@@ -23,6 +23,7 @@ import { useWishlist } from '@/context/WishlistContext';
 import { useAuth } from '@/context/AuthContext';
 import { ProductCard } from '@/components/product/ProductCard';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { SizeGuideModal } from '@/components/product/SizeGuideModal';
 import { Product, Review } from '@/types';
 
 interface ProductDetailClientProps {
@@ -43,6 +44,7 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const [activeTab, setActiveTab] = useState<'desc' | 'info' | 'material' | 'reviews'>('desc');
   const [isAddedSuccess, setIsAddedSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
   // Reviews state
   const [reviewsList, setReviewsList] = useState<Review[]>([]);
@@ -451,7 +453,11 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                     <label className="text-xs font-bold text-[#171613]">
                       Kích cỡ: <span className="font-normal text-[#747069]">{selectedSize}</span>
                     </label>
-                    <button type="button" className="text-xs text-[#747069] hover:text-[#171613] flex items-center gap-1 underline">
+                    <button
+                      type="button"
+                      onClick={() => setIsSizeGuideOpen(true)}
+                      className="text-xs text-[#747069] hover:text-[#171613] flex items-center gap-1 underline transition-colors cursor-pointer"
+                    >
                       <Ruler className="w-3 h-3" />
                       <span>Hướng dẫn chọn size</span>
                     </button>
@@ -901,6 +907,14 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
             </div>
           </div>
         )}
+        {/* Modal Hướng dẫn chọn size */}
+        <SizeGuideModal
+          isOpen={isSizeGuideOpen}
+          onClose={() => setIsSizeGuideOpen(false)}
+          category={product.category}
+          productId={product.id}
+          productName={product.name}
+        />
       </div>
     </div>
   );

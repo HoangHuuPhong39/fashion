@@ -102,6 +102,31 @@ export default function OrderSuccessPage({ params }: PageProps) {
     };
   }, [resolvedParams.id, orders]);
 
+  // Polling tự động kiểm tra trạng thái thanh toán VietQR mỗi 3.5 giây
+  useEffect(() => {
+    if (!order || order.paymentMethod !== 'vietqr' || order.paymentStatus === 'paid' || order.status === 'cancelled') {
+      return;
+    }
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/orders/${order.id || resolvedParams.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.order) {
+            if (data.order.paymentStatus !== order.paymentStatus || data.order.status !== order.status) {
+              setOrder(data.order);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Lỗi kiểm tra trạng thái thanh toán đơn:', err);
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [order, resolvedParams.id]);
+
   const copyToClipboard = (text: string, field: string) => {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
@@ -346,6 +371,16 @@ export default function OrderSuccessPage({ params }: PageProps) {
             </div>
           ) : (
             <div className="bg-white border border-[#E8E4DC] rounded-2xl p-6 sm:p-8 shadow-sm">
+            {order.paymentStatus === 'partially_paid' && (
+              <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-amber-800">
+                  <Clock className="w-4 h-4" /> Đơn hàng đã nhận một phần tiền thanh toán
+                </span>
+                <p>
+                  Hệ thống ghi nhận bạn đã chuyển một phần tiền. Vui lòng quét mã bên dưới hoặc chuyển nốt số tiền còn lại để đơn hàng được tự động xác nhận xuất kho.
+                </p>
+              </div>
+            )}
             <div className="flex items-center gap-2 text-[#8A7158] font-bold text-xs uppercase tracking-wider mb-2">
               <QrCode className="w-4 h-4 text-[#8A7158]" />
               <span>Cổng Thanh Toán Chuyển Khoản Nhanh VietQR</span>

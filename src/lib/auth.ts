@@ -159,6 +159,16 @@ export function findUserById(id: string): StoredUser | undefined {
   return users.find((u) => u.id === id);
 }
 
+export function updateUserPassword(userIdOrEmail: string, newPassword: string): boolean {
+  const users = getAllUsers();
+  const lower = userIdOrEmail.toLowerCase().trim();
+  const target = users.find((u) => u.id === userIdOrEmail || u.email.toLowerCase() === lower);
+  if (!target) return false;
+  target.passwordHash = hashPassword(newPassword);
+  saveAllUsers(users);
+  return true;
+}
+
 export function createUser(userData: {
   name: string;
   email: string;
@@ -242,6 +252,15 @@ export function deleteServerSession(rawToken: string): void {
   const tokenHash = hashToken(rawToken);
   const sessions = getAllSessions();
   saveAllSessions(sessions.filter((s) => s.tokenHash !== tokenHash));
+}
+
+/**
+ * Thu hồi tất cả các phiên làm việc của người dùng (khi đặt lại mật khẩu hoặc tài khoản bị khóa)
+ */
+export function revokeAllUserSessions(userId: string): void {
+  const sessions = getAllSessions();
+  const retained = sessions.filter((s) => s.userId !== userId);
+  saveAllSessions(retained);
 }
 
 /**

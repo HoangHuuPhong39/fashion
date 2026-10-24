@@ -40,6 +40,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6
     },
     {
+      url: `${baseUrl}/ve-chung-toi`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
+      url: `${baseUrl}/chinh-sach-doi-tra`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.6
+    },
+    {
+      url: `${baseUrl}/van-chuyen`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.6
+    },
+    {
+      url: `${baseUrl}/thanh-toan`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.6
+    },
+    {
+      url: `${baseUrl}/lien-he`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7
+    },
+    {
       url: `${baseUrl}/privacy`,
       lastModified: now,
       changeFrequency: 'yearly',

@@ -60,6 +60,8 @@ function persistStore() {
  * Trích xuất IP khách hàng từ các header tin cậy của nền tảng (Vercel, Cloudflare)
  * Ngăn chặn tuyệt đối việc attacker tự gửi header X-Forwarded-For giả mạo để bypass rate limit
  */
+export const getClientIp = (request: Request) => getTrustedClientIp(request);
+
 export function getTrustedClientIp(request: Request): string {
   // 1. Vercel trusted header
   const vercelIp = request.headers.get('x-vercel-forwarded-for');

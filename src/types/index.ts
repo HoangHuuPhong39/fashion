@@ -308,4 +308,57 @@ export interface User {
   isVip: boolean;
   addresses: ShippingAddress[];
   bankInfo?: BankAccountInfo;
+  emailVerified?: boolean;
 }
+
+// Bảng liên hệ / tin nhắn khách hàng gửi
+export interface ContactMessage {
+  id: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+  status: 'new' | 'read' | 'replied' | 'archived';
+  ipHash?: string;
+  createdAt: string;
+}
+
+// Bảng hướng dẫn chọn size
+export interface SizeMeasurement {
+  size: string; // XS, S, M, L, XL...
+  bust?: string; // Vòng ngực (cm)
+  waist?: string; // Vòng eo (cm)
+  hips?: string; // Vòng mông (cm)
+  length?: string; // Chiều dài trang phục (cm)
+  weightRange?: string; // Cân nặng phù hợp (kg)
+  heightRange?: string; // Chiều cao phù hợp (cm)
+}
+
+export interface SizeGuide {
+  id: string;
+  categoryId?: string; // Áp dụng cho danh mục nào (ao-so-mi, dam-vay...)
+  productId?: string; // Hoặc riêng biệt cho 1 sản phẩm bespoke
+  title: string;
+  measurements: SizeMeasurement[];
+  fitTips?: string; // Lời khuyên phom dáng (ôm sát, vừa vặn, rộng rãi)
+  modelStats?: string; // Số đo người mẫu mặc mẫu (Cao 1m75, nặng 50kg, mặc size S)
+  updatedAt: string;
+}
+
+// Webhook thanh toán VietQR (SePay / Casso)
+export interface PaymentTransactionRecord {
+  id: string;
+  transactionId: string; // ID từ bên cung cấp dịch vụ ngân hàng
+  provider: 'sepay' | 'casso' | 'manual';
+  orderId?: string;
+  orderCode?: string;
+  amount: number;
+  content: string; // Nội dung chuyển khoản
+  gateway?: string; // Tên ngân hàng nhận (MBBank, Vietcombank...)
+  accountNumber?: string;
+  status: 'success' | 'partial' | 'unmatched';
+  createdAt: string;
+  rawData?: any;
+}
+

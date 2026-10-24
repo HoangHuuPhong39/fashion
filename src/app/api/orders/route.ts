@@ -3,6 +3,7 @@ import { getDBOrders, createDBOrder } from '@/lib/db';
 import { requireUser, getSessionUser, verifyMutationOrigin } from '@/lib/guard';
 import { getTrustedClientIp, checkRateLimit, recordFailedAttempt, resetRateLimit } from '@/lib/ratelimit';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { sendEmailAsync, buildOrderConfirmationEmail } from '@/lib/email';
 
 export async function GET(request: Request) {
   try {
@@ -80,6 +81,17 @@ export async function POST(request: Request) {
 
     resetRateLimit(ipRateKey);
     if (emailRateKey) resetRateLimit(emailRateKey);
+
+    // Gửi email xác nhận đơn hàng bất đồng bộ qua Resend (non-blocking, lỗi gửi mail không làm hỏng đơn)
+    if (result.order.shippingAddress?.email) {
+      const emailContent = buildOrderConfirmationEmail(result.order);
+      sendEmailAsync({
+        to: result.order.shippingAddress.email,
+        subject: emailContent.subject,
+        html: emailContent.html,
+        text: emailContent.text
+      });
+    }
 
     const response = NextResponse.json(result);
 

@@ -107,11 +107,11 @@ export const Footer: React.FC = () => {
               Khám Phá
             </h5>
             <ul className="space-y-2 text-xs text-[#E8D7BD]/80">
+              <li><Link href="/ve-chung-toi" className="hover:text-[#FAF8F3] transition-colors">Về Chúng Tôi (Story)</Link></li>
               <li><Link href="/shop?category=nu" className="hover:text-[#FAF8F3] transition-colors">Bộ sưu tập Nữ</Link></li>
               <li><Link href="/shop?category=nam" className="hover:text-[#FAF8F3] transition-colors">Thời trang Nam</Link></li>
-              <li><Link href="/local-brands" className="hover:text-[#FAF8F3] transition-colors">Tuyển chọn Local Brands VN</Link></li>
-              <li><Link href="/shop?origin=international_order" className="hover:text-[#FAF8F3] transition-colors">Hàng Order Quốc Tế</Link></li>
-              <li><Link href="/shop?category=tui-xach" className="hover:text-[#FAF8F3] transition-colors">Túi xách & Giày cao cấp</Link></li>
+              <li><Link href="/collections" className="hover:text-[#FAF8F3] transition-colors">Editorial Lookbook 2026</Link></li>
+              <li><Link href="/concierge" className="hover:text-[#FAF8F3] transition-colors">Dịch vụ Fashion Concierge</Link></li>
               <li><Link href="/shop?sale=true" className="hover:text-[#B83A3A] transition-colors">Ưu đãi mùa mới (Sale)</Link></li>
             </ul>
           </div>
@@ -122,11 +122,11 @@ export const Footer: React.FC = () => {
               Chính Sách & Hỗ Trợ
             </h5>
             <ul className="space-y-2 text-xs text-[#E8D7BD]/80">
+              <li><Link href="/chinh-sach-doi-tra" className="hover:text-[#FAF8F3] transition-colors">Chính sách đổi trả trong 7 ngày</Link></li>
+              <li><Link href="/van-chuyen" className="hover:text-[#FAF8F3] transition-colors">Chính sách giao nhận & Freeship</Link></li>
+              <li><Link href="/thanh-toan" className="hover:text-[#FAF8F3] transition-colors">Phương thức thanh toán & VietQR</Link></li>
+              <li><Link href="/lien-he" className="hover:text-[#FAF8F3] transition-colors">Liên hệ xưởng & Showroom</Link></li>
               <li><Link href="/order-info" className="hover:text-[#FAF8F3] transition-colors">Quy trình Hàng Order Quốc Tế</Link></li>
-              <li><Link href="/order-info#deposit" className="hover:text-[#FAF8F3] transition-colors">Chính sách đặt cọc 50%</Link></li>
-              <li><Link href="/account" className="hover:text-[#FAF8F3] transition-colors">Tra cứu tiến độ đơn hàng</Link></li>
-              <li><Link href="/order-info#returns" className="hover:text-[#FAF8F3] transition-colors">Chính sách đổi trả trong 7 ngày</Link></li>
-              <li><Link href="/order-info#authenticity" className="hover:text-[#FAF8F3] transition-colors">Cam kết kiểm định nguồn gốc</Link></li>
             </ul>
           </div>
 

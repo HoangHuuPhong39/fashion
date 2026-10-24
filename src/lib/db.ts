@@ -14,7 +14,10 @@ import {
   ProductViewEvent,
   ProductTag,
   OrderItem,
-  PaymentMethod
+  PaymentMethod,
+  ContactMessage,
+  SizeGuide,
+  PaymentTransactionRecord
 } from '@/types';
 import { PRODUCTS as DEFAULT_PRODUCTS, MOCK_ORDERS } from '@/data/mockData';
 import { getAllUsers, findUserById } from '@/lib/auth';
@@ -30,6 +33,11 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const CATEGORIES_FILE = path.join(DATA_DIR, 'categories.json');
 const SEARCH_EVENTS_FILE = path.join(DATA_DIR, 'search_events.json');
 const PRODUCT_VIEWS_FILE = path.join(DATA_DIR, 'product_views.json');
+const CONTACT_MESSAGES_FILE = path.join(DATA_DIR, 'contact_messages.json');
+const SIZE_GUIDES_FILE = path.join(DATA_DIR, 'size_guides.json');
+const PASSWORD_RESET_TOKENS_FILE = path.join(DATA_DIR, 'password_reset_tokens.json');
+const EMAIL_VERIFICATION_TOKENS_FILE = path.join(DATA_DIR, 'email_verification_tokens.json');
+const PAYMENT_TRANSACTIONS_FILE = path.join(DATA_DIR, 'payment_transactions.json');
 
 function ensureDirectoryExistence() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -1656,3 +1664,268 @@ export function getRealProductStats(): {
     totalActive: products.filter((p) => p.status === 'active').length
   };
 }
+
+// ===== CONTACT MESSAGES =====
+
+export function saveContactMessage(msg: Omit<ContactMessage, 'id' | 'createdAt' | 'status'>): ContactMessage {
+  const messages = readJSON<ContactMessage[]>(CONTACT_MESSAGES_FILE, []);
+  const newMessage: ContactMessage = {
+    ...msg,
+    id: `contact-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+    status: 'new',
+    createdAt: new Date().toISOString()
+  };
+  writeJSON(CONTACT_MESSAGES_FILE, [newMessage, ...messages]);
+  return newMessage;
+}
+
+export function getContactMessages(): ContactMessage[] {
+  return readJSON<ContactMessage[]>(CONTACT_MESSAGES_FILE, []);
+}
+
+// ===== SIZE GUIDES =====
+
+export const DEFAULT_SIZE_GUIDES: SizeGuide[] = [
+  {
+    id: 'guide-ao-so-mi',
+    categoryId: 'ao-so-mi',
+    title: 'Bảng Size Áo Sơ Mi & Áo Kiểu Atelier',
+    fitTips: 'Phom Regular fit may đo thanh lịch. Nếu muốn mặc phong cách thoải mái rộng rãi (Oversized), quý khách vui lòng tăng thêm 1 size.',
+    modelStats: 'Người mẫu cao 1m75, nặng 52kg, số đo 84-62-90, đang mặc size S.',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+    measurements: [
+      { size: 'XS', bust: '80 - 84', waist: '62 - 66', length: '60', heightRange: '150 - 155', weightRange: '42 - 47' },
+      { size: 'S', bust: '84 - 88', waist: '66 - 70', length: '62', heightRange: '155 - 160', weightRange: '48 - 53' },
+      { size: 'M', bust: '88 - 92', waist: '70 - 74', length: '64', heightRange: '160 - 165', weightRange: '54 - 58' },
+      { size: 'L', bust: '92 - 96', waist: '74 - 78', length: '66', heightRange: '165 - 170', weightRange: '59 - 64' },
+      { size: 'XL', bust: '96 - 102', waist: '78 - 84', length: '68', heightRange: '168 - 175', weightRange: '65 - 72' }
+    ]
+  },
+  {
+    id: 'guide-dam-vay',
+    categoryId: 'dam-vay',
+    title: 'Bảng Size Đầm Lụa & Váy Haute Couture',
+    fitTips: 'Chất liệu lụa tơ tằm dệt cao cấp mềm rủ tự nhiên. Ưu tiên chọn size theo số đo Vòng Ngực và Vòng Eo chuẩn.',
+    modelStats: 'Người mẫu cao 1m78, nặng 51kg, số đo 82-60-89, đang mặc size S.',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+    measurements: [
+      { size: 'XS', bust: '80 - 83', waist: '60 - 64', hips: '86 - 90', length: '106', heightRange: '152 - 156', weightRange: '43 - 47' },
+      { size: 'S', bust: '84 - 87', waist: '64 - 68', hips: '90 - 94', length: '108', heightRange: '156 - 162', weightRange: '48 - 53' },
+      { size: 'M', bust: '88 - 92', waist: '68 - 72', hips: '94 - 98', length: '110', heightRange: '162 - 167', weightRange: '54 - 59' },
+      { size: 'L', bust: '92 - 96', waist: '72 - 76', hips: '98 - 102', length: '112', heightRange: '165 - 172', weightRange: '60 - 65' },
+      { size: 'XL', bust: '96 - 102', waist: '76 - 82', hips: '102 - 108', length: '114', heightRange: '168 - 175', weightRange: '66 - 72' }
+    ]
+  },
+  {
+    id: 'guide-quan-au',
+    categoryId: 'quan-au',
+    title: 'Bảng Size Quần Âu & Quần Khắc Họa Kiến Trúc',
+    fitTips: 'Cạp cao tôn dáng, ống suông rủ. Chọn size dựa theo số đo Vòng Eo (đo ngang rốn) và Vòng Mông.',
+    modelStats: 'Người mẫu cao 1m75, đang mặc size S, gấu quần chạm mu bàn chân khi đi giày 5cm.',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+    measurements: [
+      { size: 'XS', waist: '62 - 66', hips: '86 - 90', length: '98', heightRange: '152 - 157', weightRange: '42 - 47' },
+      { size: 'S', waist: '66 - 70', hips: '90 - 94', length: '100', heightRange: '157 - 163', weightRange: '48 - 53' },
+      { size: 'M', waist: '70 - 74', hips: '94 - 98', length: '102', heightRange: '163 - 168', weightRange: '54 - 59' },
+      { size: 'L', waist: '74 - 78', hips: '98 - 102', length: '104', heightRange: '167 - 172', weightRange: '60 - 65' },
+      { size: 'XL', waist: '78 - 84', hips: '102 - 108', length: '105', heightRange: '170 - 176', weightRange: '66 - 72' }
+    ]
+  },
+  {
+    id: 'guide-ao-khoac',
+    categoryId: 'ao-khoac',
+    title: 'Bảng Size Áo Khoác Blazer & Măng Tô Cashmere',
+    fitTips: 'Thiết kế có độ cử động vừa phải để quý khách thoải mái phối cùng sơ mi hoặc áo len mỏng bên trong.',
+    modelStats: 'Người mẫu cao 1m77, số đo vai 39cm, đang mặc size S.',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+    measurements: [
+      { size: 'XS', bust: '84 - 88', waist: '70 - 74', length: '68', heightRange: '152 - 157', weightRange: '43 - 48' },
+      { size: 'S', bust: '88 - 92', waist: '74 - 78', length: '70', heightRange: '157 - 163', weightRange: '49 - 54' },
+      { size: 'M', bust: '92 - 96', waist: '78 - 82', length: '72', heightRange: '163 - 168', weightRange: '55 - 60' },
+      { size: 'L', bust: '96 - 100', waist: '82 - 86', length: '74', heightRange: '168 - 173', weightRange: '61 - 66' },
+      { size: 'XL', bust: '100 - 106', waist: '86 - 92', length: '75', heightRange: '170 - 176', weightRange: '67 - 74' }
+    ]
+  }
+];
+
+export function getSizeGuides(): SizeGuide[] {
+  return readJSON<SizeGuide[]>(SIZE_GUIDES_FILE, DEFAULT_SIZE_GUIDES);
+}
+
+export function getSizeGuideByCategoryOrProduct(category?: string, productId?: string): SizeGuide | null {
+  const guides = getSizeGuides();
+  if (productId) {
+    const byProduct = guides.find((g) => g.productId === productId);
+    if (byProduct) return byProduct;
+  }
+  if (category) {
+    const byCategory = guides.find(
+      (g) => g.categoryId && (g.categoryId.toLowerCase() === category.toLowerCase() || category.toLowerCase().includes(g.categoryId.toLowerCase()))
+    );
+    if (byCategory) return byCategory;
+  }
+  // Mặc định trả về bảng áo sơ mi hoặc bảng đầu tiên
+  return guides[0] || null;
+}
+
+export function saveSizeGuide(guideData: Partial<SizeGuide> & { id?: string }): SizeGuide {
+  const guides = getSizeGuides();
+  const id = guideData.id || `guide-${Date.now()}`;
+  const now = new Date().toISOString();
+  const existingIdx = guides.findIndex((g) => g.id === id);
+
+  const newGuide: SizeGuide = {
+    id,
+    categoryId: guideData.categoryId,
+    productId: guideData.productId,
+    title: guideData.title || 'Bảng Size TADA! Atelier',
+    measurements: guideData.measurements || [],
+    fitTips: guideData.fitTips,
+    modelStats: guideData.modelStats,
+    updatedAt: now
+  };
+
+  if (existingIdx !== -1) {
+    guides[existingIdx] = newGuide;
+  } else {
+    guides.push(newGuide);
+  }
+  writeJSON(SIZE_GUIDES_FILE, guides);
+  return newGuide;
+}
+
+// ===== PASSWORD RESET TOKENS =====
+
+export interface PasswordResetTokenRecord {
+  id: string;
+  email: string;
+  tokenHash: string;
+  expiresAt: string;
+  usedAt?: string;
+  createdAt: string;
+}
+
+export function savePasswordResetToken(email: string, tokenHash: string, expiresAt: string): PasswordResetTokenRecord {
+  const tokens = readJSON<PasswordResetTokenRecord[]>(PASSWORD_RESET_TOKENS_FILE, []);
+  const record: PasswordResetTokenRecord = {
+    id: `prt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    email: email.toLowerCase().trim(),
+    tokenHash,
+    expiresAt,
+    createdAt: new Date().toISOString()
+  };
+  writeJSON(PASSWORD_RESET_TOKENS_FILE, [record, ...tokens]);
+  return record;
+}
+
+export function getPasswordResetToken(tokenHash: string): PasswordResetTokenRecord | null {
+  const tokens = readJSON<PasswordResetTokenRecord[]>(PASSWORD_RESET_TOKENS_FILE, []);
+  const found = tokens.find((t) => t.tokenHash === tokenHash);
+  if (!found) return null;
+  // Kiểm tra hạn sử dụng
+  if (new Date(found.expiresAt).getTime() < Date.now()) {
+    return null;
+  }
+  // Kiểm tra xem đã dùng chưa
+  if (found.usedAt) {
+    return null;
+  }
+  return found;
+}
+
+export function markPasswordResetTokenUsed(tokenHash: string): boolean {
+  const tokens = readJSON<PasswordResetTokenRecord[]>(PASSWORD_RESET_TOKENS_FILE, []);
+  const found = tokens.find((t) => t.tokenHash === tokenHash);
+  if (!found) return false;
+  found.usedAt = new Date().toISOString();
+  writeJSON(PASSWORD_RESET_TOKENS_FILE, tokens);
+  return true;
+}
+
+// ===== EMAIL VERIFICATION TOKENS =====
+
+export interface EmailVerificationTokenRecord {
+  id: string;
+  userId: string;
+  email: string;
+  tokenHash: string;
+  expiresAt: string;
+  verifiedAt?: string;
+  createdAt: string;
+}
+
+export function saveEmailVerificationToken(userId: string, email: string, tokenHash: string, expiresAt: string): EmailVerificationTokenRecord {
+  const tokens = readJSON<EmailVerificationTokenRecord[]>(EMAIL_VERIFICATION_TOKENS_FILE, []);
+  const record: EmailVerificationTokenRecord = {
+    id: `evt-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    userId,
+    email: email.toLowerCase().trim(),
+    tokenHash,
+    expiresAt,
+    createdAt: new Date().toISOString()
+  };
+  writeJSON(EMAIL_VERIFICATION_TOKENS_FILE, [record, ...tokens]);
+  return record;
+}
+
+export function verifyEmailToken(tokenHash: string): { success: boolean; email?: string; userId?: string; message: string } {
+  const tokens = readJSON<EmailVerificationTokenRecord[]>(EMAIL_VERIFICATION_TOKENS_FILE, []);
+  const found = tokens.find((t) => t.tokenHash === tokenHash);
+  if (!found) {
+    return { success: false, message: 'Mã xác minh không hợp lệ hoặc đã hết hiệu lực.' };
+  }
+  if (new Date(found.expiresAt).getTime() < Date.now()) {
+    return { success: false, message: 'Mã xác minh đã quá hạn. Vui lòng gửi lại yêu cầu.' };
+  }
+  if (found.verifiedAt) {
+    return { success: false, message: 'Email này đã được xác minh trước đó.' };
+  }
+  found.verifiedAt = new Date().toISOString();
+  writeJSON(EMAIL_VERIFICATION_TOKENS_FILE, tokens);
+
+  // Cập nhật emailVerified = true cho user trong users.json
+  const users = getAllUsers();
+  const u = users.find((x) => x.id === found.userId || x.email.toLowerCase() === found.email.toLowerCase());
+  if (u) {
+    u.emailVerified = true;
+    writeJSON(USERS_FILE, users);
+
+    // Tự động liên kết các đơn hàng khách vãng lai (guest orders) cùng email vào tài khoản này
+    const orders = getDBOrders();
+    let hasOrderLinked = false;
+    for (const ord of orders) {
+      if ((!ord.userId || ord.userId === '') && ord.shippingAddress?.email?.toLowerCase() === found.email.toLowerCase()) {
+        ord.userId = u.id;
+        hasOrderLinked = true;
+      }
+    }
+    if (hasOrderLinked) {
+      saveDBOrders(orders);
+    }
+  }
+
+  return { success: true, email: found.email, userId: found.userId, message: 'Xác minh tài khoản email thành công!' };
+}
+
+// ===== PAYMENT TRANSACTIONS (VIETQR / WEBHOOK) =====
+
+export function savePaymentTransaction(record: Omit<PaymentTransactionRecord, 'id' | 'createdAt'>): PaymentTransactionRecord {
+  const transactions = readJSON<PaymentTransactionRecord[]>(PAYMENT_TRANSACTIONS_FILE, []);
+  const newTx: PaymentTransactionRecord = {
+    ...record,
+    id: `tx-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    createdAt: new Date().toISOString()
+  };
+  writeJSON(PAYMENT_TRANSACTIONS_FILE, [newTx, ...transactions]);
+  return newTx;
+}
+
+export function getPaymentTransaction(transactionId: string): PaymentTransactionRecord | null {
+  const transactions = readJSON<PaymentTransactionRecord[]>(PAYMENT_TRANSACTIONS_FILE, []);
+  return transactions.find((t) => t.transactionId === transactionId) || null;
+}
+
+export function getPaymentTransactions(): PaymentTransactionRecord[] {
+  return readJSON<PaymentTransactionRecord[]>(PAYMENT_TRANSACTIONS_FILE, []);
+}
+
