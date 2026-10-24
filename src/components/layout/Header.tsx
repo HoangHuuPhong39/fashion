@@ -9,6 +9,7 @@ import { useProducts } from '@/context/ProductContext';
 import { Product } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { useMounted } from '@/hooks/useMounted';
+import { matchSearchQuery, removeVietnameseTones } from '@/lib/vietnamese';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
@@ -21,24 +22,58 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
   const mounted = useMounted();
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  // Live search filtering với useMemo
+  // Debounce 250ms cho truy vấn tìm kiếm
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchTerm.trim());
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
+
+  // Live search filtering với chuẩn hóa không dấu và chịu lỗi gõ
   const searchResults = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (term.length < 2) return [];
+    if (debouncedQuery.length < 2) return [];
     return products
       .filter(
         (p) =>
-          p.name.toLowerCase().includes(term) ||
-          p.brand.toLowerCase().includes(term) ||
-          (p.sku && p.sku.toLowerCase().includes(term)) ||
-          p.category.toLowerCase().includes(term) ||
-          (p.subCategory && p.subCategory.toLowerCase().includes(term))
+          matchSearchQuery(p.name, debouncedQuery) ||
+          matchSearchQuery(p.brand, debouncedQuery) ||
+          (p.sku && matchSearchQuery(p.sku, debouncedQuery)) ||
+          matchSearchQuery(p.category, debouncedQuery) ||
+          (p.subCategory && matchSearchQuery(p.subCategory, debouncedQuery))
       )
       .slice(0, 6);
-  }, [searchTerm, products]);
+  }, [debouncedQuery, products]);
+
+  // Sản phẩm đề xuất khi không có kết quả tìm kiếm
+  const recommendedProducts = useMemo(() => {
+    return products.slice(0, 3);
+  }, [products]);
+
+  // Hàm highlight từ khớp hỗ trợ cả tiếng Việt có dấu và không dấu
+  const highlightMatch = (text: string, query: string) => {
+    if (!query || !text) return text;
+    const cleanQ = removeVietnameseTones(query);
+    const cleanT = removeVietnameseTones(text);
+    const idx = cleanT.indexOf(cleanQ);
+    if (idx === -1) return text;
+
+    const before = text.substring(0, idx);
+    const matched = text.substring(idx, idx + query.length);
+    const after = text.substring(idx + query.length);
+
+    return (
+      <>
+        {before}
+        <mark className="bg-[#FEF08A] text-[#171613] font-bold px-0.5 rounded">{matched}</mark>
+        {after}
+      </>
+    );
+  };
 
   // Click outside to close search dropdown
   useEffect(() => {
@@ -150,7 +185,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
                               <SafeImage src={product.images[0]} alt="" fill className="object-cover" sizes="40px" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-xs font-medium text-[#171613] truncate">{product.name}</p>
+                              <p className="text-xs font-medium text-[#171613] truncate">
+                                {highlightMatch(product.name, debouncedQuery)}
+                              </p>
                               <div className="flex items-center gap-2 mt-0.5">
                                 <span className="text-xs font-bold text-[#B83A3A]">{formatPrice(product.price)}</span>
                                 <span className="text-[10px] text-[#747069]">{product.brand}</span>
@@ -160,8 +197,31 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
                         ))}
                       </div>
                     ) : (
-                      <div className="p-4 text-center text-xs text-[#747069]">
-                        Không tìm thấy sản phẩm phù hợp
+                      <div className="p-4 space-y-3">
+                        <div className="text-center text-xs text-[#747069]">
+                          Không tìm thấy sản phẩm khớp với &quot;<span className="text-[#171613] font-semibold">{debouncedQuery}</span>&quot;.
+                        </div>
+                        <div className="pt-2 border-t border-[#E8E4DC]">
+                          <span className="text-[10px] font-bold text-[#8A7158] uppercase tracking-wider block mb-2">
+                            Gợi ý trang phục nổi bật từ Atelier:
+                          </span>
+                          <div className="space-y-2">
+                            {recommendedProducts.map((p) => (
+                              <Link
+                                key={p.id}
+                                href={`/product/${p.id}`}
+                                onClick={() => setIsSearchOpen(false)}
+                                className="flex items-center gap-2.5 p-1.5 rounded hover:bg-[#FAF8F3] transition-colors text-xs text-[#171613]"
+                              >
+                                <div className="relative w-8 h-10 rounded overflow-hidden bg-[#E8E4DC] shrink-0">
+                                  <SafeImage src={p.images[0]} alt="" fill className="object-cover" sizes="32px" />
+                                </div>
+                                <span className="truncate flex-1 font-medium">{p.name}</span>
+                                <span className="font-bold text-[#B83A3A] text-[11px] shrink-0">{formatPrice(p.price)}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     )}
                   </>

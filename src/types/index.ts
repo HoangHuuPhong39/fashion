@@ -362,3 +362,17 @@ export interface PaymentTransactionRecord {
   rawData?: any;
 }
 
+// Đăng ký nhận thông báo khi có hàng lại (Back-in-stock)
+export interface StockNotification {
+  id: string;
+  productId: string;
+  productName?: string;
+  color?: string;
+  size?: string;
+  email: string;
+  status: 'pending' | 'sent';
+  sentAt?: string;
+  createdAt: string;
+}
+
+

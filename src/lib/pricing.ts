@@ -67,8 +67,9 @@ export function calculateOrderPricing(params: {
   membershipTier?: MembershipTier | null;
   shippingMethod?: 'standard' | 'express';
   couponUsageCount?: number;
+  province?: string;
 }): PricingCalculationResult {
-  const { subtotal, couponCode, membershipTier, shippingMethod, couponUsageCount = 0 } = params;
+  const { subtotal, couponCode, membershipTier, shippingMethod, couponUsageCount = 0, province = '' } = params;
 
   if (subtotal <= 0) {
     return {
@@ -126,10 +127,20 @@ export function calculateOrderPricing(params: {
   }
 
   // 4. Phí vận chuyển
+  const cleanProvince = province.trim().toLowerCase();
+  const isMetro =
+    cleanProvince.includes('hà nội') ||
+    cleanProvince.includes('ha noi') ||
+    cleanProvince.includes('hồ chí minh') ||
+    cleanProvince.includes('ho chi minh') ||
+    cleanProvince.includes('sài gòn') ||
+    cleanProvince.includes('hcm');
+
+  const baseStandardFee = isMetro ? 25000 : STANDARD_SHIPPING_FEE;
   const isVipFreeship = tier === 'gold' || tier === 'diamond';
   const isThresholdFreeship = subtotal >= FREESHIP_THRESHOLD;
 
-  let shippingFee = STANDARD_SHIPPING_FEE;
+  let shippingFee = baseStandardFee;
   if (shippingMethod === 'express') {
     shippingFee = 50000;
     // Hạng Diamond được freeship cả hỏa tốc

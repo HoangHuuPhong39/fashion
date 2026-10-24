@@ -415,3 +415,78 @@ ${verifyUrl}
 
   return { subject, html, text };
 }
+
+
+// ==========================================
+// 5. TEMPLATE: THÔNG BÁO SẢN PHẨM CÓ HÀNG LẠI (BACK-IN-STOCK)
+// ==========================================
+export function buildBackInStockEmail(
+  productName: string,
+  productUrl: string,
+  color?: string,
+  size?: string
+): { subject: string; html: string; text: string } {
+  const subject = `[TADA! Atelier] Sản phẩm ${productName} đã có hàng trở lại!`;
+  const variantText = color && size ? `(Màu ${color} - Size ${size})` : '';
+
+  const html = `
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sản phẩm đã có hàng lại</title>
+</head>
+<body style="margin: 0; padding: 0; background-color: #FAF8F3; font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, sans-serif; color: #171613;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="padding: 24px 0;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="background-color: #FFFFFF; border-radius: 12px; border: 1px solid #E8E4DC; overflow: hidden;">
+          <tr>
+            <td style="background-color: #171613; padding: 24px; text-align: center;">
+              <h1 style="margin: 0; font-size: 20px; letter-spacing: 3px; color: #FAF8F3; font-family: Georgia, serif;">
+                TADA! FASHION ATELIER
+              </h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 32px 24px;">
+              <span style="font-size: 11px; color: #8A7158; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
+                TIN VUI DÀNH CHO BẠN
+              </span>
+              <h2 style="font-size: 18px; margin: 8px 0 16px; color: #171613;">
+                Thiết kế bạn quan tâm đã có hàng trở lại!
+              </h2>
+              <p style="font-size: 13px; line-height: 1.6; color: #747069;">
+                Kính gửi quý khách, sản phẩm <strong>${productName}</strong> ${variantText} vừa được xưởng Atelier bổ sung số lượng vào kho.
+              </p>
+              <div style="background-color: #FAF8F3; border-radius: 8px; padding: 16px; margin: 20px 0; border: 1px solid #E8E4DC; text-align: center;">
+                <p style="font-size: 13px; font-weight: bold; color: #171613; margin: 0 0 12px;">
+                  ${productName} ${variantText}
+                </p>
+                <a href="${productUrl}" style="display: inline-block; background-color: #171613; color: #FFFFFF; font-size: 12px; font-weight: bold; text-decoration: none; padding: 12px 28px; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px;">
+                  Đặt Mua Ngay Kẻo Hết &rarr;
+                </a>
+              </div>
+              <p style="font-size: 11px; color: #A8A29E; line-height: 1.5; margin-top: 24px; border-top: 1px solid #E8E4DC; padding-top: 16px;">
+                Số lượng có hạn do tiêu chuẩn may đo thủ công. Email này chỉ được gửi một lần duy nhất theo yêu cầu đăng ký của bạn.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  const text = `
+THÔNG BÁO TỪ TADA! ATELIER
+Sản phẩm ${productName} ${variantText} mà bạn quan tâm đã có hàng trở lại!
+Đặt mua ngay tại: ${productUrl}
+
+Số lượng có hạn. Chúc bạn có trải nghiệm mua sắm tuyệt vời!
+  `.trim();
+
+  return { subject, html, text };
+}

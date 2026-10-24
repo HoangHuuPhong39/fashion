@@ -17,11 +17,13 @@ import {
   PaymentMethod,
   ContactMessage,
   SizeGuide,
-  PaymentTransactionRecord
+  PaymentTransactionRecord,
+  StockNotification
 } from '@/types';
 import { PRODUCTS as DEFAULT_PRODUCTS, MOCK_ORDERS } from '@/data/mockData';
 import { getAllUsers, findUserById } from '@/lib/auth';
 import { calculateOrderPricing } from '@/lib/pricing';
+import { matchSearchQuery } from '@/lib/vietnamese';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 
@@ -38,6 +40,7 @@ const SIZE_GUIDES_FILE = path.join(DATA_DIR, 'size_guides.json');
 const PASSWORD_RESET_TOKENS_FILE = path.join(DATA_DIR, 'password_reset_tokens.json');
 const EMAIL_VERIFICATION_TOKENS_FILE = path.join(DATA_DIR, 'email_verification_tokens.json');
 const PAYMENT_TRANSACTIONS_FILE = path.join(DATA_DIR, 'payment_transactions.json');
+const STOCK_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'stock_notifications.json');
 
 function ensureDirectoryExistence() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -1205,7 +1208,8 @@ export function createDBOrder(orderData: {
     couponCode: inputCoupon,
     membershipTier: userTier,
     shippingMethod: orderData.shippingMethod || 'standard',
-    couponUsageCount
+    couponUsageCount,
+    province: orderData.shippingAddress?.city || ''
   });
 
   if (inputCoupon && pricing.couponMessage && !pricing.appliedCoupon) {
@@ -1511,17 +1515,17 @@ export function queryProducts(params: ProductQueryParams = {}): {
     list = list.filter((p) => p.status === params.status);
   }
 
-  // 2. Tìm kiếm từ khóa theo nhiều trường (Name, SKU, Brand, Material, Tags, Style)
+  // 2. Tìm kiếm từ khóa theo nhiều trường (Name, SKU, Brand, Material, Tags, Style) - HỖ TRỢ KHÔNG DẤU VÀ TÁCH CỤM TỪ
   if (params.query && params.query.trim()) {
-    const q = params.query.trim().toLowerCase();
+    const q = params.query.trim();
     list = list.filter((p) => {
-      const matchName = (p.name || '').toLowerCase().includes(q);
-      const matchSku = (p.sku || '').toLowerCase().includes(q);
-      const matchBrand = (p.brand || '').toLowerCase().includes(q);
-      const matchDesc = (p.description || '').toLowerCase().includes(q);
-      const matchMaterial = (p.material || '').toLowerCase().includes(q);
-      const matchStyle = (p.style || '').toLowerCase().includes(q);
-      const matchTags = (p.tags || []).some((t) => t.toLowerCase().includes(q));
+      const matchName = matchSearchQuery(p.name || '', q);
+      const matchSku = matchSearchQuery(p.sku || '', q);
+      const matchBrand = matchSearchQuery(p.brand || '', q);
+      const matchDesc = matchSearchQuery(p.description || '', q);
+      const matchMaterial = matchSearchQuery(p.material || '', q);
+      const matchStyle = matchSearchQuery(p.style || '', q);
+      const matchTags = (p.tags || []).some((t) => matchSearchQuery(t, q));
       return matchName || matchSku || matchBrand || matchDesc || matchMaterial || matchStyle || matchTags;
     });
   }
@@ -1928,4 +1932,84 @@ export function getPaymentTransaction(transactionId: string): PaymentTransaction
 export function getPaymentTransactions(): PaymentTransactionRecord[] {
   return readJSON<PaymentTransactionRecord[]>(PAYMENT_TRANSACTIONS_FILE, []);
 }
+
+// ===== STOCK NOTIFICATIONS (BÁO KHI CÓ HÀNG) =====
+
+export function saveStockNotification(data: {
+  productId: string;
+  productName?: string;
+  color?: string;
+  size?: string;
+  email: string;
+}): { success: boolean; message: string; notification?: StockNotification } {
+  const cleanEmail = data.email.trim().toLowerCase();
+  const list = readJSON<StockNotification[]>(STOCK_NOTIFICATIONS_FILE, []);
+
+  // Chống đăng ký trùng lặp khi đang pending
+  const existing = list.find(
+    (n) =>
+      n.email.toLowerCase() === cleanEmail &&
+      n.productId === data.productId &&
+      (n.color || '').toLowerCase() === (data.color || '').toLowerCase() &&
+      (n.size || '').toLowerCase() === (data.size || '').toLowerCase() &&
+      n.status === 'pending'
+  );
+
+  if (existing) {
+    return {
+      success: true,
+      message: 'Bạn đã đăng ký nhận thông báo cho sản phẩm này rồi. Chúng tôi sẽ gửi email ngay khi có hàng!',
+      notification: existing
+    };
+  }
+
+  const newNotif: StockNotification = {
+    id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    productId: data.productId,
+    productName: data.productName,
+    color: data.color,
+    size: data.size,
+    email: cleanEmail,
+    status: 'pending',
+    createdAt: new Date().toISOString()
+  };
+
+  writeJSON(STOCK_NOTIFICATIONS_FILE, [newNotif, ...list]);
+  return {
+    success: true,
+    message: 'Đăng ký nhận thông báo thành công! TADA! sẽ thông báo ngay khi sản phẩm có hàng.',
+    notification: newNotif
+  };
+}
+
+export function getPendingStockNotifications(productId: string, color?: string, size?: string): StockNotification[] {
+  const list = readJSON<StockNotification[]>(STOCK_NOTIFICATIONS_FILE, []);
+  return list.filter((n) => {
+    if (n.status !== 'pending' || n.productId !== productId) return false;
+    if (color && n.color && n.color.toLowerCase() !== color.toLowerCase()) return false;
+    if (size && n.size && n.size.toLowerCase() !== size.toLowerCase()) return false;
+    return true;
+  });
+}
+
+export function markStockNotificationsSent(ids: string[]): void {
+  if (!ids || ids.length === 0) return;
+  const list = readJSON<StockNotification[]>(STOCK_NOTIFICATIONS_FILE, []);
+  const idSet = new Set(ids);
+  const now = new Date().toISOString();
+
+  let modified = false;
+  for (const item of list) {
+    if (idSet.has(item.id)) {
+      item.status = 'sent';
+      item.sentAt = now;
+      modified = true;
+    }
+  }
+
+  if (modified) {
+    writeJSON(STOCK_NOTIFICATIONS_FILE, list);
+  }
+}
+
 

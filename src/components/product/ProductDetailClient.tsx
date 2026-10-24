@@ -46,6 +46,44 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const [errorMessage, setErrorMessage] = useState('');
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
 
+  // Back-in-stock notification state
+  const [notifyEmail, setNotifyEmail] = useState('');
+  const [isNotifying, setIsNotifying] = useState(false);
+  const [notifyMsg, setNotifyMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleRegisterStockNotification = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!notifyEmail || !notifyEmail.includes('@')) {
+      setNotifyMsg({ type: 'error', text: 'Vui lòng nhập địa chỉ email hợp lệ.' });
+      return;
+    }
+    setIsNotifying(true);
+    setNotifyMsg(null);
+    try {
+      const res = await fetch('/api/products/notify-stock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productId: product.id,
+          color: selectedColor,
+          size: selectedSize,
+          email: notifyEmail
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setNotifyMsg({ type: 'success', text: data.message || 'Đăng ký thành công!' });
+        setNotifyEmail('');
+      } else {
+        setNotifyMsg({ type: 'error', text: data.message || 'Không thể đăng ký lúc này.' });
+      }
+    } catch {
+      setNotifyMsg({ type: 'error', text: 'Có lỗi kết nối máy chủ. Vui lòng thử lại.' });
+    } finally {
+      setIsNotifying(false);
+    }
+  };
+
   // Reviews state
   const [reviewsList, setReviewsList] = useState<Review[]>([]);
   const [, setIsLoadingReviews] = useState(false);
@@ -572,6 +610,46 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                   {isOutOfStock ? 'Tạm hết hàng' : 'Mua ngay'}
                 </button>
               </div>
+
+              {/* Form "Báo khi có hàng" khi biến thể đang hết hàng */}
+              {isOutOfStock && (
+                <div className="p-4 rounded-xl bg-white border border-[#E8E4DC] shadow-xs space-y-2.5 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-[#D97706] animate-pulse"></span>
+                    <span className="text-xs font-bold text-[#171613]">
+                      Báo cho tôi khi {product.name} ({selectedColor} - Size {selectedSize}) có hàng trở lại:
+                    </span>
+                  </div>
+
+                  <form onSubmit={handleRegisterStockNotification} className="flex gap-2">
+                    <input
+                      type="email"
+                      required
+                      placeholder="Nhập email của bạn..."
+                      value={notifyEmail}
+                      onChange={(e) => setNotifyEmail(e.target.value)}
+                      className="flex-1 px-3 py-2 text-xs rounded-lg border border-[#E8E4DC] focus:outline-none focus:border-[#8A7158] bg-[#FAF8F3]"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isNotifying}
+                      className="px-4 py-2 bg-[#171613] text-white text-xs font-semibold rounded-lg hover:bg-[#8A7158] transition-colors disabled:opacity-50 shrink-0"
+                    >
+                      {isNotifying ? 'Đang gửi...' : 'Báo khi có hàng'}
+                    </button>
+                  </form>
+
+                  {notifyMsg && (
+                    <p
+                      className={`text-xs ${
+                        notifyMsg.type === 'success' ? 'text-[#15803D] font-medium' : 'text-[#DC2626]'
+                      }`}
+                    >
+                      {notifyMsg.text}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* 3 Cam Kết Icon */}
               <div className="pt-4 border-t border-[#F0ECE1] flex items-center justify-between text-xs text-[#747069] flex-wrap gap-2">

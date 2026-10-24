@@ -22,6 +22,7 @@ import { useProducts } from '@/context/ProductContext';
 import { Order, OrderItem, PaymentMethod } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { calculateOrderPricing } from '@/lib/pricing';
+import { AddressCascadeSelect } from '@/components/checkout/AddressCascadeSelect';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -71,7 +72,8 @@ export default function CheckoutPage() {
     subtotal,
     couponCode: appliedCoupon,
     membershipTier: user?.membershipTier || 'bronze',
-    shippingMethod
+    shippingMethod,
+    province: city
   });
   const shippingCost = pricing.shippingFee;
   const finalTotal = pricing.total;
@@ -299,50 +301,17 @@ export default function CheckoutPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                <div>
-                  <label className="block text-[#747069] mb-1 font-medium">Tỉnh / Thành phố *</label>
-                  <select
-                    value={city}
-                    required
-                    onChange={(e) => setCity(e.target.value)}
-                    className="w-full bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg p-2 text-xs text-[#171613]"
-                  >
-                    <option value="">-- Chọn Tỉnh / Thành --</option>
-                    <option value="Hà Nội">Hà Nội</option>
-                    <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
-                    <option value="Đà Nẵng">Đà Nẵng</option>
-                    <option value="Hải Phòng">Hải Phòng</option>
-                    <option value="Cần Thơ">Cần Thơ</option>
-                    <option value="Bình Dương">Bình Dương</option>
-                    <option value="Đồng Nai">Đồng Nai</option>
-                    <option value="Quảng Ninh">Quảng Ninh</option>
-                    <option value="Khác">Tỉnh / Thành khác</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[#747069] mb-1 font-medium">Quận / Huyện *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Quận / Huyện"
-                    value={district}
-                    onChange={(e) => setDistrict(e.target.value)}
-                    className="w-full bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg p-2 text-xs text-[#171613] placeholder:text-[#A8A29E]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-[#747069] mb-1 font-medium">Phường / Xã *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Phường / Xã"
-                    value={ward}
-                    onChange={(e) => setWard(e.target.value)}
-                    className="w-full bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg p-2 text-xs text-[#171613] placeholder:text-[#A8A29E]"
-                  />
-                </div>
-              </div>
+              {/* Bộ chọn Tỉnh/Thành -> Quận/Huyện -> Phường/Xã phụ thuộc */}
+              <AddressCascadeSelect
+                province={city}
+                district={district}
+                ward={ward}
+                onChange={({ province: p, district: d, ward: w }) => {
+                  setCity(p);
+                  setDistrict(d);
+                  setWard(w);
+                }}
+              />
 
               <div className="text-xs">
                 <label className="block text-[#747069] mb-1 font-medium">Ghi chú giao hàng (Tùy chọn)</label>

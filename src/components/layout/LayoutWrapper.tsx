@@ -7,6 +7,7 @@ import { Navigation } from './Navigation';
 import { Footer } from './Footer';
 import { MobileMenu } from './MobileMenu';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { FloatingContactWidget } from './FloatingContactWidget';
 
 export const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -22,6 +23,7 @@ export const LayoutWrapper: React.FC<{ children: React.ReactNode }> = ({ childre
       <CartDrawer />
       <main className="flex-1">{children}</main>
       <Footer />
+      <FloatingContactWidget />
     </>
   );
 };
