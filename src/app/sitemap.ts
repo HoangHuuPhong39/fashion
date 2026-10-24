@@ -1,8 +1,10 @@
 import { MetadataRoute } from 'next';
 import { getDBProducts } from '@/lib/db';
 
+export const revalidate = 3600; // Cập nhật lại sitemap mỗi 1 giờ
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada.vn';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
   const now = new Date();
 
   // Các trang tĩnh chính
@@ -18,6 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: now,
       changeFrequency: 'daily',
       priority: 0.9
+    },
+    {
+      url: `${baseUrl}/collections`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.85
     },
     {
       url: `${baseUrl}/concierge`,
@@ -51,14 +59,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   ];
 
-  // Các trang chi tiết sản phẩm động
+  // Các trang chi tiết sản phẩm động từ Database
   try {
     const products = getDBProducts();
     const productRoutes: MetadataRoute.Sitemap = products
-      .filter((p) => p.status !== 'hidden' && p.status !== 'discontinued')
+      .filter((p) => !p.status || p.status === 'active')
       .map((p) => ({
-        url: `${baseUrl}/product/${p.id}`,
-        lastModified: now,
+        url: `${baseUrl}/product/${p.slug || p.id}`,
+        lastModified: p.updatedAt ? new Date(p.updatedAt) : now,
         changeFrequency: 'weekly',
         priority: 0.7
       }));

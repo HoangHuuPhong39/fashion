@@ -1,6 +1,5 @@
-'use client';
-
 import React from 'react';
+import { Metadata } from 'next';
 import { HeroShowcase } from '@/components/home/HeroShowcase';
 import { CategoryCircles } from '@/components/home/CategoryCircles';
 import { PromoCards } from '@/components/home/PromoCards';
@@ -12,6 +11,41 @@ import { CategoryTrendsSection } from '@/components/home/CategoryTrendsSection';
 import { BrandLifestyleBanner } from '@/components/home/BrandLifestyleBanner';
 import { InternationalBrandSpotlight } from '@/components/home/InternationalBrandSpotlight';
 import { LocalBrandSpotlight } from '@/components/home/LocalBrandSpotlight';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
+
+export const metadata: Metadata = {
+  title: 'TADA! Fashion Atelier | Thiết Kế Thời Trang Đương Đại & May Đo Tinh Tế',
+  description:
+    'Khám phá các bộ sưu tập thời trang đương đại, local brand Việt Nam và phong cách thời trang may đo cao cấp tại TADA! Fashion Atelier. Miễn phí vận chuyển toàn quốc từ 499.000đ.',
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    title: 'TADA! Fashion Atelier | Thiết Kế Thời Trang Đương Đại',
+    description:
+      'Khám phá các thiết kế thời trang may đo tinh tế, bộ sưu tập Thu Đông 2026 và phong cách Quiet Luxury tại TADA! Fashion Atelier.',
+    url: siteUrl,
+    siteName: 'TADA! Fashion Atelier',
+    images: [
+      {
+        url: `${siteUrl}/images/og-default.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'TADA! Fashion Atelier',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TADA! Fashion Atelier | Thời Trang Đương Đại & May Đo',
+    description:
+      'Khám phá các thiết kế thời trang may đo tinh tế và bộ sưu tập đương đại tại TADA! Fashion Atelier.',
+    images: [`${siteUrl}/images/og-default.jpg`],
+  },
+};
 
 export default function HomePage() {
   return (

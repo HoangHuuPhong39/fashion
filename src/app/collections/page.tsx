@@ -1,14 +1,43 @@
-'use client';
-
 import React from 'react';
+import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, ChevronRight, Eye } from 'lucide-react';
-import { PRODUCTS } from '@/data/mockData';
+import { ArrowRight, Sparkles, ChevronRight } from 'lucide-react';
+import { getDBProducts } from '@/lib/db';
 import { ProductCard } from '@/components/product/ProductCard';
 import { SafeImage } from '@/components/ui/SafeImage';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
+
+export const metadata: Metadata = {
+  title: 'Bộ Sưu Tập Thời Trang Đương Đại & Lookbooks 2026 | TADA! Fashion Atelier',
+  description:
+    'Khám phá các bộ sưu tập thời trang Thu Đông 2026, phong cách Quiet Luxury, Local Designer Việt Nam và Heritage Sportswear tại TADA! Fashion Atelier.',
+  alternates: {
+    canonical: `${siteUrl}/collections`,
+  },
+  openGraph: {
+    title: 'Bộ Sưu Tập Thời Trang Đương Đại & Lookbooks 2026 | TADA!',
+    description:
+      'Mỗi bộ sưu tập tại TADA! là một câu chuyện thị giác được định hình bởi chất liệu thượng hạng và kỹ thuật may đo tinh tế.',
+    url: `${siteUrl}/collections`,
+    siteName: 'TADA! Fashion Atelier',
+    images: [
+      {
+        url: `${siteUrl}/images/og-default.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'Bộ sưu tập TADA! Fashion Atelier',
+      },
+    ],
+    locale: 'vi_VN',
+    type: 'website',
+  },
+};
+
 export default function CollectionsPage() {
-  const autumnProducts = PRODUCTS.filter((p) =>
+  const allProducts = getDBProducts().filter((p) => !p.status || p.status === 'active');
+
+  const autumnProducts = allProducts.filter((p) =>
     p.subCategory === 'ao-khoac' ||
     p.subCategory === 'ao-len' ||
     p.category === 'ao-khoac' ||
@@ -18,15 +47,15 @@ export default function CollectionsPage() {
     p.name.toLowerCase().includes('blazer')
   ).slice(0, 4);
 
-  const quietLuxuryProducts = PRODUCTS.filter((p) =>
+  const quietLuxuryProducts = allProducts.filter((p) =>
     ['lemaire', 'gia studios', 'subtle studios', 'cos', 'chanel'].includes(p.brand.toLowerCase())
   ).slice(0, 4);
 
-  const localDesignerProducts = PRODUCTS.filter(
+  const localDesignerProducts = allProducts.filter(
     (p) => p.origin === 'vietnam_local_brand'
   ).slice(0, 4);
 
-  const retroSportswearProducts = PRODUCTS.filter(
+  const retroSportswearProducts = allProducts.filter(
     (p) => p.category === 'do-bo' || p.brand === 'Adidas Originals' || p.brand === 'Chrome Hearts'
   ).slice(0, 4);
 

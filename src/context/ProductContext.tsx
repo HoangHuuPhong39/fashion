@@ -21,6 +21,7 @@ interface ProductContextType {
   deleteProduct: (id: string) => Promise<void>;
   resetToDefault: () => void;
   refreshProducts: () => Promise<void>;
+  fetchProducts: (page?: number, limit?: number) => Promise<any>;
   getProductById: (id: string) => Product | undefined;
   getProductBySlug: (slug: string) => Product | undefined;
   // Dynamic categories management
@@ -81,40 +82,26 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch {}
   }, []);
 
-  const fetchProducts = useCallback(async () => {
+  const fetchProducts = useCallback(async (page: number = 1, limit: number = 24) => {
     try {
-      const res = await fetch('/api/products');
+      const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
       if (res.ok) {
         const data = await res.json();
-        if (data.success && Array.isArray(data.products) && data.products.length > 0) {
+        if (data.success && Array.isArray(data.products)) {
           setProducts(data.products);
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data.products));
-          } catch {}
-          return;
+          return data;
         }
       }
     } catch (e) {
-      console.warn('Cannot fetch from /api/products, falling back to local cache', e);
+      console.warn('Cannot fetch from /api/products', e);
     }
-
-    // Fallback to localStorage
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setProducts(parsed);
-        }
-      }
-    } catch {}
   }, []);
 
   useEffect(() => {
     let active = true;
     const initData = async () => {
       try {
-        await Promise.all([fetchProducts(), fetchCategories(), fetchTrendingSearches()]);
+        await Promise.all([fetchCategories(), fetchTrendingSearches()]);
       } finally {
         if (active) {
           setIsLoading(false);
@@ -125,7 +112,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => {
       active = false;
     };
-  }, [fetchProducts, fetchCategories, fetchTrendingSearches]);
+  }, [fetchCategories, fetchTrendingSearches]);
 
   const saveProductsLocal = (newProducts: Product[]) => {
     setProducts(newProducts);
@@ -357,6 +344,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
         deleteProduct,
         resetToDefault,
         refreshProducts: fetchProducts,
+        fetchProducts,
         getProductById,
         getProductBySlug,
         fetchCategories,

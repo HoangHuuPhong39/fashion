@@ -62,6 +62,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
   const allProducts = getDBProducts();
   const relatedProducts = allProducts
     .filter(
@@ -69,5 +70,76 @@ export default async function ProductDetailPage({ params }: PageProps) {
     )
     .slice(0, 4);
 
-  return <ProductDetailClient key={product.id} product={product} relatedProducts={relatedProducts} />;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Trang chủ',
+            item: siteUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: product.category === 'nu' ? 'Thời Trang Nữ' : product.category === 'nam' ? 'Thời Trang Nam' : product.category,
+            item: `${siteUrl}/shop?category=${product.category}`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name: product.name,
+            item: `${siteUrl}/product/${product.slug || product.id}`,
+          },
+        ],
+      },
+      {
+        '@type': 'Product',
+        name: product.name,
+        description: product.description,
+        image: product.images?.map((img) => (img.startsWith('http') ? img : `${siteUrl}${img}`)) || [],
+        sku: product.sku || product.id,
+        brand: {
+          '@type': 'Brand',
+          name: product.brand,
+        },
+        offers: {
+          '@type': 'Offer',
+          url: `${siteUrl}/product/${product.slug || product.id}`,
+          priceCurrency: 'VND',
+          price: product.price,
+          priceValidUntil: '2027-12-31',
+          itemCondition: 'https://schema.org/NewCondition',
+          availability:
+            product.stockCount > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          seller: {
+            '@type': 'Organization',
+            name: 'TADA! Fashion Atelier',
+          },
+        },
+        ...(product.reviewCount && product.reviewCount > 0
+          ? {
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: product.rating,
+                reviewCount: product.reviewCount,
+              },
+            }
+          : {}),
+      },
+    ],
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <ProductDetailClient key={product.id} product={product} relatedProducts={relatedProducts} />
+    </>
+  );
 }

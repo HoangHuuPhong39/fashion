@@ -18,15 +18,46 @@ const beVietnamPro = Be_Vietnam_Pro({
   display: 'swap',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
+
 export const metadata: Metadata = {
-  title: 'TADA! — Style for your story | Sàn Thời Trang Cao Cấp',
-  description: 'Khám phá thế giới thời trang thanh lịch tại TADA!. Tuyển chọn thiết kế độc quyền từ Local Brands Việt Nam hàng đầu và dịch vụ Order thời trang quốc tế từ Paris, Seoul, Tokyo.',
-  keywords: 'TADA!, thời trang cao cấp, local brand việt nam, hàng order quốc tế, đầm lụa, áo khoác cashmere, quiet luxury',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'TADA! Fashion Atelier | Thời Trang Đương Đại & May Đo Tinh Tế',
+    template: '%s | TADA! Fashion Atelier',
+  },
+  description:
+    'Khám phá thế giới thời trang thanh lịch tại TADA! Fashion Atelier. Tuyển chọn thiết kế độc quyền từ Local Brands Việt Nam hàng đầu và dịch vụ Fashion Concierge may đo.',
+  keywords: [
+    'TADA!',
+    'thời trang cao cấp',
+    'local brand việt nam',
+    'hàng order quốc tế',
+    'đầm lụa',
+    'áo khoác cashmere',
+    'quiet luxury',
+    'may đo đương đại',
+  ],
   openGraph: {
-    title: 'TADA! — Style for your story',
+    title: 'TADA! Fashion Atelier — Style for your story',
     description: 'Nền tảng thương mại điện tử thời trang đương đại và dịch vụ Fashion Concierge quốc tế.',
     type: 'website',
     locale: 'vi_VN',
+    siteName: 'TADA! Fashion Atelier',
+    images: [
+      {
+        url: `${siteUrl}/images/og-default.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'TADA! Fashion Atelier',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'TADA! Fashion Atelier',
+    description: 'Thời trang đương đại & dịch vụ may đo cao cấp.',
+    images: [`${siteUrl}/images/og-default.jpg`],
   },
 };
 
