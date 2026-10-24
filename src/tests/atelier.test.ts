@@ -12,7 +12,7 @@ import {
   updateConciergeStatus
 } from '@/lib/db';
 import { requireAdmin, requireUser } from '@/lib/guard';
-import { sanitizeCsvCell } from '@/app/api/admin/orders/export-csv/route';
+import { sanitizeCsvCell } from '@/lib/csv';
 import { verifyTotpCode, generateTotpSecret, generateTotpCode, generateBackupCodes, verifyAndConsumeBackupCode } from '@/lib/totp';
 import crypto from 'crypto';
 
