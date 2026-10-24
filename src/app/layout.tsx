@@ -59,6 +59,9 @@ export const metadata: Metadata = {
     description: 'Thời trang đương đại & dịch vụ may đo cao cấp.',
     images: [`${siteUrl}/images/og-default.jpg`],
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  },
 };
 
 export default function RootLayout({

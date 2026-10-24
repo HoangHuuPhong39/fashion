@@ -1,0 +1,40 @@
+name: CI / Production Build Quality Check
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  verify:
+    name: Typecheck, Lint & Build
+    runs-on: ubuntu-latest
+
+    env:
+      ADMIN_EMAIL: admin@tada.vn
+      ADMIN_INITIAL_PASSWORD: CiAdminPassword2026!
+      NEXT_PUBLIC_SITE_URL: https://tada-fashion.vn
+      IP_HASH_SECRET: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Type Checking
+        run: npx tsc --noEmit
+
+      - name: ESLint Code Quality Inspection
+        run: npx eslint src
+
+      - name: Production Next.js Build
+        run: npx next build
