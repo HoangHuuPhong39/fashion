@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { adjustProductStock, getPendingStockNotifications, markStockNotificationsSent, getProductById } from '@/lib/db';
 import { requireAdmin } from '@/lib/guard';
 import { sendEmailAsync, buildBackInStockEmail } from '@/lib/email';
+import { recordAdminAuditLog } from '@/lib/audit';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
 
@@ -33,6 +34,21 @@ export async function POST(request: Request) {
     if (!result.success) {
       return NextResponse.json(result, { status: 400 });
     }
+
+    recordAdminAuditLog({
+      action: 'inventory_adjust',
+      entity: 'inventory',
+      entityId: productId,
+      performedBy: authCheck.user.email || authCheck.user.name,
+      details: {
+        variantId,
+        change,
+        type,
+        reason,
+        orderId,
+        newStock: result.updatedProduct?.stockCount
+      }
+    });
 
     // TỰ ĐỘNG GỬI EMAIL THÔNG BÁO CHO KHÁCH HÀNG "BÁO KHI CÓ HÀNG" KHI TỒN > 0
     if (change > 0 && result.updatedProduct && result.updatedProduct.stockCount > 0) {

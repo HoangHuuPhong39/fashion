@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getOrderById, updateDBOrderStatus } from '@/lib/db';
 import { getSessionUser, requireUser } from '@/lib/guard';
 import { sendEmailAsync, buildOrderStatusChangeEmail } from '@/lib/email';
+import { recordAdminAuditLog } from '@/lib/audit';
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -106,6 +107,20 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const result = updateDBOrderStatus(id, targetStatus, note, performedBy, targetPaymentStatus);
     if (!result.success) {
       return NextResponse.json(result, { status: 400 });
+    }
+
+    if (isAdmin) {
+      recordAdminAuditLog({
+        action: 'order_status_update',
+        entity: 'order',
+        entityId: id,
+        performedBy: user.email || user.name,
+        details: {
+          before: { status: order.status, paymentStatus: order.paymentStatus },
+          after: { status: targetStatus, paymentStatus: targetPaymentStatus || order.paymentStatus },
+          note
+        }
+      });
     }
 
     // Gửi email cập nhật trạng thái đơn hàng (nếu trạng thái có thay đổi và có email người nhận)

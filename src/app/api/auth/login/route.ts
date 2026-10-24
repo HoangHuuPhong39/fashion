@@ -6,9 +6,12 @@ import {
   checkRateLimit,
   recordFailedAttempt,
   resetRateLimit,
-  getTrustedClientIp
+  getTrustedClientIp,
+  consumeUserBackupCode
 } from '@/lib/auth';
 import { verifyMutationOrigin } from '@/lib/guard';
+import { verifyTotpCode } from '@/lib/totp';
+import { recordAdminAuditLog } from '@/lib/audit';
 
 export async function POST(request: Request) {
   try {
@@ -64,9 +67,52 @@ export async function POST(request: Request) {
       );
     }
 
+    // 2.1 Kiểm tra Xác thực 2 lớp (TOTP 2FA) nếu tài khoản đã kích hoạt
+    if (user.twoFactorEnabled && user.twoFactorSecret) {
+      const code = String(body.adminPin || body.twoFactorCode || '').trim();
+      if (!code) {
+        return NextResponse.json(
+          {
+            success: false,
+            require2FA: true,
+            message: 'Tài khoản yêu cầu xác thực 2 lớp (TOTP). Vui lòng nhập mã 6 số từ Google Authenticator hoặc mã dự phòng.'
+          },
+          { status: 401 }
+        );
+      }
+
+      const isTotpValid = verifyTotpCode(code, user.twoFactorSecret);
+      const isBackupValid = !isTotpValid && consumeUserBackupCode(user.id, code);
+
+      if (!isTotpValid && !isBackupValid) {
+        recordFailedAttempt(ipRateKey);
+        recordFailedAttempt(emailRateKey);
+        return NextResponse.json(
+          {
+            success: false,
+            require2FA: true,
+            message: 'Mã xác thực 2FA không chính xác hoặc đã hết hạn.'
+          },
+          { status: 401 }
+        );
+      }
+    }
+
     // 3. Đăng nhập thành công -> Reset rate limit
     resetRateLimit(ipRateKey);
     resetRateLimit(emailRateKey);
+
+    // Ghi nhật ký đăng nhập của quản trị viên
+    if (user.role === 'admin') {
+      recordAdminAuditLog({
+        action: 'admin_login',
+        entity: 'user',
+        entityId: user.id,
+        performedBy: user.email || user.name,
+        ipHash: ip,
+        details: { twoFactorUsed: !!user.twoFactorEnabled }
+      });
+    }
 
     // 4. Tạo server session
     const { rawToken } = createServerSession(user);

@@ -87,3 +87,24 @@ body {
 input, select, textarea, button {
   font-family: inherit;
 }
+
+/* Định dạng in phiếu giao hàng & hóa đơn cho Quản trị viên (A4/A5) */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  nav, footer, aside, header, .print-hidden {
+    display: none !important;
+  }
+  .printable-invoice {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}

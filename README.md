@@ -122,11 +122,81 @@ Toàn bộ ID sản phẩm (`prod-...`), biến thể, đơn hàng, người dù
 
 ---
 
+## 🛠️ Hướng Dẫn Cấu Hình Chi Tiết 5 Dịch Vụ Bên Thứ Ba
+
+Hệ thống được thiết kế theo mô hình Adapter linh hoạt, cho phép cấu hình hoặc chuyển đổi nhà cung cấp mà không làm gián đoạn vận hành:
+
+### 1. Dịch Vụ Email Giao Dịch — Resend (https://resend.com)
+- **Mục đích**: Gửi email xác nhận đơn hàng, cập nhật trạng thái đơn, đặt lại mật khẩu, xác thực email, và báo khi có hàng.
+- **Cách cấu hình**:
+  1. Đăng ký tài khoản tại [resend.com](https://resend.com) và tạo API Key (bắt đầu bằng `re_...`).
+  2. Xác minh tên miền riêng (ví dụ: `tada-fashion.vn`) trong mục **Domains** bằng cách thêm bản ghi DNS MX, TXT (SPF), và DKIM theo hướng dẫn của Resend.
+  3. Khai báo vào biến môi trường:
+     - `RESEND_API_KEY`: Khóa API key vừa tạo.
+     - `EMAIL_FROM`: `TADA! Fashion Atelier <no-reply@tada-fashion.vn>` (hoặc email đã xác minh).
+  *(Lưu ý: Nếu chưa cấu hình key hoặc chưa xác minh domain, hệ thống tự động fallback ghi log email dạng text giả lập an toàn mà không làm gián đoạn quy trình đặt hàng).*
+
+---
+
+### 2. Tự Động Xác Nhận Thanh Toán VietQR — SePay hoặc Casso
+- **Mục đích**: Nhận thông báo giao dịch chuyển khoản VietQR từ ngân hàng (MBBank, Vietcombank, v.v.), tự động cập nhật đơn hàng thành `paid` hoặc `partially_paid`, chống tấn công replay và timing attacks.
+- **Cách cấu hình SePay (Khuyên dùng)**:
+  1. Đăng ký tài khoản tại [sepay.vn](https://sepay.vn) và kết nối tài khoản ngân hàng của Atelier.
+  2. Tạo Webhook với URL: `https://tada-fashion.vn/api/webhooks/payment`.
+  3. Đặt API Key / Token xác thực chữ ký (Authentication Header) và điền vào:
+     - `SEPAY_WEBHOOK_API_KEY`: Khóa bí mật đã đặt trên SePay.
+- **Cách cấu hình Casso (Tùy chọn)**:
+  1. Đăng ký tại [casso.vn](https://casso.vn) và cấu hình Webhook URL tương tự.
+  2. Điền token bảo mật vào `CASSO_SECURE_TOKEN`.
+
+---
+
+### 3. Tính Cước Vận Chuyển — Giao Hàng Nhanh (GHN)
+- **Mục đích**: Tự động tính cước vận chuyển chuẩn xác từ kho hàng đến địa chỉ người nhận theo thời gian thực.
+- **Cách cấu hình**:
+  1. Đăng nhập cổng quản trị [khachhang.ghn.vn](https://khachhang.ghn.vn).
+  2. Vào mục **Quản lý tài khoản** -> **Thông tin tài khoản** -> Lấy `Token API` và `Mã cửa hàng (ShopId)`.
+  3. Điền vào biến môi trường:
+     - `GHN_API_TOKEN`: Token API từ GHN.
+     - `GHN_SHOP_ID`: Mã cửa hàng của bạn trên GHN.
+     - `GHN_FROM_DISTRICT_ID`: Mã Quận/Huyện của showroom/kho xuất hàng (Ví dụ: 1442 cho Quận 1, TP.HCM hoặc 1482 cho Hoàn Kiếm, Hà Nội).
+  *(Lưu ý: Khi chưa có token hoặc API GHN quá tải, hệ thống tự động fallback về biểu phí đồng giá theo vùng miền của Atelier: 25.000đ nội thành, 35.000đ tỉnh thành, 50.000đ hỏa tốc).*
+
+---
+
+### 4. Đăng Nhập Google OAuth 2.0 (PKCE)
+- **Mục đích**: Cho phép khách hàng đăng nhập nhanh 1 chạm bằng tài khoản Google, tự động xác minh email và liên kết tài khoản an toàn.
+- **Cách cấu hình**:
+  1. Truy cập [Google Cloud Console](https://console.cloud.google.com).
+  2. Tạo Project mới -> Vào **APIs & Services** -> **Credentials**.
+  3. Tạo **OAuth 2.0 Client IDs** với Application Type: *Web application*.
+  4. Thêm **Authorized redirect URIs**:
+     - Local: `http://localhost:3000/api/auth/google/callback`
+     - Production: `https://tada-fashion.vn/api/auth/google/callback`
+  5. Điền thông tin vào:
+     - `GOOGLE_CLIENT_ID`: Mã Client ID (đuôi `.apps.googleusercontent.com`).
+     - `GOOGLE_CLIENT_SECRET`: Mã Client Secret bảo mật.
+
+---
+
+### 5. Chống Bot & Spam — Cloudflare Turnstile CAPTCHA
+- **Mục đích**: Bảo vệ form liên hệ `/lien-he`, đăng ký/đăng nhập và đặt hàng khỏi bot tự động mà không bắt người dùng giải câu đố hình ảnh khó chịu.
+- **Cách cấu hình**:
+  1. Đăng nhập [Cloudflare Dashboard](https://dash.cloudflare.com) -> Chọn mục **Turnstile**.
+  2. Bấm **Add Site**: Nhập tên miền `tada-fashion.vn` (thêm `localhost` cho môi trường thử nghiệm).
+  3. Chọn chế độ: *Managed (Khuyên dùng)*.
+  4. Lấy cặp khóa và điền vào:
+     - `NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY`: Khóa công khai hiển thị trên trình duyệt.
+     - `CLOUDFLARE_TURNSTILE_SECRET_KEY`: Khóa bí mật dùng để xác minh phía máy chủ.
+
+---
+
 ## 🔄 Quy Trình Kiểm Thử & CI/CD (GitHub Actions)
 
 Mỗi khi có commit hoặc Pull Request vào nhánh `master` hoặc `main`, luồng tự động hóa `.github/workflows/ci.yml` sẽ thực hiện chuỗi kiểm định nghiêm ngặt:
 1. `npx tsc --noEmit`: Kiểm tra tính toàn vẹn kiểu dữ liệu TypeScript.
 2. `npx eslint src`: Quét toàn diện chất lượng mã và quy chuẩn React 19 / Next.js.
-3. `npx next build`: Biên dịch gói ứng dụng production thực tế.
+3. `npm test`: Chạy 22 bài kiểm thử tự động toàn diện qua Vitest.
+4. `npx next build`: Biên dịch gói ứng dụng production thực tế.
 
 Chỉ những commit vượt qua 100% các bước trên mới được phép merge và deploy ra môi trường production.

@@ -309,6 +309,7 @@ export interface User {
   addresses: ShippingAddress[];
   bankInfo?: BankAccountInfo;
   emailVerified?: boolean;
+  twoFactorEnabled?: boolean;
 }
 
 // Bảng liên hệ / tin nhắn khách hàng gửi

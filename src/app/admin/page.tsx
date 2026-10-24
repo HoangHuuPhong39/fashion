@@ -65,12 +65,15 @@ import { InventoryLogsTab } from '@/components/admin/tabs/InventoryLogsTab';
 import { LoyaltyTab } from '@/components/admin/tabs/LoyaltyTab';
 import { CouponsTab } from '@/components/admin/tabs/CouponsTab';
 import { CategoriesTab } from '@/components/admin/tabs/CategoriesTab';
+import { AuditLogsTab } from '@/components/admin/tabs/AuditLogsTab';
+import { SecurityTab } from '@/components/admin/tabs/SecurityTab';
 
 export default function AdminPage() {
   const { orders, updateOrderStatus, user, isAdmin, loginWithAdmin, logout, refreshOrders } = useAuth();
   const { products, categories, addProduct, updateProduct, updatePrice, adjustStock, deleteProduct, refreshProducts, saveCategory, deleteCategory } = useProducts();
 
-  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'inventory_logs' | 'dashboard' | 'loyalty' | 'coupons' | 'categories'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'orders' | 'inventory_logs' | 'audit_logs' | 'dashboard' | 'loyalty' | 'coupons' | 'categories' | 'security'>('dashboard');
+  const [lowStockThreshold, setLowStockThreshold] = useState<number>(5);
   const [adminEmail, setAdminEmail] = useState('admin@tada.vn');
   const [adminPassword, setAdminPassword] = useState('');
   const [adminPin, setAdminPin] = useState('');
@@ -790,64 +793,9 @@ export default function AdminPage() {
     return filteredOrders.slice(start, start + ORDERS_PER_PAGE);
   }, [filteredOrders, orderPage]);
 
-  // Xuất file CSV chuẩn UTF-8 có BOM để mở bằng Excel tiếng Việt hoàn hảo
+  // Xuất file CSV bảo mật chống CSV Injection và chuẩn UTF-8 có BOM
   const handleExportCSV = () => {
-    if (filteredOrders.length === 0) {
-      alert('Không có dữ liệu đơn hàng để xuất.');
-      return;
-    }
-
-    const headers = [
-      'Mã Đơn Hàng',
-      'Thời Gian Đặt',
-      'Họ Tên Khách Hàng',
-      'Số Điện Thoại',
-      'Địa Chỉ Giao Hàng',
-      'Danh Sách Sản Phẩm',
-      'Tổng Số Lượng',
-      'Tạm Tính (VNĐ)',
-      'Phí Vận Chuyển (VNĐ)',
-      'Giảm Giá (VNĐ)',
-      'Tổng Tiền (VNĐ)',
-      'Phương Thức Thanh Toán',
-      'Trạng Thái Thanh Toán',
-      'Trạng Thái Đơn Hàng'
-    ];
-
-    const rows = filteredOrders.map((o) => {
-      const itemsDesc = o.items
-        .map((i) => `${i.productName} [${i.color || ''} - Size ${i.size || ''}] x${i.quantity}`)
-        .join('; ');
-      const totalQty = o.items.reduce((sum, i) => sum + i.quantity, 0);
-
-      return [
-        `"${o.orderCode}"`,
-        `"${formatDate(o.createdAt)}"`,
-        `"${o.shippingAddress.fullName}"`,
-        `"${o.shippingAddress.phone}"`,
-        `"${o.shippingAddress.address}, ${o.shippingAddress.ward}, ${o.shippingAddress.district}, ${o.shippingAddress.city}"`,
-        `"${itemsDesc}"`,
-        totalQty,
-        o.subtotal,
-        o.shippingFee,
-        o.discountAmount,
-        o.total,
-        `"${o.paymentMethod}"`,
-        `"${o.paymentStatus === 'paid' ? 'Đã thanh toán' : o.paymentStatus === 'partially_paid' ? 'Đã cọc' : 'Chưa thanh toán'}"`,
-        `"${o.statusLabel}"`
-      ].join(',');
-    });
-
-    // Thêm UTF-8 BOM (\uFEFF) để Excel mở không bị vỡ font tiếng Việt
-    const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', `TADA_Don_Hang_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open('/api/admin/orders/export-csv', '_blank');
   };
 
   // Thống kê Dashboard thực tế
@@ -891,9 +839,14 @@ export default function AdminPage() {
       0
     );
 
-    // Top sản phẩm bán chạy
+    // Tỷ lệ hủy đơn
+    const cancellationRate =
+      totalOrdersCount > 0 ? Number(((cancelledCount / totalOrdersCount) * 100).toFixed(1)) : 0;
+
+    // Top sản phẩm bán chạy THẬT (chỉ tính từ các đơn ĐÃ GIAO THÀNH CÔNG theo yêu cầu)
+    const deliveredOrders = targetOrders.filter((o) => o.status === 'delivered');
     const productSalesMap: Record<string, { name: string; quantity: number; revenue: number; image: string }> = {};
-    nonCancelledOrders.forEach((o) => {
+    deliveredOrders.forEach((o) => {
       o.items.forEach((item) => {
         if (!productSalesMap[item.productId]) {
           productSalesMap[item.productId] = {
@@ -912,8 +865,44 @@ export default function AdminPage() {
       .sort((a, b) => b.quantity - a.quantity)
       .slice(0, 5);
 
-    // Sản phẩm sắp hết hàng
-    const lowStockProducts = products.filter((p) => p.stockCount <= 5);
+    // Sản phẩm sắp hết hàng dựa trên ngưỡng cấu hình được
+    const lowStockProducts = products.filter((p) => p.stockCount <= lowStockThreshold);
+
+    // Tính mốc biểu đồ doanh thu nhẹ SVG
+    const revenueTimeline: Array<{ label: string; revenue: number }> = [];
+    if (dashboardTimeRange === '7days') {
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(now.getTime() - i * 86400000);
+        const dayStr = `${d.getDate()}/${d.getMonth() + 1}`;
+        const start = new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+        const end = start + 86400000;
+        const rev = validRevenueOrders
+          .filter((o) => {
+            const t = new Date(o.createdAt).getTime();
+            return t >= start && t < end;
+          })
+          .reduce((sum, o) => sum + o.total, 0);
+        revenueTimeline.push({ label: dayStr, revenue: rev });
+      }
+    } else {
+      // 4 mốc tuần hoặc kỳ
+      const intervals = [
+        { label: 'Kỳ 1', frac: 0.25 },
+        { label: 'Kỳ 2', frac: 0.5 },
+        { label: 'Kỳ 3', frac: 0.75 },
+        { label: 'Kỳ 4', frac: 1.0 }
+      ];
+      intervals.forEach((it, idx) => {
+        const slice = validRevenueOrders.slice(
+          Math.floor((idx / 4) * validRevenueOrders.length),
+          Math.floor(((idx + 1) / 4) * validRevenueOrders.length)
+        );
+        revenueTimeline.push({
+          label: it.label,
+          revenue: slice.reduce((sum, o) => sum + o.total, 0)
+        });
+      });
+    }
 
     return {
       totalOrdersCount,
@@ -921,13 +910,15 @@ export default function AdminPage() {
       shippingCount,
       deliveredCount,
       cancelledCount,
+      cancellationRate,
       actualRevenue,
       aov,
       totalItemsSold,
       topSellingProducts,
-      lowStockProducts
+      lowStockProducts,
+      revenueTimeline
     };
-  }, [orders, products, dashboardTimeRange]);
+  }, [orders, products, dashboardTimeRange, lowStockThreshold]);
 
   // TRƯỜNG HỢP: KHÁCH HÀNG THƯỜNG THỬ TRUY CẬP TRỰC TIẾP URL /admin -> TỪ CHỐI
   if (user && user.role !== 'admin') {
@@ -1373,6 +1364,36 @@ export default function AdminPage() {
                 >
                   <Users className="w-4 h-4" />
                   <span>Khách hàng & VIP</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsProductModalOpen(false);
+                    setActiveTab('audit_logs');
+                  }}
+                  className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors text-left ${
+                    !isProductModalOpen && activeTab === 'audit_logs'
+                      ? 'bg-[#E8D7BD] text-[#171613] font-bold'
+                      : 'text-[#747069] hover:bg-[#F4F1EA] hover:text-[#171613]'
+                  }`}
+                >
+                  <History className="w-4 h-4" />
+                  <span>Nhật ký thao tác</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsProductModalOpen(false);
+                    setActiveTab('security');
+                  }}
+                  className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors text-left ${
+                    !isProductModalOpen && activeTab === 'security'
+                      ? 'bg-[#E8D7BD] text-[#171613] font-bold'
+                      : 'text-[#747069] hover:bg-[#F4F1EA] hover:text-[#171613]'
+                  }`}
+                >
+                  <ShieldCheck className="w-4 h-4 text-[#15803D]" />
+                  <span>Bảo mật 2FA</span>
                 </button>
               </div>
 
@@ -2500,8 +2521,15 @@ export default function AdminPage() {
                     setDashboardTimeRange={setDashboardTimeRange}
                     dashboardStats={dashboardStats}
                     formatPrice={formatPrice}
+                    lowStockThreshold={lowStockThreshold}
+                    setLowStockThreshold={setLowStockThreshold}
+                    onOpenStockModal={handleOpenStockModal}
                   />
                 )}
+
+                {activeTab === 'audit_logs' && <AuditLogsTab />}
+
+                {activeTab === 'security' && <SecurityTab />}
 
                 {activeTab === 'loyalty' && (
                   <LoyaltyTab
@@ -2671,8 +2699,8 @@ export default function AdminPage() {
           MODAL: CHI TIẾT ĐƠN HÀNG & IN HÓA ĐƠN
          ========================================================================= */}
       {viewingOrderDetail && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl print:m-0 print:p-0 print:shadow-none">
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 print:p-0 print:bg-white print:fixed print:inset-0">
+          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 space-y-6 max-h-[90vh] overflow-y-auto shadow-2xl printable-invoice print:max-h-none print:overflow-visible">
             <div className="flex items-center justify-between pb-3 border-b border-[#E8E4DC] print:hidden">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5 text-[#8A7158]" />
@@ -2798,6 +2826,25 @@ export default function AdminPage() {
                 <p>
                   Trạng thái đơn hàng: <strong>{viewingOrderDetail.statusLabel}</strong>
                 </p>
+              </div>
+
+              {/* Phần ký nhận khi in phiếu giao hàng A4/A5 */}
+              <div className="hidden print:grid grid-cols-3 gap-4 pt-10 text-center text-[11px] border-t border-[#E8E4DC]">
+                <div>
+                  <p className="font-bold text-[#171613]">Người Lập Phiếu</p>
+                  <p className="text-[9px] text-[#747069] italic mt-0.5">(Ký và ghi rõ họ tên)</p>
+                  <div className="h-16" />
+                </div>
+                <div>
+                  <p className="font-bold text-[#171613]">Người Giao Hàng</p>
+                  <p className="text-[9px] text-[#747069] italic mt-0.5">(Ký và ghi rõ họ tên)</p>
+                  <div className="h-16" />
+                </div>
+                <div>
+                  <p className="font-bold text-[#171613]">Người Nhận Hàng</p>
+                  <p className="text-[9px] text-[#747069] italic mt-0.5">(Ký và ghi rõ họ tên)</p>
+                  <div className="h-16" />
+                </div>
               </div>
             </div>
           </div>

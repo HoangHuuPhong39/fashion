@@ -10,6 +10,7 @@ import {
   resetRateLimit,
   hashIp
 } from './ratelimit';
+import { verifyAndConsumeBackupCode } from './totp';
 
 export { getTrustedClientIp, checkRateLimit, recordFailedAttempt, resetRateLimit, hashIp };
 // Legacy alias
@@ -21,6 +22,9 @@ const SESSIONS_FILE = path.join(DATA_DIR, 'sessions.json');
 
 export interface StoredUser extends User {
   passwordHash: string;
+  twoFactorEnabled?: boolean;
+  twoFactorSecret?: string;
+  twoFactorBackupCodes?: string[];
 }
 
 export interface Session {
@@ -294,3 +298,48 @@ export function verifySessionToken(rawToken?: string | null): { valid: boolean; 
   const { passwordHash: _, ...safeUser } = user;
   return { valid: true, user: safeUser };
 }
+
+// ===== 2FA (XÁC THỰC HAI LỚP TOTP CHO ADMIN) =====
+
+export function enableUserTwoFactor(
+  userId: string,
+  secret: string,
+  hashedBackupCodes: string[]
+): boolean {
+  const users = getAllUsers();
+  const user = users.find((u) => u.id === userId);
+  if (!user) return false;
+
+  user.twoFactorEnabled = true;
+  user.twoFactorSecret = secret;
+  user.twoFactorBackupCodes = hashedBackupCodes;
+  saveAllUsers(users);
+  return true;
+}
+
+export function disableUserTwoFactor(userId: string): boolean {
+  const users = getAllUsers();
+  const user = users.find((u) => u.id === userId);
+  if (!user) return false;
+
+  user.twoFactorEnabled = false;
+  user.twoFactorSecret = undefined;
+  user.twoFactorBackupCodes = undefined;
+  saveAllUsers(users);
+  return true;
+}
+
+export function consumeUserBackupCode(userId: string, inputCode: string): boolean {
+  const users = getAllUsers();
+  const user = users.find((u) => u.id === userId);
+  if (!user || !user.twoFactorBackupCodes || user.twoFactorBackupCodes.length === 0) return false;
+
+  const { valid, remainingHashedCodes } = verifyAndConsumeBackupCode(inputCode, user.twoFactorBackupCodes);
+  if (valid) {
+    user.twoFactorBackupCodes = remainingHashedCodes;
+    saveAllUsers(users);
+    return true;
+  }
+  return false;
+}
+

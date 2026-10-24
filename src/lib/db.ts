@@ -2038,7 +2038,8 @@ export function createConciergeRequest(data: {
   email: string;
   serviceType: 'bespoke_tailoring' | 'international_order';
   productLink?: string;
-  productName: string;
+  productName?: string;
+  description?: string;
   images?: string[];
   size?: string;
   color?: string;
@@ -2058,7 +2059,7 @@ export function createConciergeRequest(data: {
     email: data.email.trim().toLowerCase(),
     serviceType: data.serviceType,
     productLink: data.productLink?.trim(),
-    productName: data.productName.trim(),
+    productName: data.productName ? data.productName.trim() : (data as any).description ? (data as any).description.slice(0, 50) : 'Yêu cầu Atelier Concierge',
     images: data.images || [],
     size: data.size?.trim(),
     color: data.color?.trim(),
@@ -2087,7 +2088,8 @@ export function createConciergeRequest(data: {
 
 export function lookupConciergeRequest(code: string, phoneOrEmail: string): ConciergeRequest | null {
   const cleanCode = code.trim().toUpperCase();
-  const cleanPhoneOrEmail = phoneOrEmail.trim().toLowerCase().replace(/[\s.-]/g, '');
+  const rawInput = phoneOrEmail.trim().toLowerCase();
+  const cleanPhone = rawInput.replace(/[\s.-]/g, '');
   const list = getAllConciergeRequests();
 
   return (
@@ -2096,7 +2098,7 @@ export function lookupConciergeRequest(code: string, phoneOrEmail: string): Conc
       if (!matchCode) return false;
       const rPhone = (r.phone || '').replace(/[\s.-]/g, '');
       const rEmail = (r.email || '').toLowerCase();
-      return rPhone === cleanPhoneOrEmail || rEmail === cleanPhoneOrEmail;
+      return (rPhone && rPhone === cleanPhone) || (rEmail && rEmail === rawInput);
     }) || null
   );
 }

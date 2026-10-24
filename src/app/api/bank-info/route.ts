@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 import { requireAdmin, verifyMutationOrigin } from '@/lib/guard';
+import { recordAdminAuditLog } from '@/lib/audit';
 
 const SETTINGS_FILE = path.join(process.cwd(), 'data', 'bank_settings.json');
 
@@ -68,6 +69,18 @@ export async function PUT(request: Request) {
     }
 
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2), 'utf-8');
+
+    recordAdminAuditLog({
+      action: 'bank_settings_update',
+      entity: 'bank_settings',
+      entityId: 'vietqr_primary',
+      performedBy: authCheck.user.email || authCheck.user.name,
+      details: {
+        bankName: updated.bankName,
+        accountHolder: updated.accountHolder,
+        accountNumberMasked: '***' + updated.accountNumber.slice(-4)
+      }
+    });
 
     return NextResponse.json({
       success: true,
