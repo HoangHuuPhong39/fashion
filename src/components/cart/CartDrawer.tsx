@@ -4,10 +4,13 @@ import React from 'react';
 import Link from 'next/link';
 import { X, Trash2, Plus, Minus, ArrowRight, ShoppingBag, ShieldCheck, Truck } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 import { Badge } from '@/components/ui/Badge';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { LoyaltyProgressBar } from '@/components/loyalty/LoyaltyProgressBar';
 
 export const CartDrawer: React.FC = () => {
+  const { user } = useAuth();
   const {
     items,
     isCartDrawerOpen,
@@ -189,6 +192,9 @@ export const CartDrawer: React.FC = () => {
         {/* Footer Actions */}
         {items.length > 0 && (
           <div className="p-5 border-t border-[#E8E4DC] bg-[#F4F1EA] space-y-3">
+            {/* Thanh tiến trình thăng hạng thành viên */}
+            <LoyaltyProgressBar user={user} cartSubtotal={subtotal} compact />
+
             <div className="flex items-center justify-between text-sm font-medium">
               <span className="text-[#747069]">Tạm tính:</span>
               <span className="font-editorial text-lg text-[#171613] font-bold">

@@ -15,7 +15,8 @@ import {
   AlertCircle,
   MessageSquare,
   Send,
-  CheckCircle2
+  CheckCircle2,
+  X
 } from 'lucide-react';
 import { BRANDS } from '@/data/mockData';
 import { useCart } from '@/context/CartContext';
@@ -24,14 +25,16 @@ import { useAuth } from '@/context/AuthContext';
 import { ProductCard } from '@/components/product/ProductCard';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { SizeGuideModal } from '@/components/product/SizeGuideModal';
+import { CompleteTheLookSection } from '@/components/product/CompleteTheLookSection';
 import { Product, Review } from '@/types';
 
 interface ProductDetailClientProps {
   product: Product;
   relatedProducts: Product[];
+  matchingProducts?: Product[];
 }
 
-export function ProductDetailClient({ product, relatedProducts }: ProductDetailClientProps) {
+export function ProductDetailClient({ product, relatedProducts, matchingProducts }: ProductDetailClientProps) {
   const router = useRouter();
   const { user, orders } = useAuth();
   const { addToCart } = useCart();
@@ -89,6 +92,9 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const [, setIsLoadingReviews] = useState(false);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewContent, setReviewContent] = useState('');
+  const [reviewImages, setReviewImages] = useState<string[]>([]);
+  const [isUploadingReviewImg, setIsUploadingReviewImg] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<'all' | 'with_images' | '5_star'>('all');
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewSuccessMsg, setReviewSuccessMsg] = useState('');
 
@@ -241,14 +247,16 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
           author: user.name,
           rating: reviewRating,
           content: reviewContent.trim(),
-          orderId: eligibleOrder?.orderCode
+          orderId: eligibleOrder?.orderCode,
+          images: reviewImages
         })
       });
 
       const data = await res.json();
       if (res.ok && data.success) {
         setReviewContent('');
-        setReviewSuccessMsg('Cảm ơn bạn! Đánh giá đã được ghi nhận vào hệ thống.');
+        setReviewImages([]);
+        setReviewSuccessMsg('Cảm ơn bạn! Đánh giá kèm hình ảnh thực tế đã được gửi và đang chờ duyệt hiển thị.');
         await fetchReviews();
       } else {
         alert(data.message || 'Lỗi gửi đánh giá.');
@@ -257,6 +265,39 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
       alert('Không thể kết nối đến máy chủ.');
     } finally {
       setIsSubmittingReview(false);
+    }
+  };
+
+  const handleUploadReviewImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    if (reviewImages.length + files.length > 5) {
+      alert('Bạn chỉ có thể đính kèm tối đa 5 hình ảnh cho mỗi đánh giá.');
+      return;
+    }
+
+    setIsUploadingReviewImg(true);
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.url) {
+            setReviewImages((prev) => [...prev, data.url]);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Lỗi tải ảnh:', err);
+      alert('Có lỗi khi tải ảnh lên.');
+    } finally {
+      setIsUploadingReviewImg(false);
     }
   };
 
@@ -276,6 +317,26 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const approvedReviews = useMemo(() => {
     return reviewsList.filter((r) => r.status === 'approved' || !r.status);
   }, [reviewsList]);
+
+  const filteredReviews = useMemo(() => {
+    return approvedReviews.filter((r) => {
+      if (reviewFilter === 'with_images') {
+        return r.images && r.images.length > 0;
+      }
+      if (reviewFilter === '5_star') {
+        return r.rating === 5;
+      }
+      return true;
+    });
+  }, [approvedReviews, reviewFilter]);
+
+  const withImagesCount = useMemo(() => {
+    return approvedReviews.filter((r) => r.images && r.images.length > 0).length;
+  }, [approvedReviews]);
+
+  const fiveStarCount = useMemo(() => {
+    return approvedReviews.filter((r) => r.rating === 5).length;
+  }, [approvedReviews]);
 
   const ratingStats = useMemo(() => {
     const total = approvedReviews.length;
@@ -860,6 +921,41 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                           />
                         </div>
 
+                        {/* Đính kèm tối đa 5 hình ảnh */}
+                        <div>
+                          <label className="font-semibold text-[#171613] block mb-1.5">
+                            Đính kèm hình ảnh thực tế ({reviewImages.length}/5):
+                          </label>
+                          <div className="flex flex-wrap items-center gap-2">
+                            {reviewImages.map((img, idx) => (
+                              <div key={idx} className="relative w-14 h-14 rounded-lg overflow-hidden border border-[#E8E4DC] group">
+                                <SafeImage src={img} alt="" fill className="object-cover" sizes="56px" />
+                                <button
+                                  type="button"
+                                  onClick={() => setReviewImages(reviewImages.filter((_, i) => i !== idx))}
+                                  className="absolute inset-0 bg-black/60 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                  aria-label="Xóa ảnh này"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ))}
+                            {reviewImages.length < 5 && (
+                              <label className="w-14 h-14 rounded-lg border-2 border-dashed border-[#D5CEC2] hover:border-[#171613] flex flex-col items-center justify-center cursor-pointer bg-[#FAF8F3] hover:bg-white transition-all text-[#747069] text-[10px]">
+                                <input
+                                  type="file"
+                                  accept="image/*"
+                                  multiple
+                                  disabled={isUploadingReviewImg}
+                                  onChange={handleUploadReviewImage}
+                                  className="hidden"
+                                />
+                                <span>{isUploadingReviewImg ? '...' : '+ Thêm'}</span>
+                              </label>
+                            )}
+                          </div>
+                        </div>
+
                         {reviewSuccessMsg && (
                           <div className="p-3 bg-[#DCFCE7] border border-[#86EFAC] text-[#15803D] rounded-xl font-medium flex items-center gap-2">
                             <CheckCircle2 className="w-4 h-4 shrink-0" />
@@ -902,21 +998,66 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                   </div>
 
                   {/* DANH SÁCH ĐÁNH GIÁ CỦA KHÁCH HÀNG */}
-                  <div className="space-y-3 pt-2">
-                    <h4 className="font-bold text-sm text-[#171613]">
-                      Nhận Xét Từ Khách Hàng Thực Tế ({approvedReviews.length})
-                    </h4>
+                  <div className="space-y-4 pt-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <h4 className="font-bold text-sm text-[#171613]">
+                        Nhận Xét Từ Khách Hàng Thực Tế ({approvedReviews.length})
+                      </h4>
 
-                    {approvedReviews.length === 0 ? (
+                      {/* Thanh bộ lọc đánh giá */}
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <button
+                          type="button"
+                          onClick={() => setReviewFilter('all')}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                            reviewFilter === 'all'
+                              ? 'bg-[#171613] text-white'
+                              : 'bg-[#FAF8F3] text-[#747069] border border-[#E8E4DC] hover:text-[#171613]'
+                          }`}
+                        >
+                          Tất cả ({approvedReviews.length})
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setReviewFilter('with_images')}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                            reviewFilter === 'with_images'
+                              ? 'bg-[#171613] text-white'
+                              : 'bg-[#FAF8F3] text-[#747069] border border-[#E8E4DC] hover:text-[#171613]'
+                          }`}
+                        >
+                          Có hình ảnh ({withImagesCount})
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setReviewFilter('5_star')}
+                          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                            reviewFilter === '5_star'
+                              ? 'bg-[#171613] text-white'
+                              : 'bg-[#FAF8F3] text-[#747069] border border-[#E8E4DC] hover:text-[#171613]'
+                          }`}
+                        >
+                          5 sao ({fiveStarCount})
+                        </button>
+                      </div>
+                    </div>
+
+                    {filteredReviews.length === 0 ? (
                       <div className="text-center py-8 bg-[#FAF8F3] rounded-2xl border border-[#E8E4DC] p-6">
                         <MessageSquare className="w-8 h-8 text-[#A8A29E] mx-auto mb-2" />
-                        <p className="font-semibold text-[#171613]">Chưa có đánh giá nào</p>
+                        <p className="font-semibold text-[#171613]">
+                          {reviewFilter === 'with_images'
+                            ? 'Chưa có đánh giá nào có hình ảnh thực tế'
+                            : reviewFilter === '5_star'
+                            ? 'Chưa có đánh giá 5 sao nào'
+                            : 'Chưa có đánh giá nào'}
+                        </p>
                         <p className="text-xs text-[#747069] mt-1">
                           Hãy là người đầu tiên trải nghiệm thiết kế này và chia sẻ cảm nhận của bạn!
                         </p>
                       </div>
                     ) : (
-                      approvedReviews.map((rev) => (
+                      filteredReviews.map((rev) => (
                         <div
                           key={rev.id}
                           className="p-4 rounded-xl border border-[#E8E4DC] bg-white space-y-2 shadow-xs"
@@ -971,6 +1112,13 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
             </div>
           </div>
         </div>
+
+        {/* Khối Hoàn Thiện Set Đồ (Complete the Look) */}
+        {matchingProducts && matchingProducts.length > 0 && (
+          <div className="pt-6">
+            <CompleteTheLookSection mainProduct={product} matchingProducts={matchingProducts} />
+          </div>
+        )}
 
         {/* Sản phẩm liên quan */}
         {relatedProducts.length > 0 && (

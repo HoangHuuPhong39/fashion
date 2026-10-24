@@ -228,6 +228,17 @@ const NavigationContent: React.FC = () => {
                 <span>Order Quốc Tế</span>
               </Link>
             </li>
+
+            {/* Tạp Chí & Cẩm Nang */}
+            <li>
+              <Link
+                href="/blog"
+                onClick={closeMenu}
+                className={getNavClass(pathname.startsWith('/blog'))}
+              >
+                <span>Tạp Chí</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>

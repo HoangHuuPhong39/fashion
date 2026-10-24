@@ -18,7 +18,9 @@ import {
   ContactMessage,
   SizeGuide,
   PaymentTransactionRecord,
-  StockNotification
+  StockNotification,
+  ConciergeRequest,
+  ConciergeStatus
 } from '@/types';
 import { PRODUCTS as DEFAULT_PRODUCTS, MOCK_ORDERS } from '@/data/mockData';
 import { getAllUsers, findUserById } from '@/lib/auth';
@@ -41,6 +43,7 @@ const PASSWORD_RESET_TOKENS_FILE = path.join(DATA_DIR, 'password_reset_tokens.js
 const EMAIL_VERIFICATION_TOKENS_FILE = path.join(DATA_DIR, 'email_verification_tokens.json');
 const PAYMENT_TRANSACTIONS_FILE = path.join(DATA_DIR, 'payment_transactions.json');
 const STOCK_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'stock_notifications.json');
+const CONCIERGE_REQUESTS_FILE = path.join(DATA_DIR, 'concierge_requests.json');
 
 function ensureDirectoryExistence() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -2011,5 +2014,123 @@ export function markStockNotificationsSent(ids: string[]): void {
     writeJSON(STOCK_NOTIFICATIONS_FILE, list);
   }
 }
+
+// ===== CONCIERGE SERVICE PIPELINE =====
+
+export const CONCIERGE_STATUS_LABELS: Record<ConciergeStatus, string> = {
+  received: 'Đã tiếp nhận yêu cầu',
+  quoted: 'Đã thẩm định & Báo giá',
+  deposit_paid: 'Đã nhận đặt cọc 50%',
+  purchased: 'Đã đặt hàng từ Brand/Xưởng',
+  shipping_international: 'Đang vận chuyển quốc tế',
+  in_warehouse: 'Đã nhập kho Atelier VN',
+  delivered: 'Đã bàn giao khách hàng',
+  cancelled: 'Đã hủy yêu cầu'
+};
+
+export function getAllConciergeRequests(): ConciergeRequest[] {
+  return readJSON<ConciergeRequest[]>(CONCIERGE_REQUESTS_FILE, []);
+}
+
+export function createConciergeRequest(data: {
+  customerName: string;
+  phone: string;
+  email: string;
+  serviceType: 'bespoke_tailoring' | 'international_order';
+  productLink?: string;
+  productName: string;
+  images?: string[];
+  size?: string;
+  color?: string;
+  notes?: string;
+  budgetVND?: number;
+}): { success: boolean; message: string; request?: ConciergeRequest } {
+  const list = getAllConciergeRequests();
+  const id = `cr-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const code = `CR-${Date.now().toString().slice(-6)}`;
+  const now = new Date().toISOString();
+
+  const newReq: ConciergeRequest = {
+    id,
+    code,
+    customerName: data.customerName.trim(),
+    phone: data.phone.trim(),
+    email: data.email.trim().toLowerCase(),
+    serviceType: data.serviceType,
+    productLink: data.productLink?.trim(),
+    productName: data.productName.trim(),
+    images: data.images || [],
+    size: data.size?.trim(),
+    color: data.color?.trim(),
+    notes: data.notes?.trim(),
+    budgetVND: data.budgetVND,
+    status: 'received',
+    statusHistory: [
+      {
+        status: 'received',
+        label: CONCIERGE_STATUS_LABELS.received,
+        note: 'Yêu cầu của bạn đã được chuyển tới chuyên viên tạo mẫu & thẩm định nguồn cung Atelier.',
+        changedAt: now
+      }
+    ],
+    createdAt: now,
+    updatedAt: now
+  };
+
+  writeJSON(CONCIERGE_REQUESTS_FILE, [newReq, ...list]);
+  return {
+    success: true,
+    message: 'Gửi yêu cầu Concierge thành công! Chuyên viên Atelier sẽ liên hệ bạn trong vòng 2 giờ.',
+    request: newReq
+  };
+}
+
+export function lookupConciergeRequest(code: string, phoneOrEmail: string): ConciergeRequest | null {
+  const cleanCode = code.trim().toUpperCase();
+  const cleanPhoneOrEmail = phoneOrEmail.trim().toLowerCase().replace(/[\s.-]/g, '');
+  const list = getAllConciergeRequests();
+
+  return (
+    list.find((r) => {
+      const matchCode = r.code.toUpperCase() === cleanCode || r.id.toLowerCase() === cleanCode.toLowerCase();
+      if (!matchCode) return false;
+      const rPhone = (r.phone || '').replace(/[\s.-]/g, '');
+      const rEmail = (r.email || '').toLowerCase();
+      return rPhone === cleanPhoneOrEmail || rEmail === cleanPhoneOrEmail;
+    }) || null
+  );
+}
+
+export function updateConciergeStatus(
+  id: string,
+  newStatus: ConciergeStatus,
+  note?: string,
+  quotedPrice?: number,
+  depositAmount?: number
+): { success: boolean; message: string; request?: ConciergeRequest } {
+  const list = getAllConciergeRequests();
+  const target = list.find((r) => r.id === id || r.code === id);
+  if (!target) {
+    return { success: false, message: 'Không tìm thấy yêu cầu Concierge.' };
+  }
+
+  const now = new Date().toISOString();
+  target.status = newStatus;
+  target.updatedAt = now;
+  if (typeof quotedPrice === 'number') target.quotedPrice = quotedPrice;
+  if (typeof depositAmount === 'number') target.depositAmount = depositAmount;
+
+  if (!target.statusHistory) target.statusHistory = [];
+  target.statusHistory.push({
+    status: newStatus,
+    label: CONCIERGE_STATUS_LABELS[newStatus] || newStatus,
+    note,
+    changedAt: now
+  });
+
+  writeJSON(CONCIERGE_REQUESTS_FILE, list);
+  return { success: true, message: 'Cập nhật trạng thái Concierge thành công.', request: target };
+}
+
 
 

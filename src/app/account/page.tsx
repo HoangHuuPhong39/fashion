@@ -50,6 +50,7 @@ import { useProducts } from '@/context/ProductContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { SafeImage } from '@/components/ui/SafeImage';
 import { AddressCascadeSelect } from '@/components/checkout/AddressCascadeSelect';
+import { LoyaltyProgressBar } from '@/components/loyalty/LoyaltyProgressBar';
 import { Product, ProductOrigin } from '@/types';
 
 export default function AccountPage() {
@@ -758,6 +759,9 @@ export default function AccountPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Thanh tiến trình thăng hạng thành viên */}
+                <LoyaltyProgressBar user={user} />
 
                 {/* 4 Thẻ tóm tắt chỉ số */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

@@ -111,6 +111,7 @@ export const Footer: React.FC = () => {
               <li><Link href="/shop?category=nu" className="hover:text-[#FAF8F3] transition-colors">Bộ sưu tập Nữ</Link></li>
               <li><Link href="/shop?category=nam" className="hover:text-[#FAF8F3] transition-colors">Thời trang Nam</Link></li>
               <li><Link href="/collections" className="hover:text-[#FAF8F3] transition-colors">Editorial Lookbook 2026</Link></li>
+              <li><Link href="/blog" className="hover:text-[#FAF8F3] transition-colors">Tạp chí Thời trang (Blog)</Link></li>
               <li><Link href="/concierge" className="hover:text-[#FAF8F3] transition-colors">Dịch vụ Fashion Concierge</Link></li>
               <li><Link href="/shop?sale=true" className="hover:text-[#B83A3A] transition-colors">Ưu đãi mùa mới (Sale)</Link></li>
             </ul>

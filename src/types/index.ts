@@ -375,4 +375,42 @@ export interface StockNotification {
   createdAt: string;
 }
 
+// Dịch vụ Concierge (May đo Bespoke & Order Quốc Tế)
+export type ConciergeStatus =
+  | 'received'
+  | 'quoted'
+  | 'deposit_paid'
+  | 'purchased'
+  | 'shipping_international'
+  | 'in_warehouse'
+  | 'delivered'
+  | 'cancelled';
+
+export interface ConciergeRequest {
+  id: string;
+  code: string; // CR-xxxx
+  customerName: string;
+  phone: string;
+  email: string;
+  serviceType: 'bespoke_tailoring' | 'international_order';
+  productLink?: string;
+  productName: string;
+  images?: string[];
+  size?: string;
+  color?: string;
+  notes?: string;
+  budgetVND?: number;
+  quotedPrice?: number;
+  depositAmount?: number;
+  status: ConciergeStatus;
+  statusHistory: {
+    status: ConciergeStatus;
+    label: string;
+    note?: string;
+    changedAt: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
 

@@ -70,6 +70,11 @@ export default async function ProductDetailPage({ params }: PageProps) {
     )
     .slice(0, 4);
 
+  // Sản phẩm phối cùng set đồ (Complete the Look)
+  const matchingProducts = allProducts
+    .filter((p) => p.id !== product.id && p.category !== product.category && (!p.status || p.status === 'active'))
+    .slice(0, 3);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -139,7 +144,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ProductDetailClient key={product.id} product={product} relatedProducts={relatedProducts} />
+      <ProductDetailClient
+        key={product.id}
+        product={product}
+        relatedProducts={relatedProducts}
+        matchingProducts={matchingProducts}
+      />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getDBProducts } from '@/lib/db';
+import { BLOG_POSTS } from '@/data/blog-posts';
 
 export const revalidate = 3600; // Cập nhật lại sitemap mỗi 1 giờ
 
@@ -70,6 +71,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7
     },
     {
+      url: `${baseUrl}/blog`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8
+    },
+    {
       url: `${baseUrl}/privacy`,
       lastModified: now,
       changeFrequency: 'yearly',
@@ -101,7 +108,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.7
       }));
 
-    return [...staticRoutes, ...productRoutes];
+    const blogRoutes: MetadataRoute.Sitemap = BLOG_POSTS.map((post) => ({
+      url: `${baseUrl}/blog/${post.slug}`,
+      lastModified: new Date(post.publishedAt),
+      changeFrequency: 'monthly',
+      priority: 0.7
+    }));
+
+    return [...staticRoutes, ...productRoutes, ...blogRoutes];
   } catch {
     return staticRoutes;
   }

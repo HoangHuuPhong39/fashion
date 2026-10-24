@@ -15,6 +15,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { ConciergeInteractive } from '@/components/concierge/ConciergeInteractive';
 
 export const metadata: Metadata = {
   title: 'Fashion Concierge Service | TADA! Fashion Atelier',
@@ -127,6 +128,11 @@ export default function ConciergePage() {
             </p>
           </div>
         </div>
+
+        {/* Khối Tương Tác: Gửi Yêu Cầu & Tra Cứu Lộ Trình Concierge */}
+        <section id="concierge-form">
+          <ConciergeInteractive />
+        </section>
 
         {/* Quy Trình 4 Bước Hoạt Động */}
         <div className="bg-white rounded-3xl border border-[#E8E4DC] p-8 sm:p-12 shadow-sm space-y-10">
