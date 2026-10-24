@@ -5,6 +5,7 @@ import crypto from 'crypto';
 import sharp from 'sharp';
 import { requireUser, verifyMutationOrigin } from '@/lib/guard';
 import { checkRateLimit, recordFailedAttempt } from '@/lib/ratelimit';
+import { uploadToObjectStorage } from '@/lib/storage';
 
 function isValidImageMagicBytes(buffer: Buffer): boolean {
   if (buffer.length < 12) return false;
@@ -121,10 +122,9 @@ export async function POST(request: Request) {
 
       const safeRandom = crypto.randomBytes(8).toString('hex');
       const safeName = `${Date.now()}-${safeRandom}.webp`;
-      const filePath = path.join(uploadDir, safeName);
 
-      fs.writeFileSync(filePath, processedBuffer);
-      uploadedUrls.push(`/uploads/${safeName}`);
+      const publicUrl = await uploadToObjectStorage(safeName, processedBuffer, 'image/webp');
+      uploadedUrls.push(publicUrl);
       recordFailedAttempt(quotaKey, 60 * 60 * 1000);
     }
 
