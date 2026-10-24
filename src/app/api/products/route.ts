@@ -1,17 +1,28 @@
 import { NextResponse, NextRequest } from 'next/server';
 import { getDBProducts, saveOrUpdateProduct, queryProducts } from '@/lib/db';
-import { requireAdmin } from '@/lib/guard';
+import { requireAdmin, getSessionUser, verifyMutationOrigin } from '@/lib/guard';
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
+    const sessionUser = getSessionUser(request);
+    const isAdmin = sessionUser?.role === 'admin';
+
     const hasFilters = searchParams.toString().length > 0;
 
-    // Nếu không có bất kỳ query param nào, trả về danh sách đầy đủ tương thích ngược
+    // BẢO MẬT: Người dùng chưa là admin TUYỆT ĐỐI không thể dùng includeHidden hoặc status để xem hàng ẩn
+    const includeHidden = isAdmin ? searchParams.get('includeHidden') === 'true' : false;
+    const requestedStatus = isAdmin ? searchParams.get('status') || undefined : 'active';
+
+    // Nếu không có bất kỳ query param nào, trả về danh sách tương thích ngược
     if (!hasFilters) {
-      const products = getDBProducts();
+      const allProducts = getDBProducts();
+      const filteredProducts = isAdmin
+        ? allProducts
+        : allProducts.filter((p) => !p.status || p.status === 'active');
+
       return NextResponse.json(
-        { success: true, products, total: products.length },
+        { success: true, products: filteredProducts, total: filteredProducts.length },
         {
           headers: {
             'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120'
@@ -31,8 +42,6 @@ export async function GET(request: NextRequest) {
     const tag = searchParams.get('tag') || undefined;
     const query = searchParams.get('q') || searchParams.get('query') || undefined;
     const inStockOnly = searchParams.get('inStock') === 'true';
-    const status = searchParams.get('status') || undefined;
-    const includeHidden = searchParams.get('includeHidden') === 'true';
     const sortBy = (searchParams.get('sortBy') || searchParams.get('sort') || 'popular') as any;
     const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
     const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 24;
@@ -49,7 +58,7 @@ export async function GET(request: NextRequest) {
       tag,
       query,
       inStockOnly,
-      status,
+      status: requestedStatus,
       includeHidden,
       sortBy,
       page,
@@ -67,37 +76,39 @@ export async function GET(request: NextRequest) {
       },
       {
         headers: {
-          'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=120'
+          'Cache-Control': 'public, s-maxage=15, stale-while-revalidate=60'
         }
       }
     );
-  } catch (error: any) {
-    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  } catch (error) {
+    console.error('Error in GET /api/products:', error);
+    return NextResponse.json({ success: false, message: 'Lỗi khi tải danh sách sản phẩm.' }, { status: 500 });
   }
 }
 
 export async function POST(request: Request) {
   try {
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
     const authCheck = requireAdmin(request);
     if (authCheck.errorResponse) return authCheck.errorResponse;
 
     const body = await request.json().catch(() => ({}));
-    
-    // Server-side validation
-    if (!body.name || !body.name.trim()) {
-      return NextResponse.json({ success: false, message: 'Tên sản phẩm không được để trống.' }, { status: 400 });
-    }
-    if (body.price === undefined || typeof body.price !== 'number' || body.price < 0) {
-      return NextResponse.json({ success: false, message: 'Giá bán phải là số lớn hơn hoặc bằng 0.' }, { status: 400 });
-    }
-    if (!body.categoryId && !body.category) {
-      return NextResponse.json({ success: false, message: 'Vui lòng chọn danh mục chính cho sản phẩm.' }, { status: 400 });
+
+    if (!body.name || !body.price) {
+      return NextResponse.json(
+        { success: false, message: 'Tên sản phẩm và giá bán là thông tin bắt buộc.' },
+        { status: 400 }
+      );
     }
 
-    const product = saveOrUpdateProduct(body);
-    return NextResponse.json({ success: true, product });
+    const created = saveOrUpdateProduct(body);
+    return NextResponse.json({ success: true, product: created }, { status: 201 });
   } catch (error) {
     console.error('Error creating product:', error);
-    return NextResponse.json({ success: false, message: 'Không thể tạo sản phẩm. Vui lòng kiểm tra lại.' }, { status: 400 });
+    return NextResponse.json({ success: false, message: 'Không thể tạo sản phẩm.' }, { status: 400 });
   }
 }

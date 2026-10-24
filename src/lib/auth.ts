@@ -3,6 +3,17 @@ import path from 'path';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { User, UserRole } from '@/types';
+import {
+  getTrustedClientIp,
+  checkRateLimit,
+  recordFailedAttempt,
+  resetRateLimit,
+  hashIp
+} from './ratelimit';
+
+export { getTrustedClientIp, checkRateLimit, recordFailedAttempt, resetRateLimit, hashIp };
+// Legacy alias
+export const getClientIp = getTrustedClientIp;
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
@@ -72,15 +83,24 @@ function writeJSON<T>(filePath: string, data: T): void {
   }
 }
 
-// ===== BĂM MẬT KHẨU & TIỆN ÍCH CRYPTO =====
+// ===== BĂM MẬT KHẨU & TIỆN ÍCH CRYPTO CHỐNG TIMING ATTACK =====
+
+const DUMMY_BCRYPT_HASH = '$2a$10$wE99q0/jV/C34m6k6lG9qOKz9p39mQv5hG6Z8zQ7J.M4wD5wN3x6e';
 
 export function hashPassword(plain: string): string {
   const salt = bcrypt.genSaltSync(10);
   return bcrypt.hashSync(plain, salt);
 }
 
-export function verifyPassword(plain: string, hash: string): boolean {
-  if (!plain || !hash) return false;
+/**
+ * Luôn chạy bcrypt compare kể cả khi user không tồn tại để chống tấn công dò thời gian (Timing Attack)
+ */
+export function verifyPassword(plain: string, hash?: string): boolean {
+  if (!plain) return false;
+  if (!hash) {
+    bcrypt.compareSync(plain, DUMMY_BCRYPT_HASH);
+    return false;
+  }
   return bcrypt.compareSync(plain, hash);
 }
 
@@ -88,86 +108,38 @@ export function hashToken(token: string): string {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-// ===== QUẢN LÝ TÀI KHOẢN & SEED ADMIN ĐẦU TIÊN =====
+// ===== QUẢN LÝ TÀI KHOẢN & SEED ADMIN =====
 
 function getInitialUsers(): StoredUser[] {
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@tada.vn').trim().toLowerCase();
-  const adminPassword = process.env.ADMIN_INITIAL_PASSWORD || 'Admin@2026!';
+  const adminEmail = (process.env.ADMIN_EMAIL || '').trim().toLowerCase();
+  const adminPassword = process.env.ADMIN_INITIAL_PASSWORD;
+
+  // Nếu thiếu ADMIN_INITIAL_PASSWORD, DỪNG seed admin và cảnh báo rõ ràng
+  if (!adminPassword || !adminEmail) {
+    console.error(
+      '[BẢO MẬT] Thiếu biến môi trường ADMIN_INITIAL_PASSWORD hoặc ADMIN_EMAIL. Dừng khởi tạo tài khoản admin mặc định.'
+    );
+    return [];
+  }
 
   return [
     {
       id: 'usr-admin',
-      name: 'Nguyễn Quản Trị',
+      name: 'Quản Trị Viên TADA!',
       email: adminEmail,
-      phone: '0909999999',
+      phone: process.env.NEXT_PUBLIC_HOTLINE || '0366861159',
       role: 'admin',
       passwordHash: hashPassword(adminPassword),
       membershipTier: 'diamond',
-      totalSpent: 45000000,
-      points: 88888,
+      totalSpent: 0,
+      points: 0,
       isVip: true,
       avatar: '/images/avatar-default.jpg',
       coverImage: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80',
-      bankInfo: {
-        bankName: 'MBBank',
-        accountNumber: '0366861159',
-        accountHolder: 'HOANG HUU PHONG',
-        branch: 'Chi nhánh TP. Hồ Chí Minh',
-        hotline: '0366861159'
-      },
       addresses: []
     }
   ];
 }
-
-// Migration chạy một lần: quét data/users.json, băm password -> passwordHash, xóa password plaintext
-export function migrateUserPasswords(): void {
-  ensureDirectory();
-  if (!fs.existsSync(USERS_FILE)) {
-    writeJSON(USERS_FILE, getInitialUsers());
-    return;
-  }
-
-  try {
-    const raw = fs.readFileSync(USERS_FILE, 'utf-8');
-    const users = JSON.parse(raw);
-    let hasChanges = false;
-
-    // Lọc bỏ các tài khoản demo cũ nếu có theo yêu cầu
-    const demoEmails = ['hoangyen@tada.vn', 'minhanh@tada.vn'];
-    const filteredUsers = Array.isArray(users)
-      ? users.filter((u: any) => !demoEmails.includes(u.email?.toLowerCase()))
-      : [];
-
-    if (filteredUsers.length !== users.length) {
-      hasChanges = true;
-    }
-
-    const migrated = filteredUsers.map((u: any) => {
-      const clone = { ...u };
-      if (clone.password && typeof clone.password === 'string') {
-        if (!clone.passwordHash) {
-          clone.passwordHash = hashPassword(clone.password);
-        }
-        delete clone.password;
-        hasChanges = true;
-      }
-      return clone;
-    });
-
-    if (hasChanges) {
-      writeJSON(USERS_FILE, migrated);
-      console.log('✅ Migrated user passwords to bcrypt hashes and removed plaintext.');
-    }
-  } catch (err) {
-    console.error('Failed to run password migration on users.json', err);
-  }
-}
-
-// Tự động kiểm tra và di chuyển khi module được load
-try {
-  migrateUserPasswords();
-} catch {}
 
 export function getAllUsers(): StoredUser[] {
   return readJSON<StoredUser[]>(USERS_FILE, getInitialUsers());
@@ -204,7 +176,7 @@ export function createUser(userData: {
     passwordHash: hashPassword(userData.password),
     membershipTier: 'bronze',
     totalSpent: 0,
-    points: 2000,
+    points: 0,
     isVip: false,
     addresses: []
   };
@@ -227,7 +199,7 @@ export function updateUser(id: string, updates: Partial<StoredUser>): StoredUser
   return users[idx];
 }
 
-// ===== QUẢN LÝ PHIÊN LÀM VIỆC (SESSIONS) VỚI SHA-256 HASH =====
+// ===== QUẢN LÝ PHIÊN LÀM VIỆC (SESSIONS) =====
 
 export function getAllSessions(): Session[] {
   return readJSON<Session[]>(SESSIONS_FILE, []);
@@ -237,6 +209,11 @@ export function saveAllSessions(sessions: Session[]): void {
   writeJSON(SESSIONS_FILE, sessions);
 }
 
+/**
+ * Tạo phiên làm việc mới:
+ * Bỏ giới hạn 100 phiên toàn hệ thống.
+ * Giới hạn tối đa 5 phiên đang hoạt động CHO TỪNG USER.
+ */
 export function createServerSession(user: StoredUser): { rawToken: string; session: Session } {
   const sessions = getAllSessions();
   const rawToken = crypto.randomBytes(32).toString('hex');
@@ -251,9 +228,12 @@ export function createServerSession(user: StoredUser): { rawToken: string; sessi
     expiresAt
   };
 
-  // Giữ tối đa 100 session còn hạn
-  const updated = [newSession, ...sessions.filter((s) => new Date(s.expiresAt).getTime() > Date.now())].slice(0, 100);
-  saveAllSessions(updated);
+  const now = Date.now();
+  const validSessions = sessions.filter((s) => new Date(s.expiresAt).getTime() > now);
+  const otherUsersSessions = validSessions.filter((s) => s.userId !== user.id);
+  const thisUserSessions = [newSession, ...validSessions.filter((s) => s.userId === user.id)].slice(0, 5);
+
+  saveAllSessions([...thisUserSessions, ...otherUsersSessions]);
   return { rawToken, session: newSession };
 }
 
@@ -262,6 +242,16 @@ export function deleteServerSession(rawToken: string): void {
   const tokenHash = hashToken(rawToken);
   const sessions = getAllSessions();
   saveAllSessions(sessions.filter((s) => s.tokenHash !== tokenHash));
+}
+
+/**
+ * Thu hồi tất cả các phiên làm việc khác của người dùng (khi đổi mật khẩu)
+ */
+export function revokeOtherUserSessions(userId: string, currentToken?: string | null): void {
+  const currentHash = currentToken ? hashToken(currentToken) : null;
+  const sessions = getAllSessions();
+  const retained = sessions.filter((s) => s.userId !== userId || (currentHash && s.tokenHash === currentHash));
+  saveAllSessions(retained);
 }
 
 export function verifySessionToken(rawToken?: string | null): { valid: boolean; user?: User } {
@@ -284,55 +274,4 @@ export function verifySessionToken(rawToken?: string | null): { valid: boolean; 
   // Đảm bảo không bao giờ trả về passwordHash cho client
   const { passwordHash: _, ...safeUser } = user;
   return { valid: true, user: safeUser };
-}
-
-// ===== BỘ GIỚI HẠN TẦN SUẤT TRUY CẬP (RATE LIMITING) IN-MEMORY =====
-
-interface RateLimitEntry {
-  attempts: number;
-  resetAt: number;
-}
-const rateLimitStore = new Map<string, RateLimitEntry>();
-
-export function checkRateLimit(
-  key: string,
-  maxAttempts = 5,
-  windowMs = 15 * 60 * 1000
-): { allowed: boolean; remaining: number; retryAfterSeconds?: number } {
-  const now = Date.now();
-  const entry = rateLimitStore.get(key);
-
-  if (!entry || now > entry.resetAt) {
-    return { allowed: true, remaining: maxAttempts };
-  }
-
-  if (entry.attempts >= maxAttempts) {
-    const retryAfterSeconds = Math.ceil((entry.resetAt - now) / 1000);
-    return { allowed: false, remaining: 0, retryAfterSeconds };
-  }
-
-  return { allowed: true, remaining: maxAttempts - entry.attempts };
-}
-
-export function recordFailedAttempt(key: string, windowMs = 15 * 60 * 1000): void {
-  const now = Date.now();
-  const entry = rateLimitStore.get(key);
-
-  if (!entry || now > entry.resetAt) {
-    rateLimitStore.set(key, { attempts: 1, resetAt: now + windowMs });
-  } else {
-    entry.attempts += 1;
-  }
-}
-
-export function resetRateLimit(key: string): void {
-  rateLimitStore.delete(key);
-}
-
-export function getClientIp(request: Request): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    return forwarded.split(',')[0].trim();
-  }
-  return request.headers.get('x-real-ip') || '127.0.0.1';
 }

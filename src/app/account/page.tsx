@@ -140,10 +140,10 @@ export default function AccountPage() {
 
   // Admin Bank Info State
   const [bankName, setBankName] = useState('MBBank');
-  const [bankAccount, setBankAccount] = useState('0366861159');
-  const [bankHolder, setBankHolder] = useState('HOANG HUU PHONG');
-  const [bankBranch, setBankBranch] = useState('Chi nhánh TP. Hồ Chí Minh');
-  const [bankHotline, setBankHotline] = useState('0366861159');
+  const [bankAccount, setBankAccount] = useState('');
+  const [bankHolder, setBankHolder] = useState('');
+  const [bankBranch, setBankBranch] = useState('');
+  const [bankHotline, setBankHotline] = useState('');
 
   const [isSavingProfile, setIsSavingProfile] = useState(false);
   const [profileSuccessMsg, setProfileSuccessMsg] = useState('');

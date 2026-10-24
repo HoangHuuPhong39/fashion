@@ -6,12 +6,18 @@ import {
   checkRateLimit,
   recordFailedAttempt,
   resetRateLimit,
-  getClientIp
+  getTrustedClientIp
 } from '@/lib/auth';
+import { verifyMutationOrigin } from '@/lib/guard';
 
 export async function POST(request: Request) {
   try {
-    const ip = getClientIp(request);
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
+    const ip = getTrustedClientIp(request);
     const body = await request.json().catch(() => ({}));
     const { email, password } = body;
 
@@ -25,15 +31,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // 1. Kiểm tra giới hạn tần suất đăng nhập (IP + Email)
-    const rateLimitKey = `login:${ip}:${cleanEmail}`;
-    const rateCheck = checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000);
+    // 1. Kiểm tra giới hạn tần suất đăng nhập (theo cả IP và Email)
+    const ipRateKey = `login:ip:${ip}`;
+    const emailRateKey = `login:email:${cleanEmail}`;
 
-    if (!rateCheck.allowed) {
+    const ipCheck = checkRateLimit(ipRateKey, 10, 15 * 60 * 1000);
+    const emailCheck = checkRateLimit(emailRateKey, 5, 15 * 60 * 1000);
+
+    if (!ipCheck.allowed || !emailCheck.allowed) {
+      const waitSeconds = Math.max(ipCheck.retryAfterSeconds || 0, emailCheck.retryAfterSeconds || 0) || 900;
       return NextResponse.json(
         {
           success: false,
-          message: `Bạn đã thử đăng nhập sai quá nhiều lần. Vui lòng thử lại sau ${rateCheck.retryAfterSeconds || 900} giây.`
+          message: `Bạn đã thử đăng nhập sai quá nhiều lần. Vui lòng thử lại sau ${waitSeconds} giây.`
         },
         { status: 429 }
       );
@@ -42,41 +52,32 @@ export async function POST(request: Request) {
     // 2. Tra cứu tài khoản
     const user = findUserByEmail(cleanEmail);
 
-    // Không tiết lộ tài khoản có tồn tại hay không để chống account enumeration
-    if (!user || !user.passwordHash) {
-      recordFailedAttempt(rateLimitKey);
+    // Luôn luôn chạy verifyPassword (với dummy hash nếu user không tồn tại) để chống Timing Attack
+    const isPasswordValid = verifyPassword(cleanPassword, user?.passwordHash);
+
+    if (!user || !isPasswordValid) {
+      recordFailedAttempt(ipRateKey);
+      recordFailedAttempt(emailRateKey);
       return NextResponse.json(
-        { success: false, message: 'Email hoặc mật khẩu không đúng.' },
+        { success: false, message: 'Email hoặc mật khẩu không chính xác.' },
         { status: 401 }
       );
     }
 
-    // 3. BẮT BUỘC kiểm tra mật khẩu bằng bcrypt (cho cả khách và admin)
-    const isPasswordValid = verifyPassword(cleanPassword, user.passwordHash);
-    if (!isPasswordValid) {
-      recordFailedAttempt(rateLimitKey);
-      return NextResponse.json(
-        { success: false, message: 'Email hoặc mật khẩu không đúng.' },
-        { status: 401 }
-      );
-    }
+    // 3. Đăng nhập thành công -> Reset rate limit
+    resetRateLimit(ipRateKey);
+    resetRateLimit(emailRateKey);
 
-    // Đăng nhập thành công -> Xóa bộ đếm sai
-    resetRateLimit(rateLimitKey);
-
-    // 4. Tạo phiên làm việc máy chủ (token hash SHA-256)
+    // 4. Tạo server session
     const { rawToken } = createServerSession(user);
-
     const { passwordHash: _, ...safeUser } = user;
 
     const response = NextResponse.json({
       success: true,
-      message: `Đăng nhập thành công! Chào mừng ${safeUser.name}.`,
+      message: 'Đăng nhập thành công.',
       user: safeUser
-      // Tuyệt đối không trả token trong body JSON
     });
 
-    // 5. Thiết lập Cookie HttpOnly bảo mật
     response.cookies.set('tada_session', rawToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -89,7 +90,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { success: false, message: 'Có lỗi xảy ra trong quá trình xác thực. Vui lòng thử lại.' },
+      { success: false, message: 'Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại.' },
       { status: 500 }
     );
   }

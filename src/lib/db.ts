@@ -940,7 +940,56 @@ export function adjustProductStock(
 
 // ===== ORDERS =====
 
+export function checkAndCancelExpiredVietQROrders(): void {
+  try {
+    const orders = readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
+    const now = Date.now();
+    let hasExpired = false;
+
+    for (const order of orders) {
+      if (
+        order.paymentMethod === 'vietqr' &&
+        order.paymentStatus === 'pending' &&
+        order.status === 'pending_confirmation' &&
+        order.holdExpiresAt &&
+        new Date(order.holdExpiresAt).getTime() < now
+      ) {
+        hasExpired = true;
+        order.status = 'cancelled';
+        order.statusLabel = 'Đã hủy (Hết hạn chuyển khoản 24h)';
+        order.updatedAt = new Date().toISOString();
+        if (!order.statusHistory) order.statusHistory = [];
+        order.statusHistory.push({
+          status: 'cancelled',
+          statusLabel: 'Đã hủy (Hết hạn chuyển khoản 24h)',
+          changedAt: new Date().toISOString(),
+          note: 'Tự động hủy đơn và hoàn trả tồn kho sau 24 giờ không thanh toán VietQR.'
+        });
+
+        // Hoàn lại tồn kho cho từng sản phẩm
+        for (const item of order.items) {
+          adjustProductStock(
+            item.productId,
+            item.variantId,
+            item.quantity,
+            'order_cancel_return',
+            `Tự động hoàn kho do đơn ${order.orderCode} quá hạn 24h`,
+            'System Auto'
+          );
+        }
+      }
+    }
+
+    if (hasExpired) {
+      writeJSON(ORDERS_FILE, orders);
+    }
+  } catch (err) {
+    console.error('Error auto-cancelling expired VietQR orders:', err);
+  }
+}
+
 export function getDBOrders(): Order[] {
+  checkAndCancelExpiredVietQROrders();
   return readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
 }
 
@@ -1045,28 +1094,54 @@ export function createDBOrder(orderData: {
     };
   }
 
-  // 5. Kiểm tra tồn kho đồng bộ từ products.json
-  const products = getDBProducts();
+  // 5. BẢO MẬT: Cộng gộp số lượng theo từng biến thể trước khi kiểm tra tồn kho
+  const aggregatedMap = new Map<string, {
+    productId: string;
+    variantId?: string;
+    color?: string;
+    size?: string;
+    totalQuantity: number;
+    productName?: string;
+  }>();
 
   for (const item of orderData.items) {
-    const prod = products.find((p) => p.id === item.productId);
+    const key = `${item.productId}__${item.variantId || (item.color || '') + '_' + (item.size || '')}`;
+    const existing = aggregatedMap.get(key);
+    if (existing) {
+      existing.totalQuantity += item.quantity;
+    } else {
+      aggregatedMap.set(key, {
+        productId: item.productId,
+        variantId: item.variantId,
+        color: item.color,
+        size: item.size,
+        totalQuantity: item.quantity,
+        productName: item.productName
+      });
+    }
+  }
+
+  const products = getDBProducts();
+
+  for (const agg of aggregatedMap.values()) {
+    const prod = products.find((p) => p.id === agg.productId);
     if (!prod) {
-      return { success: false, message: `Sản phẩm "${item.productName || item.productId}" không tồn tại trong hệ thống.` };
+      return { success: false, message: `Sản phẩm "${agg.productName || agg.productId}" không tồn tại trong hệ thống.` };
     }
 
-    if (item.variantId && prod.variants) {
-      const variant = prod.variants.find((v) => v.id === item.variantId || (v.color === item.color && v.size === item.size));
+    if (agg.variantId && prod.variants) {
+      const variant = prod.variants.find((v) => v.id === agg.variantId || (v.color === agg.color && v.size === agg.size));
       if (!variant) {
-        return { success: false, message: `Biến thể (${item.color} - Size ${item.size}) của "${prod.name}" không tồn tại.` };
+        return { success: false, message: `Biến thể (${agg.color} - Size ${agg.size}) của "${prod.name}" không tồn tại.` };
       }
-      if (variant.stockCount < item.quantity) {
+      if (variant.stockCount < agg.totalQuantity) {
         return {
           success: false,
-          message: `Rất tiếc! "${prod.name}" (${item.color} - Size ${item.size}) chỉ còn ${variant.stockCount} chiếc, không đủ số lượng ${item.quantity} bạn yêu cầu.`
+          message: `Rất tiếc! "${prod.name}" (${agg.color} - Size ${agg.size}) chỉ còn ${variant.stockCount} chiếc, không đủ tổng số lượng ${agg.totalQuantity} bạn yêu cầu.`
         };
       }
     } else {
-      if (prod.stockCount < item.quantity) {
+      if (prod.stockCount < agg.totalQuantity) {
         return {
           success: false,
           message: `Rất tiếc! "${prod.name}" chỉ còn ${prod.stockCount} chiếc trong kho.`
@@ -1110,12 +1185,27 @@ export function createDBOrder(orderData: {
     }
   }
 
+  // Đếm số lượt đã sử dụng mã giảm giá này trên toàn hệ thống
+  const existingOrders = getDBOrders();
+  const inputCoupon = (orderData.appliedCoupon || orderData.couponCode || '').trim().toUpperCase();
+  const couponUsageCount = inputCoupon
+    ? existingOrders.filter((o) => o.appliedCoupon?.toUpperCase() === inputCoupon && o.status !== 'cancelled').length
+    : 0;
+
   const pricing = calculateOrderPricing({
     subtotal: serverSubtotal,
-    couponCode: orderData.appliedCoupon || orderData.couponCode,
+    couponCode: inputCoupon,
     membershipTier: userTier,
-    shippingMethod: orderData.shippingMethod || 'standard'
+    shippingMethod: orderData.shippingMethod || 'standard',
+    couponUsageCount
   });
+
+  if (inputCoupon && pricing.couponMessage && !pricing.appliedCoupon) {
+    return {
+      success: false,
+      message: pricing.couponMessage
+    };
+  }
 
   // 7. Tạo mã đơn hàng bảo mật khó đoán với 6 ký tự hex ngẫu nhiên
   const now = new Date();
@@ -1150,22 +1240,27 @@ export function createDBOrder(orderData: {
     total: pricing.total,
     paymentMethod: orderData.paymentMethod,
     paymentStatus: 'pending',
+    holdExpiresAt: orderData.paymentMethod === 'vietqr' ? new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() : undefined,
     statusHistory: [
       {
         status: 'pending_confirmation',
         statusLabel: 'Chờ xác nhận',
         changedAt: now.toISOString(),
-        note: 'Đơn hàng được đặt thành công qua website TADA!'
+        note: orderData.paymentMethod === 'vietqr'
+          ? 'Đơn hàng tạo thành công qua VietQR (Giữ tồn kho trong 24 giờ)'
+          : 'Đơn hàng được đặt thành công qua website TADA!'
       }
     ]
   };
 
-  // 8. Trừ tồn kho đồng bộ và ghi logs
+  // 8. Trừ tồn kho đồng bộ và kiểm tra kết quả - ROLLBACK TOÀN BỘ nếu thất bại
+  const deductedItems: Array<{ productId: string; variantId?: string; quantity: number }> = [];
+
   for (const item of trustedItems) {
     const prod = products.find((p) => p.id === item.productId)!;
     const targetVariant = prod.variants?.find((v) => v.id === item.variantId || (v.color === item.color && v.size === item.size));
 
-    adjustProductStock(
+    const adjustResult = adjustProductStock(
       prod.id,
       targetVariant?.id,
       -item.quantity,
@@ -1174,6 +1269,30 @@ export function createDBOrder(orderData: {
       cleanFullName,
       newOrder.orderCode
     );
+
+    if (!adjustResult.success) {
+      // Rollback toàn bộ các món đã trừ trước đó
+      for (const d of deductedItems) {
+        adjustProductStock(
+          d.productId,
+          d.variantId,
+          d.quantity,
+          'order_cancel_return',
+          `Rollback hoàn kho do lỗi tạo đơn ${newOrder.orderCode}`,
+          'System Rollback'
+        );
+      }
+      return {
+        success: false,
+        message: adjustResult.message || 'Lỗi trừ tồn kho sản phẩm. Đơn hàng không thể hoàn tất.'
+      };
+    }
+
+    deductedItems.push({
+      productId: prod.id,
+      variantId: targetVariant?.id,
+      quantity: item.quantity
+    });
   }
 
   // 9. Lưu đơn hàng vào orders.json theo kiểu atomic write

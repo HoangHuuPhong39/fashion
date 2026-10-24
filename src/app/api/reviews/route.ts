@@ -1,13 +1,27 @@
 import { NextResponse } from 'next/server';
 import { getDBReviews, addDBReview, getDBOrders } from '@/lib/db';
-import { requireUser } from '@/lib/guard';
+import { requireUser, getSessionUser, verifyMutationOrigin } from '@/lib/guard';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const productId = searchParams.get('productId') || undefined;
+    const sessionUser = getSessionUser(request);
+    const isAdmin = sessionUser?.role === 'admin';
+
     const reviews = getDBReviews(productId);
-    return NextResponse.json({ success: true, reviews });
+
+    if (isAdmin) {
+      return NextResponse.json({ success: true, reviews });
+    }
+
+    // BẢO MẬT CÔNG KHAI: Chỉ trả về đánh giá đã được duyệt (status === 'approved')
+    // và TUYỆT ĐỐI KHÔNG trả userId / orderId để bảo vệ thông tin khách hàng
+    const safePublicReviews = reviews
+      .filter((r) => r.status === 'approved' || (!r.status && process.env.NODE_ENV === 'development'))
+      .map(({ userId: _, orderId: __, ...safeReview }) => safeReview);
+
+    return NextResponse.json({ success: true, reviews: safePublicReviews });
   } catch (error) {
     console.error('Error fetching reviews:', error);
     return NextResponse.json({ success: false, message: 'Lỗi khi tải đánh giá.' }, { status: 500 });
@@ -16,12 +30,17 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
     const authCheck = requireUser(request);
     if (authCheck.errorResponse) return authCheck.errorResponse;
 
     const user = authCheck.user;
     const body = await request.json().catch(() => ({}));
-    const { productId, rating, content, images, orderId } = body;
+    const { productId, rating, content, images } = body;
 
     const cleanProductId = typeof productId === 'string' ? productId.trim() : '';
     const numRating = Number(rating);
@@ -34,11 +53,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // Kiểm tra xem người dùng đã từng mua sản phẩm này trong một đơn hàng đã giao thành công (delivered) chưa
+    // BẢO MẬT: Chỉ khớp đơn theo userId, TUYỆT ĐỐI KHÔNG khớp theo shippingAddress.email chưa xác minh
     const orders = getDBOrders();
     const deliveredOrders = orders.filter(
-      (o) => (o.userId === user.id || o.shippingAddress?.email?.toLowerCase() === user.email.toLowerCase()) &&
-             o.status === 'delivered'
+      (o) => o.userId === user.id && o.status === 'delivered'
     );
 
     const matchingOrder = deliveredOrders.find((o) =>
@@ -49,39 +67,40 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua và nhận hàng thành công.'
+          message: 'Bạn chỉ có thể đánh giá sản phẩm sau khi đã mua và nhận hàng thành công qua tài khoản này.'
         },
         { status: 403 }
       );
     }
 
-    // Mặc định đánh giá của khách hàng ở trạng thái 'pending' để quản trị viên kiểm duyệt
+    // Mặc định đánh giá ở trạng thái 'pending' để quản trị viên kiểm duyệt
     const reviewStatus = user.role === 'admin' ? 'approved' : 'pending';
 
-    const result = addDBReview({
+    const safeImages = Array.isArray(images)
+      ? images.filter((img) => typeof img === 'string' && (img.startsWith('/uploads/') || img.startsWith('https://')))
+      : [];
+
+    const newReview = addDBReview({
       productId: cleanProductId,
       userId: user.id,
-      author: user.name || 'Khách Hàng',
+      orderId: matchingOrder?.orderCode || matchingOrder?.id,
+      author: user.name || 'Khách hàng',
       rating: numRating,
       content: cleanContent,
-      images: Array.isArray(images) ? images.slice(0, 5) : [],
-      orderId: orderId || matchingOrder?.orderCode || matchingOrder?.id,
-      status: reviewStatus,
-      date: new Date().toLocaleDateString('vi-VN')
+      images: safeImages,
+      status: reviewStatus
     });
 
     return NextResponse.json({
       success: true,
-      message: user.role === 'admin'
-        ? 'Đã đăng đánh giá thành công!'
-        : 'Cảm ơn bạn đã đánh giá! Nhận xét của bạn đang được duyệt và sẽ hiển thị sớm.',
-      review: result.review
+      message:
+        user.role === 'admin'
+          ? 'Đánh giá đã được đăng thành công.'
+          : 'Cảm ơn bạn! Đánh giá đã được gửi và sẽ hiển thị sau khi quản trị viên phê duyệt.',
+      review: newReview
     });
   } catch (error) {
     console.error('Error posting review:', error);
-    return NextResponse.json(
-      { success: false, message: 'Có lỗi xảy ra khi gửi đánh giá.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, message: 'Lỗi khi gửi đánh giá.' }, { status: 500 });
   }
 }

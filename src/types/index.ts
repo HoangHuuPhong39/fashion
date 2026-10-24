@@ -258,6 +258,8 @@ export interface Order {
   paymentStatus: 'pending' | 'partially_paid' | 'paid' | 'refunded';
   trackingNumber?: string;
   carrier?: string;
+  holdExpiresAt?: string;
+  updatedAt?: string;
 }
 
 export type MembershipTier = 'bronze' | 'silver' | 'gold' | 'diamond';

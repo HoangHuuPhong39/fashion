@@ -1,30 +1,24 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { requireAdmin } from '@/lib/guard';
+import { requireAdmin, verifyMutationOrigin } from '@/lib/guard';
 
 const SETTINGS_FILE = path.join(process.cwd(), 'data', 'bank_settings.json');
-const USERS_FILE = path.join(process.cwd(), 'data', 'users.json');
 
+// BẢO MẬT: Tuyệt đối không hard-code số tài khoản và tên chủ tài khoản thật vào mã nguồn
 const DEFAULT_BANK_INFO = {
   bankName: 'MBBank',
-  accountNumber: '0366861159',
-  accountHolder: 'HOANG HUU PHONG',
-  branch: 'Chi nhánh TP. Hồ Chí Minh',
-  hotline: '0366861159'
+  accountNumber: '',
+  accountHolder: '',
+  branch: '',
+  hotline: process.env.NEXT_PUBLIC_HOTLINE || '0366861159'
 };
 
 function getShopBankSettings() {
   try {
     if (fs.existsSync(SETTINGS_FILE)) {
       const data = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf-8'));
-      if (data && data.accountNumber) return data;
-    }
-    // Fallback sang thông tin ngân hàng của admin trong users.json nếu có
-    if (fs.existsSync(USERS_FILE)) {
-      const users = JSON.parse(fs.readFileSync(USERS_FILE, 'utf-8'));
-      const admin = users.find((u: any) => u.role === 'admin' && u.bankInfo?.accountNumber);
-      if (admin?.bankInfo) return admin.bankInfo;
+      if (data && typeof data === 'object') return { ...DEFAULT_BANK_INFO, ...data };
     }
   } catch (error) {
     console.error('Error reading bank_settings.json:', error);
@@ -44,6 +38,11 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
     const authCheck = requireAdmin(request);
     if (authCheck.errorResponse) return authCheck.errorResponse;
 
@@ -53,20 +52,30 @@ export async function PUT(request: Request) {
       accountNumber: String(body.accountNumber || '').trim(),
       accountHolder: String(body.accountHolder || '').trim().toUpperCase(),
       branch: String(body.branch || '').trim(),
-      hotline: String(body.hotline || '').trim()
+      hotline: String(body.hotline || process.env.NEXT_PUBLIC_HOTLINE || '').trim()
     };
 
     if (!updated.accountNumber || !updated.accountHolder) {
       return NextResponse.json(
-        { success: false, message: 'Vui lòng điền số tài khoản và tên chủ tài khoản.' },
+        { success: false, message: 'Vui lòng cung cấp số tài khoản và tên chủ tài khoản.' },
         { status: 400 }
       );
     }
 
+    const dataDir = path.dirname(SETTINGS_FILE);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+
     fs.writeFileSync(SETTINGS_FILE, JSON.stringify(updated, null, 2), 'utf-8');
-    return NextResponse.json({ success: true, message: 'Cập nhật tài khoản ngân hàng thành công!', bankInfo: updated });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Cập nhật tài khoản nhận thanh toán VietQR thành công.',
+      bankInfo: updated
+    });
   } catch (error) {
-    console.error('Error saving bank info:', error);
-    return NextResponse.json({ success: false, message: 'Không thể lưu thông tin tài khoản ngân hàng.' }, { status: 500 });
+    console.error('Error updating bank info:', error);
+    return NextResponse.json({ success: false, message: 'Lỗi khi cập nhật thông tin thanh toán.' }, { status: 500 });
   }
 }

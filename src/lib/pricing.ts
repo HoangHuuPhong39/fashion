@@ -5,6 +5,8 @@ export interface CouponRule {
   discountPercent: number;
   isFreeship: boolean;
   description: string;
+  minOrderAmount?: number;
+  maxUsage?: number;
 }
 
 export const VALID_COUPONS: Record<string, CouponRule> = {
@@ -12,25 +14,25 @@ export const VALID_COUPONS: Record<string, CouponRule> = {
     code: 'TADAVIP',
     discountPercent: 10,
     isFreeship: false,
-    description: 'Giảm 10% tổng đơn hàng'
-  },
-  LUMIEREVIP: {
-    code: 'LUMIEREVIP',
-    discountPercent: 10,
-    isFreeship: false,
-    description: 'Giảm 10% tổng đơn hàng'
+    description: 'Giảm 10% tổng đơn hàng (đơn từ 500K)',
+    minOrderAmount: 500000,
+    maxUsage: 1000
   },
   FREESHIP: {
     code: 'FREESHIP',
     discountPercent: 0,
     isFreeship: true,
-    description: 'Miễn phí vận chuyển toàn quốc'
+    description: 'Miễn phí vận chuyển toàn quốc (đơn từ 299K)',
+    minOrderAmount: 299000,
+    maxUsage: 5000
   },
   FALL2026: {
     code: 'FALL2026',
     discountPercent: 15,
     isFreeship: false,
-    description: 'Giảm 15% cho BST Thu Đông 2026'
+    description: 'Giảm 15% cho BST Thu Đông 2026 (đơn từ 1 triệu)',
+    minOrderAmount: 1000000,
+    maxUsage: 500
   }
 };
 
@@ -51,19 +53,22 @@ export interface PricingCalculationResult {
   membershipDiscountAmount: number;
   totalDiscount: number;
   appliedCoupon: string | null;
+  couponMessage?: string;
   total: number;
 }
 
 /**
  * Tính toán biểu phí, chiết khấu và tổng thanh toán chuẩn xác phía Server & Client
+ * Quy tắc bảo mật: Mã giảm giá KHÔNG cộng dồn với chiết khấu hạng thành viên (áp dụng mức ưu đãi cao nhất).
  */
 export function calculateOrderPricing(params: {
   subtotal: number;
   couponCode?: string | null;
   membershipTier?: MembershipTier | null;
   shippingMethod?: 'standard' | 'express';
+  couponUsageCount?: number;
 }): PricingCalculationResult {
-  const { subtotal, couponCode, membershipTier, shippingMethod } = params;
+  const { subtotal, couponCode, membershipTier, shippingMethod, couponUsageCount = 0 } = params;
 
   if (subtotal <= 0) {
     return {
@@ -77,35 +82,66 @@ export function calculateOrderPricing(params: {
     };
   }
 
-  // 1. Kiểm tra mã giảm giá
+  // 1. Kiểm tra mã giảm giá hợp lệ
   const cleanCode = (couponCode || '').trim().toUpperCase();
   const couponRule = cleanCode ? VALID_COUPONS[cleanCode] || null : null;
-  const appliedCoupon = couponRule ? couponRule.code : null;
+  let appliedCoupon: string | null = null;
+  let couponDiscountAmount = 0;
+  let isCouponFreeship = false;
+  let couponMessage: string | undefined = undefined;
 
-  const couponDiscountPercent = couponRule ? couponRule.discountPercent : 0;
-  const couponDiscountAmount = Math.round((subtotal * couponDiscountPercent) / 100);
+  if (couponRule) {
+    // Kiểm tra mức đơn tối thiểu
+    if (couponRule.minOrderAmount && subtotal < couponRule.minOrderAmount) {
+      couponMessage = `Mã ${couponRule.code} yêu cầu đơn hàng tối thiểu ${new Intl.NumberFormat('vi-VN').format(couponRule.minOrderAmount)}đ.`;
+    } else if (couponRule.maxUsage && couponUsageCount >= couponRule.maxUsage) {
+      // Kiểm tra giới hạn lượt dùng
+      couponMessage = `Mã ${couponRule.code} đã đạt giới hạn lượt sử dụng.`;
+    } else {
+      appliedCoupon = couponRule.code;
+      isCouponFreeship = couponRule.isFreeship;
+      const discountPercent = couponRule.discountPercent;
+      couponDiscountAmount = Math.round((subtotal * discountPercent) / 100);
+    }
+  }
 
   // 2. Chiết khấu theo cấp bậc Hội Viên
   const tier = membershipTier || 'bronze';
   const membershipDiscountPercent = MEMBERSHIP_DISCOUNT_PERCENT[tier] || 0;
-  const membershipDiscountAmount = Math.round((subtotal * membershipDiscountPercent) / 100);
+  let membershipDiscountAmount = Math.round((subtotal * membershipDiscountPercent) / 100);
 
-  // 3. Phí vận chuyển
+  // 3. Quy tắc KHÔNG CỘNG DỒN: Nếu cả mã giảm giá và hội viên đều có giảm giá tiền mặt
+  // Khách hàng nhận mức chiết khấu cao nhất, không cộng dồn hai ưu đãi
+  let totalDiscount = 0;
+  if (couponDiscountAmount > 0 && membershipDiscountAmount > 0) {
+    if (couponDiscountAmount >= membershipDiscountAmount) {
+      totalDiscount = couponDiscountAmount;
+      membershipDiscountAmount = 0; // Ưu tiên coupon lớn hơn
+    } else {
+      totalDiscount = membershipDiscountAmount;
+      couponDiscountAmount = 0; // Ưu tiên hạng thành viên lớn hơn
+    }
+  } else {
+    totalDiscount = couponDiscountAmount + membershipDiscountAmount;
+  }
+
+  // 4. Phí vận chuyển
   const isVipFreeship = tier === 'gold' || tier === 'diamond';
-  const isCouponFreeship = couponRule ? couponRule.isFreeship : false;
   const isThresholdFreeship = subtotal >= FREESHIP_THRESHOLD;
 
   let shippingFee = STANDARD_SHIPPING_FEE;
   if (shippingMethod === 'express') {
     shippingFee = 50000;
+    // Hạng Diamond được freeship cả hỏa tốc
+    if (tier === 'diamond') {
+      shippingFee = 0;
+    }
+  } else {
+    if (isVipFreeship || isCouponFreeship || isThresholdFreeship) {
+      shippingFee = 0;
+    }
   }
 
-  if (isVipFreeship || isCouponFreeship || isThresholdFreeship) {
-    shippingFee = 0;
-  }
-
-  // 4. Tổng thanh toán
-  const totalDiscount = couponDiscountAmount + membershipDiscountAmount;
   const total = Math.max(0, subtotal - totalDiscount + shippingFee);
 
   return {
@@ -115,6 +151,7 @@ export function calculateOrderPricing(params: {
     membershipDiscountAmount,
     totalDiscount,
     appliedCoupon,
+    couponMessage,
     total
   };
 }

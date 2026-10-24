@@ -5,19 +5,24 @@ import {
   verifyPassword,
   hashPassword,
   updateUser,
+  revokeOtherUserSessions,
   checkRateLimit,
   recordFailedAttempt,
   resetRateLimit,
-  getClientIp
+  getTrustedClientIp
 } from '@/lib/auth';
+import { verifyMutationOrigin } from '@/lib/guard';
 
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
-// TODO: Triển khai tính năng quên mật khẩu qua email (gửi token xác thực qua SMTP / Resend)
-
 export async function PUT(request: Request) {
   try {
-    const ip = getClientIp(request);
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
+    const ip = getTrustedClientIp(request);
     const cookieHeader = request.headers.get('cookie') || '';
     const match = cookieHeader.match(/tada_session=([^;]+)/);
     const rawToken = match ? match[1] : null;
@@ -93,11 +98,14 @@ export async function PUT(request: Request) {
       passwordHash: hashPassword(cleanNew)
     });
 
+    // BẢO MẬT: Thu hồi toàn bộ các phiên làm việc khác của người dùng
+    revokeOtherUserSessions(user.id, rawToken);
+
     resetRateLimit(rateLimitKey);
 
     return NextResponse.json({
       success: true,
-      message: 'Đổi mật khẩu thành công!'
+      message: 'Đổi mật khẩu thành công! Các phiên đăng nhập trên thiết bị khác đã được thu hồi.'
     });
   } catch (error) {
     console.error('Change password error:', error);

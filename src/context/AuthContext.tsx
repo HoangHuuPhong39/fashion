@@ -152,9 +152,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchOrders = useCallback(async (currentUser: User | null) => {
     if (!currentUser) {
       setOrders([]);
-      try {
-        localStorage.removeItem(ORDERS_STORAGE_KEY);
-      } catch {}
       return;
     }
 
@@ -172,22 +169,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const data = await res.json();
         if (data.success && Array.isArray(data.orders)) {
           setOrders(data.orders);
-          try {
-            localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(data.orders));
-          } catch {}
           return;
         }
       }
     } catch (e) {
-      console.warn('Could not fetch /api/orders, fallback to localStorage', e);
+      console.warn('Could not fetch /api/orders', e);
     }
-
-    try {
-      const savedOrders = localStorage.getItem(ORDERS_STORAGE_KEY);
-      if (savedOrders) {
-        setOrders(JSON.parse(savedOrders));
-      }
-    } catch {}
   }, []);
 
   // Khôi phục phiên làm việc thực tế từ máy chủ khi mount
@@ -210,10 +197,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch {}
 
-      // 2. Xác thực phiên thật với máy chủ với timeout 2s
+      // Xóa sạch cache đơn hàng cũ khỏi localStorage nếu còn sót từ phiên bản trước
+      try {
+        localStorage.removeItem(ORDERS_STORAGE_KEY);
+      } catch {}
+
+      // 2. Xác thực phiên thật với máy chủ với timeout 2.5s
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000);
+        const timeoutId = setTimeout(() => controller.abort(), 2500);
         const res = await fetch('/api/auth/me', { signal: controller.signal });
         clearTimeout(timeoutId);
 
@@ -225,24 +217,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               try {
                 localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(data.user));
               } catch {}
-              // Tải đơn hàng bất đồng bộ ở background, không chặn loading UI
               fetchOrders(data.user);
               return;
             }
           } else if (res.status === 401) {
-            // Máy chủ xác nhận chưa đăng nhập
-            if (!localUser) {
-              setUser(null);
-              setOrders([]);
-              try {
-                localStorage.removeItem(USER_STORAGE_KEY);
-                localStorage.removeItem(ORDERS_STORAGE_KEY);
-              } catch {}
-            }
+            // BẢO MẬT: Khi máy chủ trả về 401, LUÔN xóa user và đơn hàng khỏi cả state và localStorage
+            setUser(null);
+            setOrders([]);
+            try {
+              localStorage.removeItem(USER_STORAGE_KEY);
+              localStorage.removeItem(ORDERS_STORAGE_KEY);
+            } catch {}
+            return;
           }
         }
       } catch (err) {
-        console.warn('Cannot verify session with server, keeping cached state if any', err);
+        console.warn('Cannot verify session with server', err);
       }
 
       if (!isCancelled) {
@@ -487,9 +477,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setOrders((prev) => {
         const updated = [createdOrder, ...prev];
-        try {
-          localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(updated));
-        } catch {}
         return updated;
       });
 
@@ -557,9 +544,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const updated = prev.map((ord) =>
         ord.id === orderId ? { ...ord, status, statusLabel, ...(paymentStatus ? { paymentStatus } : {}) } : ord
       );
-      try {
-        localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(updated));
-      } catch {}
       return updated;
     });
   };

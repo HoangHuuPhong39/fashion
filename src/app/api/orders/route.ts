@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getDBOrders, createDBOrder } from '@/lib/db';
-import { requireUser, getSessionUser } from '@/lib/guard';
+import { requireUser, getSessionUser, verifyMutationOrigin } from '@/lib/guard';
+import { getTrustedClientIp, checkRateLimit, recordFailedAttempt, resetRateLimit } from '@/lib/ratelimit';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 export async function GET(request: Request) {
   try {
@@ -15,10 +17,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ success: true, orders });
     }
 
-    // Khách hàng chỉ được xem đơn hàng của chính mình
-    const userOrders = orders.filter(
-      (o) => o.userId === user.id || o.shippingAddress?.email?.toLowerCase() === user.email.toLowerCase()
-    );
+    // BẢO MẬT: Khách hàng chỉ được xem đơn hàng khớp chính xác theo userId
+    // TUYỆT ĐỐI KHÔNG khớp theo shippingAddress.email chưa xác minh
+    const userOrders = orders.filter((o) => o.userId === user.id);
     return NextResponse.json({ success: true, orders: userOrders });
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -28,10 +29,44 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
+    const ip = getTrustedClientIp(request);
     const body = await request.json().catch(() => ({}));
     const sessionUser = getSessionUser(request);
 
-    // Gắn userId từ session nếu có đăng nhập
+    // 1. Rate limit tạo đơn hàng (theo IP và Email)
+    const email = body.shippingAddress?.email?.trim().toLowerCase() || sessionUser?.email || '';
+    const ipRateKey = `order:ip:${ip}`;
+    const emailRateKey = email ? `order:email:${email}` : null;
+
+    const ipCheck = checkRateLimit(ipRateKey, 10, 15 * 60 * 1000);
+    const emailCheck = emailRateKey ? checkRateLimit(emailRateKey, 5, 15 * 60 * 1000) : { allowed: true };
+
+    if (!ipCheck.allowed || !emailCheck.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Bạn đã thực hiện quá nhiều yêu cầu đặt hàng liên tiếp. Vui lòng thử lại sau 15 phút.'
+        },
+        { status: 429 }
+      );
+    }
+
+    // 2. Xác thực Captcha Cloudflare Turnstile
+    const turnstileCheck = await verifyTurnstileToken(body.turnstileToken, ip);
+    if (!turnstileCheck.success) {
+      recordFailedAttempt(ipRateKey);
+      return NextResponse.json(
+        { success: false, message: turnstileCheck.message || 'Xác thực Captcha thất bại.' },
+        { status: 400 }
+      );
+    }
+
+    // 3. Gắn userId từ session nếu có đăng nhập
     if (sessionUser) {
       body.userId = sessionUser.id;
     }
@@ -39,8 +74,12 @@ export async function POST(request: Request) {
     const result = createDBOrder(body);
 
     if (!result.success || !result.order) {
+      recordFailedAttempt(ipRateKey);
       return NextResponse.json(result, { status: 400 });
     }
+
+    resetRateLimit(ipRateKey);
+    if (emailRateKey) resetRateLimit(emailRateKey);
 
     const response = NextResponse.json(result);
 

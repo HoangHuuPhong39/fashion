@@ -38,10 +38,10 @@ export default function OrderSuccessPage({ params }: PageProps) {
     hotline?: string;
   }>({
     bankName: 'MBBank',
-    accountNumber: '0366861159',
-    accountHolder: 'HOANG HUU PHONG',
-    branch: 'Chi nhánh TP. Hồ Chí Minh',
-    hotline: '0366861159'
+    accountNumber: '',
+    accountHolder: '',
+    branch: '',
+    hotline: ''
   });
 
   const BANK_DISPLAY_NAMES: Record<string, string> = {

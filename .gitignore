@@ -28,7 +28,6 @@ data_backup*
 /data/*
 !/data/categories.json
 !/data/products.json
-!/data/bank_settings.json
 
 # environment variables
 .env*

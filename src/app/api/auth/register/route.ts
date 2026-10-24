@@ -6,20 +6,24 @@ import {
   checkRateLimit,
   recordFailedAttempt,
   resetRateLimit,
-  getClientIp
+  getTrustedClientIp,
+  verifyPassword
 } from '@/lib/auth';
+import { verifyMutationOrigin } from '@/lib/guard';
 
-// Regex chuẩn:
-// Email định dạng hợp lệ
+// Regex chuẩn
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// Số điện thoại Việt Nam: 10 chữ số, bắt đầu bằng 0 hoặc +84 và đầu số 3, 5, 7, 8, 9
 const VN_PHONE_REGEX = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
-// Mật khẩu: tối thiểu 8 ký tự, có ít nhất một chữ cái và một chữ số
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
 export async function POST(request: Request) {
   try {
-    const ip = getClientIp(request);
+    const originCheck = verifyMutationOrigin(request);
+    if (!originCheck.valid && originCheck.errorResponse) {
+      return originCheck.errorResponse;
+    }
+
+    const ip = getTrustedClientIp(request);
     const body = await request.json().catch(() => ({}));
     const { name, email, phone, password } = body;
 
@@ -28,8 +32,8 @@ export async function POST(request: Request) {
     const cleanPhone = typeof phone === 'string' ? phone.trim().replace(/[\s.-]/g, '') : '';
     const cleanPassword = typeof password === 'string' ? password : '';
 
-    // 1. Giới hạn tần suất đăng ký (IP)
-    const rateLimitKey = `register:${ip}`;
+    // 1. Giới hạn tần suất đăng ký (theo IP)
+    const rateLimitKey = `register:ip:${ip}`;
     const rateCheck = checkRateLimit(rateLimitKey, 5, 15 * 60 * 1000);
     if (!rateCheck.allowed) {
       return NextResponse.json(
@@ -77,17 +81,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Kiểm tra trùng lặp email
+    // 3. Kiểm tra trùng lặp email - BẢO MẬT: Không tiết lộ email đã tồn tại để chống dò quét tài khoản
     const existing = findUserByEmail(cleanEmail);
     if (existing) {
+      // Giả lập thời gian băm mật khẩu để không thể đo lường thời gian
+      verifyPassword(cleanPassword, undefined);
       recordFailedAttempt(rateLimitKey);
-      return NextResponse.json(
-        { success: false, message: 'Email này đã được sử dụng. Vui lòng đăng nhập hoặc sử dụng email khác.' },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        success: true,
+        message: 'Thông tin đăng ký đã được ghi nhận. Nếu bạn đã có tài khoản, vui lòng đăng nhập.',
+        accountNotice: true
+      });
     }
 
-    // 4. Tạo tài khoản mới - Luôn gán role 'customer', KHÔNG nhận role từ client
+    // 4. Tạo tài khoản mới - Luôn gán role 'customer'
     const newUser = createUser({
       name: cleanName,
       email: cleanEmail,
@@ -106,7 +113,6 @@ export async function POST(request: Request) {
       success: true,
       message: 'Đăng ký tài khoản thành công! Chào mừng bạn gia nhập TADA! Privilege.',
       user: safeUser
-      // Không trả token trong body
     });
 
     response.cookies.set('tada_session', rawToken, {
