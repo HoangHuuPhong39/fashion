@@ -34,10 +34,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
-  // Initialize from localStorage on mount (đọc tada_cart trước, fallback sang lumiere_cart cũ để không mất dữ liệu)
+  // Initialize from localStorage on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('tada_cart') || localStorage.getItem('lumiere_cart');
+      const saved = localStorage.getItem('tada_cart');
       if (saved) {
         setItems(JSON.parse(saved));
       }

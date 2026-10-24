@@ -175,8 +175,53 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        {/* Khu vực Thông Tin Pháp Lý (E-Commerce Compliance) */}
+        <div className="pt-8 border-t border-[#2A2925] grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-xs text-[#E8D7BD]/70">
+          <div className="md:col-span-8 space-y-1.5 leading-relaxed">
+            <p className="font-semibold text-[#FAF8F3]">
+              CÔNG TY TNHH THỜI TRANG TADA! ATELIER (VIỆT NAM)
+            </p>
+            <p>
+              • <strong>Mã số doanh nghiệp (MST):</strong> [0123456789 - Chủ shop cập nhật mã số thuế chính thức]
+            </p>
+            <p>
+              • <strong>Địa chỉ trụ sở chính:</strong> [Số 68 Đường Đồng Khởi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh]
+            </p>
+            <p>
+              • <strong>Giấy phép ĐKKD:</strong> [Số 0123456789 cấp ngày 01/01/2026 bởi Sở Kế hoạch và Đầu tư TP.HCM]
+            </p>
+            <p>
+              • <strong>Đại diện pháp luật:</strong> [Họ và tên người đại diện pháp luật] — Hotline: {process.env.NEXT_PUBLIC_HOTLINE || '0366861159'}
+            </p>
+          </div>
+
+          <div className="md:col-span-4 flex md:justify-end items-center gap-3">
+            {/* Huy hiệu Đã thông báo Bộ Công Thương */}
+            <div className="inline-flex items-center gap-2 px-3 py-2 bg-[#2A2925] border border-[#3A3834] rounded-lg">
+              <div className="w-6 h-6 rounded-full bg-[#15803D]/20 text-[#22C55E] flex items-center justify-center text-[10px] font-bold">
+                ✓
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-[#FAF8F3] block leading-tight">ĐÃ THÔNG BÁO</span>
+                <span className="text-[9px] text-[#C7A66A] block leading-tight">BỘ CÔNG THƯƠNG</span>
+              </div>
+            </div>
+
+            {/* Chứng nhận SSL an toàn */}
+            <div className="inline-flex items-center gap-2 px-3 py-2 bg-[#2A2925] border border-[#3A3834] rounded-lg">
+              <div className="w-6 h-6 rounded-full bg-[#0369A1]/20 text-[#38BDF8] flex items-center justify-center text-[10px] font-bold">
+                🔒
+              </div>
+              <div>
+                <span className="text-[10px] font-bold text-[#FAF8F3] block leading-tight">BẢO MẬT SSL</span>
+                <span className="text-[9px] text-[#A8A29E] block leading-tight">GIAO DỊCH AN TOÀN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Bản quyền */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#747069] gap-3">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#747069] gap-3">
           <p>© 2026 TADA! Fashion E-Commerce. All rights reserved.</p>
           <div className="flex items-center space-x-6">
             <Link href="/terms" className="hover:text-[#FAF8F3] transition-colors">Điều khoản dịch vụ</Link>

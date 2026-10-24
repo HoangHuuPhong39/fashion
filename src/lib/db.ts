@@ -428,8 +428,8 @@ export function getProductSalesMap(): Record<string, number> {
   const orders = readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
   const salesMap: Record<string, number> = {};
   for (const order of orders) {
-    // Chỉ tính các đơn hàng hợp lệ theo nghiệp vụ (không tính đơn hủy)
-    if (order.status !== 'cancelled') {
+    // Chỉ tính các đơn hàng đã giao thành công thực tế (status === 'delivered')
+    if (order.status === 'delivered') {
       for (const item of order.items) {
         if (item.productId) {
           salesMap[item.productId] = (salesMap[item.productId] || 0) + (item.quantity || 1);

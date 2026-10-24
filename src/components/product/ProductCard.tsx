@@ -159,7 +159,7 @@ const ProductCardBase: React.FC<ProductCardProps> = ({ product, onQuickView, cla
           <div className="flex items-center justify-between text-[11px] text-[#8A7158] font-semibold tracking-[0.04em] uppercase">
             <span className="truncate">{product.brand}</span>
             {product.originCountry && (
-              <span className="text-[10px] text-[#747069] lowercase font-normal shrink-0 ml-1">
+              <span className="text-[10px] text-[#747069] capitalize font-normal shrink-0 ml-1">
                 {product.originCountry}
               </span>
             )}
@@ -228,19 +228,31 @@ const ProductCardBase: React.FC<ProductCardProps> = ({ product, onQuickView, cla
         </div>
 
         {/* Rating & Sales count & Freeship */}
-        <div className="flex items-center justify-between text-[11px] pt-0.5">
-          <div className="flex items-center gap-1 text-[#747069]">
-            <Star className="w-3.5 h-3.5 text-[#E5A93C] fill-[#E5A93C]" />
-            <span className="font-semibold text-[#171613] tabular-nums">{product.rating ? product.rating.toFixed(1) : '5.0'}</span>
-            <span className="text-[10px] text-[#A8A29E] tabular-nums">
-              ({(product.salesCount ?? 0) > 0 ? `${product.salesCount} đã bán` : `${product.reviewCount ?? 0} đánh giá`})
-            </span>
+        <div className="flex items-center justify-between text-[11px] pt-0.5 min-h-[1.25rem]">
+          <div className="flex items-center gap-1.5 text-[#747069]">
+            {(product.reviewCount ?? 0) > 0 ? (
+              <div className="flex items-center gap-1">
+                <Star className="w-3.5 h-3.5 text-[#E5A93C] fill-[#E5A93C]" />
+                <span className="font-semibold text-[#171613] tabular-nums">{product.rating ? product.rating.toFixed(1) : ''}</span>
+                <span className="text-[10px] text-[#A8A29E] tabular-nums">
+                  ({product.reviewCount})
+                </span>
+              </div>
+            ) : null}
+
+            {(product.salesCount ?? 0) > 0 && (
+              <span className="text-[10px] text-[#747069] tabular-nums">
+                {(product.reviewCount ?? 0) > 0 ? '• ' : ''}{product.salesCount} đã bán
+              </span>
+            )}
           </div>
 
-          {/* Badge Freeship */}
-          <span className="px-2 py-0.5 bg-[#DCFCE7] text-[#15803D] font-semibold text-[10px] rounded-full">
-            Freeship
-          </span>
+          {/* Badge Freeship chỉ hiện khi giá sản phẩm đạt ngưỡng 499.000đ */}
+          {product.price >= 499000 && (
+            <span className="px-2 py-0.5 bg-[#DCFCE7] text-[#15803D] font-semibold text-[10px] rounded-full">
+              Freeship
+            </span>
+          )}
         </div>
       </div>
     </div>

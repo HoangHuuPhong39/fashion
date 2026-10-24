@@ -28,7 +28,7 @@ export const TopBar: React.FC = () => {
           </span>
           <span className="hidden md:flex items-center gap-1.5 hover:text-white transition-colors">
             <Award className="w-3.5 h-3.5 text-[#C7A66A]" />
-            <span>Cam kết hàng chính hãng 100%</span>
+            <span>Hóa đơn boutique gốc & xuất xứ minh bạch</span>
           </span>
           <span className="hidden lg:flex items-center gap-1.5 hover:text-white transition-colors">
             <RotateCcw className="w-3.5 h-3.5 text-[#C7A66A]" />

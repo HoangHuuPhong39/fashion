@@ -569,7 +569,7 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                 </span>
                 <span className="flex items-center gap-1.5">
                   <ShieldCheck className="w-4 h-4 text-[#8A7158]" />
-                  <span>Cam kết chính hãng 100%</span>
+                  <span>Hóa đơn boutique gốc & minh bạch</span>
                 </span>
               </div>
             </div>

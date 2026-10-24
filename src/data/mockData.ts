@@ -1131,7 +1131,7 @@ export const PRODUCTS: Product[] = [
     "id": "lum-16",
     "name": "Váy xoè bèo nhún lụa cotton cho bé gái Little Princess Dress",
     "slug": "vay-xoe-beo-nhun-lua-cotton-be-gai",
-    "brand": "Lumière Kids",
+    "brand": "TADA! Kids",
     "origin": "in_stock_ready",
     "originCountry": "Việt Nam",
     "badges": [

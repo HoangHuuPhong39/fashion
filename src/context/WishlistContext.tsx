@@ -17,7 +17,7 @@ export const WishlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('tada_wishlist') || localStorage.getItem('lumiere_wishlist');
+      const saved = localStorage.getItem('tada_wishlist');
       if (saved) {
         setWishlist(JSON.parse(saved));
       }

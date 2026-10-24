@@ -1,149 +1,5 @@
 [
   {
-    "id": "prod-1792844854002",
-    "name": "Đầm Lụa TADA! Signature Haute Couture Test",
-    "slug": "prod-1792844854002",
-    "sku": "TADA-NU-4003",
-    "brand": "TADA! Atelier",
-    "origin": "vietnam_local_brand",
-    "originCountry": "Việt Nam",
-    "badges": [
-      "LOCAL BRAND"
-    ],
-    "category": "nu",
-    "categoryId": "nu",
-    "subCategoryId": "ao-kieu-nu",
-    "additionalCategoryIds": [],
-    "tags": [
-      "new"
-    ],
-    "price": 1850000,
-    "originalPrice": 2200000,
-    "discountPercentage": 0,
-    "rating": 5,
-    "reviewCount": 1,
-    "viewsCount": 0,
-    "salesCount": 2,
-    "inStock": true,
-    "stockCount": 23,
-    "status": "active",
-    "variants": [
-      {
-        "id": "var-prod-1792844854002-0-0",
-        "sku": "TADA-NU-4003-ĐE-S",
-        "color": "Đen Huyền Bí",
-        "colorHex": "#111111",
-        "size": "S",
-        "stockCount": 6,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      },
-      {
-        "id": "var-prod-1792844854002-0-1",
-        "sku": "TADA-NU-4003-ĐE-M",
-        "color": "Đen Huyền Bí",
-        "colorHex": "#111111",
-        "size": "M",
-        "stockCount": 3,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      },
-      {
-        "id": "var-prod-1792844854002-0-2",
-        "sku": "TADA-NU-4003-ĐE-L",
-        "color": "Đen Huyền Bí",
-        "colorHex": "#111111",
-        "size": "L",
-        "stockCount": 3,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      },
-      {
-        "id": "var-prod-1792844854002-1-0",
-        "sku": "TADA-NU-4003-BE-S",
-        "color": "Be Ánh Kim",
-        "colorHex": "#E8D7BD",
-        "size": "S",
-        "stockCount": 3,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      },
-      {
-        "id": "var-prod-1792844854002-1-1",
-        "sku": "TADA-NU-4003-BE-M",
-        "color": "Be Ánh Kim",
-        "colorHex": "#E8D7BD",
-        "size": "M",
-        "stockCount": 3,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      },
-      {
-        "id": "var-prod-1792844854002-1-2",
-        "sku": "TADA-NU-4003-BE-L",
-        "color": "Be Ánh Kim",
-        "colorHex": "#E8D7BD",
-        "size": "L",
-        "stockCount": 5,
-        "price": 1850000,
-        "originalPrice": 2200000,
-        "inStock": true,
-        "image": "/images/products/dress-1.jpg"
-      }
-    ],
-    "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành)",
-    "images": [
-      "/images/products/dress-1.jpg",
-      "/images/products/dress-2.jpg",
-      "/images/products/dress-3.jpg"
-    ],
-    "coverImageIndex": 0,
-    "colors": [
-      {
-        "name": "Đen Huyền Bí",
-        "hex": "#111111"
-      },
-      {
-        "name": "Be Ánh Kim",
-        "hex": "#E8D7BD"
-      }
-    ],
-    "sizes": [
-      "S",
-      "M",
-      "L"
-    ],
-    "shortDescription": "Sản phẩm thời trang cao cấp từ TADA!",
-    "description": "Sản phẩm mới cao cấp từ TADA!",
-    "material": "Cotton cao cấp",
-    "careInstructions": [
-      "Giặt nhẹ",
-      "Không sấy khô"
-    ],
-    "style": "Regular fit",
-    "pattern": "Trơn",
-    "gender": "nu",
-    "season": "bon-mua",
-    "fashionStyle": "Thanh lịch đương đại",
-    "seoTitle": "Đầm Lụa TADA! Signature Haute Couture Test",
-    "featured": false,
-    "isNewArrival": true,
-    "isBestSeller": false,
-    "isSale": false,
-    "createdAt": "2026-10-24T12:27:34.002Z",
-    "updatedAt": "2026-10-24T12:27:34.034Z"
-  },
-  {
     "id": "prod-1792769334217",
     "name": "Áo Amiri",
     "slug": "prod-1792769334217",
@@ -157,7 +13,7 @@
     "price": 690000,
     "originalPrice": 950000,
     "discountPercentage": 27,
-    "rating": 5,
+    "rating": 0,
     "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
@@ -232,7 +88,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "prod-1792760839536",
@@ -361,7 +218,8 @@
     "tags": [
       "bestseller"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 2
   },
   {
     "id": "lum-01",
@@ -379,8 +237,8 @@
     "price": 910000,
     "originalPrice": 1090000,
     "discountPercentage": 17,
-    "rating": 4.9,
-    "reviewCount": 38,
+    "rating": 4.7,
+    "reviewCount": 3,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -535,7 +393,7 @@
     "updatedAt": "2026-10-23T13:32:52.189Z",
     "categoryId": "nu",
     "subCategoryId": "ao-khoac-nu",
-    "salesCount": 1,
+    "salesCount": 0,
     "tags": [
       "new",
       "bestseller",
@@ -543,7 +401,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-02",
@@ -561,8 +420,8 @@
     "price": 650000,
     "originalPrice": 4200000,
     "discountPercentage": 85,
-    "rating": 5,
-    "reviewCount": 46,
+    "rating": 4.7,
+    "reviewCount": 3,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Giao hỏa tốc 2h HCM / 24-48h Toàn quốc",
@@ -601,7 +460,7 @@
     "isNewArrival": false,
     "isSale": true,
     "sku": "TADA-NU-002",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-lum-02-0-0",
@@ -721,7 +580,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-04",
@@ -737,8 +597,8 @@
     "category": "nu",
     "subCategory": "ao-thun",
     "price": 590000,
-    "rating": 4.9,
-    "reviewCount": 31,
+    "rating": 4.7,
+    "reviewCount": 3,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Hàng có sẵn - Giao 24h-48h",
@@ -857,7 +717,8 @@
       "bestseller",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-05",
@@ -876,7 +737,7 @@
     "originalPrice": 810000,
     "discountPercentage": 20,
     "rating": 4.7,
-    "reviewCount": 54,
+    "reviewCount": 3,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Có sẵn tại kho HCM - Giao nhanh 1-2 ngày",
@@ -1033,7 +894,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-06",
@@ -1049,8 +911,8 @@
     "category": "nu",
     "subCategory": "ao-len",
     "price": 670000,
-    "rating": 5,
-    "reviewCount": 19,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Hàng thủ công số lượng giới hạn - Giao 2-3 ngày",
@@ -1119,7 +981,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-09",
@@ -1137,8 +1000,8 @@
     "price": 580000,
     "originalPrice": 730000,
     "discountPercentage": 21,
-    "rating": 4.9,
-    "reviewCount": 68,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Giao hỏa tốc 2-4h nội thành",
@@ -1255,7 +1118,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-10",
@@ -1273,8 +1137,8 @@
     "price": 910000,
     "originalPrice": 1090000,
     "discountPercentage": 17,
-    "rating": 4.8,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 22,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -1363,7 +1227,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-11",
@@ -1378,8 +1243,8 @@
     "category": "nu",
     "subCategory": "ao-thun",
     "price": 430000,
-    "rating": 4.9,
-    "reviewCount": 25,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Order 7-10 ngày (Store COS Châu Âu)",
@@ -1521,7 +1386,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-03",
@@ -1538,8 +1404,8 @@
     "price": 750000,
     "originalPrice": 900000,
     "discountPercentage": 17,
-    "rating": 4.8,
-    "reviewCount": 22,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 5,
     "estimatedDelivery": "Dự kiến 7-10 ngày (Hàng order trực tiếp Seoul)",
@@ -1660,7 +1526,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-08",
@@ -1677,8 +1544,8 @@
     "price": 430000,
     "originalPrice": 540000,
     "discountPercentage": 20,
-    "rating": 4.8,
-    "reviewCount": 17,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 9,
     "estimatedDelivery": "Dự kiến 7-10 ngày (Order Hàn Quốc)",
@@ -1794,7 +1661,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-12",
@@ -1810,8 +1678,8 @@
     "category": "nam",
     "subCategory": "quan",
     "price": 450000,
-    "rating": 5,
-    "reviewCount": 28,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Order Boutique Paris 8-12 ngày",
@@ -1929,7 +1797,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-13",
@@ -1947,8 +1816,8 @@
     "price": 770000,
     "originalPrice": 940000,
     "discountPercentage": 18,
-    "rating": 4.9,
-    "reviewCount": 75,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 30,
     "estimatedDelivery": "Giao nhanh 1-2 ngày toàn quốc",
@@ -2141,7 +2010,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-14",
@@ -2156,8 +2026,8 @@
     "category": "nam",
     "subCategory": "ao-khoac",
     "price": 1070000,
-    "rating": 4.7,
-    "reviewCount": 41,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Order 7-10 ngày (Store Zara Tây Ban Nha)",
@@ -2278,7 +2148,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-15",
@@ -2293,8 +2164,8 @@
     "category": "nam",
     "subCategory": "ao-thun",
     "price": 510000,
-    "rating": 4.9,
-    "reviewCount": 92,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 45,
     "estimatedDelivery": "Giao hỏa tốc 2-4h nội thành",
@@ -2434,7 +2305,8 @@
     "tags": [
       "bestseller"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-16",
@@ -2452,8 +2324,8 @@
     "price": 380000,
     "originalPrice": 480000,
     "discountPercentage": 21,
-    "rating": 5,
-    "reviewCount": 34,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Giao nhanh 1-2 ngày toàn quốc",
@@ -2595,7 +2467,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-17",
@@ -2610,8 +2483,8 @@
     "category": "tre-em",
     "subCategory": "be-trai",
     "price": 830000,
-    "rating": 4.8,
-    "reviewCount": 16,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Order 7-10 ngày (Zara Kids Châu Âu)",
@@ -2753,7 +2626,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-18",
@@ -2770,8 +2644,8 @@
     "price": 520000,
     "originalPrice": 630000,
     "discountPercentage": 17,
-    "rating": 4.9,
-    "reviewCount": 45,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 28,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -2906,11 +2780,12 @@
     "updatedAt": "2026-10-23T17:21:21.952Z",
     "categoryId": "tre-em",
     "subCategoryId": "ao-be-trai",
-    "salesCount": 2,
+    "salesCount": 0,
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-07",
@@ -2928,8 +2803,8 @@
     "price": 710000,
     "originalPrice": 26800000,
     "discountPercentage": 97,
-    "rating": 5,
-    "reviewCount": 42,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Order từ Boutique Lemaire Paris (10-14 ngày kèm bill box seal)",
@@ -2962,7 +2837,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-PHU-018",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-lum-07-0-0",
@@ -3023,7 +2898,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-19",
@@ -3041,8 +2917,8 @@
     "price": 950000,
     "originalPrice": 18200000,
     "discountPercentage": 95,
-    "rating": 5,
-    "reviewCount": 52,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 4,
     "estimatedDelivery": "Order trực tiếp Boutique Paris 8-12 ngày full seal box",
@@ -3078,7 +2954,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-PHU-019",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-lum-19-0-0",
@@ -3127,7 +3003,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-20",
@@ -3143,8 +3020,8 @@
     "category": "phu-kien",
     "subCategory": "that-lung",
     "price": 440000,
-    "rating": 5,
-    "reviewCount": 29,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 2,
     "estimatedDelivery": "Bay Air từ Paris (Boutique Rue Cambon) 10-14 ngày",
@@ -3262,7 +3139,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-21",
@@ -3278,8 +3156,8 @@
     "category": "phu-kien",
     "subCategory": "giay-dep",
     "price": 490000,
-    "rating": 4.9,
-    "reviewCount": 37,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 8,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -3420,7 +3298,8 @@
       "bestseller",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-22",
@@ -3435,8 +3314,8 @@
     "category": "phu-kien",
     "subCategory": "giay-dep",
     "price": 790000,
-    "rating": 4.8,
-    "reviewCount": 19,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 5,
     "estimatedDelivery": "Order Seoul 7-10 ngày",
@@ -3603,7 +3482,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "lum-23",
@@ -3618,8 +3498,8 @@
     "category": "phu-kien",
     "subCategory": "phu-kien",
     "price": 320000,
-    "rating": 4.9,
-    "reviewCount": 22,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Order 7-10 ngày (Store Châu Âu)",
@@ -3686,7 +3566,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-01",
@@ -3705,8 +3586,8 @@
     "price": 430000,
     "originalPrice": 16800000,
     "discountPercentage": 97,
-    "rating": 5,
-    "reviewCount": 32,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Dự kiến 7-10 ngày (Bay Air từ Los Angeles)",
@@ -3739,7 +3620,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-024",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-01-0-0",
@@ -3800,7 +3681,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-02",
@@ -3818,8 +3700,8 @@
     "price": 520000,
     "originalPrice": 630000,
     "discountPercentage": 17,
-    "rating": 4.9,
-    "reviewCount": 28,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -3905,13 +3787,14 @@
     "updatedAt": "2026-10-24T12:34:31.236Z",
     "categoryId": "nam",
     "subCategoryId": "ao-thun-nam",
-    "salesCount": 5,
+    "salesCount": 0,
     "tags": [
       "bestseller",
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-03",
@@ -3929,8 +3812,8 @@
     "price": 900000,
     "originalPrice": 4800000,
     "discountPercentage": 81,
-    "rating": 4.9,
-    "reviewCount": 45,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 13,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -3963,7 +3846,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-DO--026",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-03-0-0",
@@ -4029,13 +3912,14 @@
     "updatedAt": "2026-10-23T14:47:57.795Z",
     "categoryId": "do-bo",
     "subCategoryId": "do-bo-mac-nha-nam",
-    "salesCount": 2,
+    "salesCount": 0,
     "tags": [
       "bestseller",
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-04",
@@ -4053,8 +3937,8 @@
     "price": 850000,
     "originalPrice": 1060000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 8,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Frankfurt)",
@@ -4147,7 +4031,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-05",
@@ -4164,8 +4049,8 @@
     "price": 830000,
     "originalPrice": 3600000,
     "discountPercentage": 77,
-    "rating": 4.8,
-    "reviewCount": 22,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -4197,7 +4082,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-028",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-05-0-0",
@@ -4256,7 +4141,8 @@
       "new",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-06",
@@ -4274,8 +4160,8 @@
     "price": 470000,
     "originalPrice": 590000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 51,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -4367,7 +4253,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-07",
@@ -4386,8 +4273,8 @@
     "price": 2050000,
     "originalPrice": 75000000,
     "discountPercentage": 97,
-    "rating": 5,
-    "reviewCount": 19,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Dự kiến 10-14 ngày (Hàng xách tay cao cấp kèm bảo hiểm)",
@@ -4418,7 +4305,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-030",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-07-0-0",
@@ -4467,7 +4354,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-08",
@@ -4475,7 +4363,7 @@
     "slug": "ao-polo-det-kim-burberry-ekd-black",
     "brand": "Burberry",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ",
       "PREMIUM"
@@ -4485,8 +4373,8 @@
     "price": 1170000,
     "originalPrice": 1430000,
     "discountPercentage": 18,
-    "rating": 5,
-    "reviewCount": 26,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Dự kiến 7-10 ngày (Bay Air từ London)",
@@ -4579,7 +4467,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-09",
@@ -4596,8 +4485,8 @@
     "price": 590000,
     "originalPrice": 4100000,
     "discountPercentage": 86,
-    "rating": 4.9,
-    "reviewCount": 42,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 16,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -4630,7 +4519,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-032",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-09-0-0",
@@ -4701,7 +4590,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-10",
@@ -4719,8 +4609,8 @@
     "price": 700000,
     "originalPrice": 4300000,
     "discountPercentage": 84,
-    "rating": 4.9,
-    "reviewCount": 31,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 9,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ châu Âu)",
@@ -4752,7 +4642,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-033",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-10-0-0",
@@ -4811,7 +4701,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-11",
@@ -4828,8 +4719,8 @@
     "price": 680000,
     "originalPrice": 3950000,
     "discountPercentage": 83,
-    "rating": 4.8,
-    "reviewCount": 25,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 11,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -4861,7 +4752,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-034",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-11-0-0",
@@ -4919,7 +4810,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-12",
@@ -4937,8 +4829,8 @@
     "price": 900000,
     "originalPrice": 4500000,
     "discountPercentage": 80,
-    "rating": 4.9,
-    "reviewCount": 37,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Madrid)",
@@ -4970,7 +4862,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-035",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-12-0-0",
@@ -5029,7 +4921,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-13",
@@ -5048,8 +4941,8 @@
     "price": 1090000,
     "originalPrice": 52000000,
     "discountPercentage": 98,
-    "rating": 5,
-    "reviewCount": 18,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 4,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris kèm hóa đơn)",
@@ -5080,7 +4973,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-036",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-13-0-0",
@@ -5129,7 +5022,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-14",
@@ -5146,8 +5040,8 @@
     "price": 510000,
     "originalPrice": 3400000,
     "discountPercentage": 85,
-    "rating": 4.8,
-    "reviewCount": 40,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -5179,7 +5073,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-037",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-14-0-0",
@@ -5237,7 +5131,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-15",
@@ -5255,8 +5150,8 @@
     "price": 550000,
     "originalPrice": 23000000,
     "discountPercentage": 98,
-    "rating": 4.9,
-    "reviewCount": 21,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 5,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Milan)",
@@ -5288,7 +5183,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-038",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-15-0-0",
@@ -5348,7 +5243,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-16",
@@ -5366,8 +5262,8 @@
     "price": 570000,
     "originalPrice": 5600000,
     "discountPercentage": 90,
-    "rating": 5,
-    "reviewCount": 36,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -5399,7 +5295,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-039",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-16-0-0",
@@ -5459,7 +5355,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-17",
@@ -5478,8 +5375,8 @@
     "price": 1170000,
     "originalPrice": 1430000,
     "discountPercentage": 18,
-    "rating": 5,
-    "reviewCount": 24,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 4,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -5572,7 +5469,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-18",
@@ -5590,8 +5488,8 @@
     "price": 730000,
     "originalPrice": 44000000,
     "discountPercentage": 98,
-    "rating": 4.9,
-    "reviewCount": 29,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 5,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -5623,7 +5521,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-041",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-18-0-0",
@@ -5683,7 +5581,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-19",
@@ -5701,8 +5600,8 @@
     "price": 1010000,
     "originalPrice": 24500000,
     "discountPercentage": 96,
-    "rating": 5,
-    "reviewCount": 33,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Florence)",
@@ -5733,7 +5632,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-042",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-19-0-0",
@@ -5793,7 +5692,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-20",
@@ -5812,8 +5712,8 @@
     "price": 850000,
     "originalPrice": 1040000,
     "discountPercentage": 18,
-    "rating": 5,
-    "reviewCount": 16,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -5905,7 +5805,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-21",
@@ -5923,8 +5824,8 @@
     "price": 770000,
     "originalPrice": 6500000,
     "discountPercentage": 88,
-    "rating": 4.9,
-    "reviewCount": 38,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 13,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -5956,7 +5857,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-044",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-21-0-0",
@@ -6016,7 +5917,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-22",
@@ -6034,8 +5936,8 @@
     "price": 720000,
     "originalPrice": 5600000,
     "discountPercentage": 87,
-    "rating": 4.9,
-    "reviewCount": 44,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -6067,7 +5969,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-045",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-22-0-0",
@@ -6126,7 +6028,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-23",
@@ -6144,8 +6047,8 @@
     "price": 990000,
     "originalPrice": 7600000,
     "discountPercentage": 87,
-    "rating": 4.9,
-    "reviewCount": 35,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -6177,7 +6080,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-046",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-23-0-0",
@@ -6236,7 +6139,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-24",
@@ -6255,8 +6159,8 @@
     "price": 1690000,
     "originalPrice": 2030000,
     "discountPercentage": 17,
-    "rating": 5,
-    "reviewCount": 20,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -6348,7 +6252,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-25",
@@ -6365,8 +6270,8 @@
     "price": 570000,
     "originalPrice": 5200000,
     "discountPercentage": 89,
-    "rating": 4.8,
-    "reviewCount": 47,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 16,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -6398,7 +6303,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-048",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-25-0-0",
@@ -6457,7 +6362,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-26",
@@ -6475,8 +6381,8 @@
     "price": 390000,
     "originalPrice": 490000,
     "discountPercentage": 20,
-    "rating": 5,
-    "reviewCount": 27,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 5,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -6568,7 +6474,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-27",
@@ -6586,8 +6493,8 @@
     "price": 770000,
     "originalPrice": 8100000,
     "discountPercentage": 90,
-    "rating": 5,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 11,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -6619,7 +6526,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-050",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-27-0-0",
@@ -6679,7 +6586,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-28",
@@ -6687,7 +6595,7 @@
     "slug": "ao-polo-len-burberry-check-placket-espresso",
     "brand": "Burberry",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ",
       "PREMIUM"
@@ -6697,8 +6605,8 @@
     "price": 1010000,
     "originalPrice": 20500000,
     "discountPercentage": 95,
-    "rating": 4.9,
-    "reviewCount": 23,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ London)",
@@ -6729,7 +6637,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-051",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-28-0-0",
@@ -6789,7 +6697,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-29",
@@ -6808,8 +6717,8 @@
     "price": 1930000,
     "originalPrice": 48000000,
     "discountPercentage": 96,
-    "rating": 5,
-    "reviewCount": 15,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 4,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Florence)",
@@ -6840,7 +6749,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-052",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-29-0-0",
@@ -6901,7 +6810,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-30",
@@ -6920,8 +6830,8 @@
     "price": 1810000,
     "originalPrice": 70000000,
     "discountPercentage": 97,
-    "rating": 5,
-    "reviewCount": 22,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -6953,7 +6863,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-053",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-30-0-0",
@@ -7013,7 +6923,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-31",
@@ -7021,7 +6932,7 @@
     "slug": "ao-cardigan-burberry-vintage-check-camel",
     "brand": "Burberry",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ",
       "PREMIUM"
@@ -7031,8 +6942,8 @@
     "price": 1090000,
     "originalPrice": 30000000,
     "discountPercentage": 96,
-    "rating": 5,
-    "reviewCount": 30,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 8,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ London)",
@@ -7064,7 +6975,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-054",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-31-0-0",
@@ -7125,7 +7036,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-32",
@@ -7144,8 +7056,8 @@
     "price": 1570000,
     "originalPrice": 78000000,
     "discountPercentage": 98,
-    "rating": 5,
-    "reviewCount": 14,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 2,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -7175,7 +7087,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-055",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-32-0-0",
@@ -7224,7 +7136,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-33",
@@ -7232,7 +7145,7 @@
     "slug": "ao-cardigan-burberry-ekd-fullzip-black",
     "brand": "Burberry",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ",
       "PREMIUM"
@@ -7242,8 +7155,8 @@
     "price": 930000,
     "originalPrice": 32000000,
     "discountPercentage": 97,
-    "rating": 4.9,
-    "reviewCount": 28,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ London)",
@@ -7275,7 +7188,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-056",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-33-0-0",
@@ -7335,7 +7248,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-34",
@@ -7353,8 +7267,8 @@
     "price": 700000,
     "originalPrice": 5900000,
     "discountPercentage": 88,
-    "rating": 4.9,
-    "reviewCount": 41,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 11,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ châu Âu)",
@@ -7387,7 +7301,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-DO--057",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-34-0-0",
@@ -7460,7 +7374,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-35",
@@ -7478,8 +7393,8 @@
     "price": 650000,
     "originalPrice": 810000,
     "discountPercentage": 20,
-    "rating": 5,
-    "reviewCount": 38,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 9,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ London)",
@@ -7571,7 +7486,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-36",
@@ -7589,8 +7505,8 @@
     "price": 900000,
     "originalPrice": 5900000,
     "discountPercentage": 85,
-    "rating": 5,
-    "reviewCount": 49,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 16,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -7623,7 +7539,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-DO--059",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-36-0-0",
@@ -7695,7 +7611,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 1
   },
   {
     "id": "mau-37",
@@ -7713,8 +7630,8 @@
     "price": 850000,
     "originalPrice": 1060000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 42,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 8,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Manchester)",
@@ -7806,7 +7723,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-38",
@@ -7823,8 +7741,8 @@
     "price": 800000,
     "originalPrice": 5500000,
     "discountPercentage": 85,
-    "rating": 4.8,
-    "reviewCount": 30,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Turin)",
@@ -7856,7 +7774,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-DO--061",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-38-0-0",
@@ -7915,7 +7833,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-39",
@@ -7933,8 +7852,8 @@
     "price": 750000,
     "originalPrice": 940000,
     "discountPercentage": 20,
-    "rating": 5,
-    "reviewCount": 35,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 7,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Đức)",
@@ -8026,7 +7945,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-40",
@@ -8045,8 +7965,8 @@
     "price": 850000,
     "originalPrice": 1060000,
     "discountPercentage": 20,
-    "rating": 5,
-    "reviewCount": 52,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -8151,7 +8071,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-41",
@@ -8169,8 +8090,8 @@
     "price": 800000,
     "originalPrice": 5800000,
     "discountPercentage": 86,
-    "rating": 4.9,
-    "reviewCount": 29,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Anh Quốc)",
@@ -8202,7 +8123,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-DO--064",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-41-0-0",
@@ -8262,7 +8183,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-42",
@@ -8280,8 +8202,8 @@
     "price": 750000,
     "originalPrice": 940000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 34,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -8373,7 +8295,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-43",
@@ -8392,8 +8315,8 @@
     "price": 500000,
     "originalPrice": 32000000,
     "discountPercentage": 98,
-    "rating": 5,
-    "reviewCount": 21,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 4,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Los Angeles)",
@@ -8426,7 +8349,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-066",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-43-0-0",
@@ -8499,7 +8422,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-44",
@@ -8518,8 +8442,8 @@
     "price": 1170000,
     "originalPrice": 1430000,
     "discountPercentage": 18,
-    "rating": 5,
-    "reviewCount": 15,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 3,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Paris)",
@@ -8598,7 +8522,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-45",
@@ -8616,8 +8541,8 @@
     "price": 1690000,
     "originalPrice": 82000000,
     "discountPercentage": 98,
-    "rating": 5,
-    "reviewCount": 18,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 2,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Milan)",
@@ -8647,7 +8572,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-068",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-45-0-0",
@@ -8696,7 +8621,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-46",
@@ -8713,8 +8639,8 @@
     "price": 550000,
     "originalPrice": 690000,
     "discountPercentage": 20,
-    "rating": 4.8,
-    "reviewCount": 37,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -8804,7 +8730,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-47",
@@ -8821,8 +8748,8 @@
     "price": 510000,
     "originalPrice": 3700000,
     "discountPercentage": 86,
-    "rating": 4.9,
-    "reviewCount": 41,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -8855,7 +8782,7 @@
     "isBestSeller": false,
     "isSale": true,
     "sku": "TADA-NAM-070",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-47-0-0",
@@ -8925,7 +8852,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-48",
@@ -8942,8 +8870,8 @@
     "price": 470000,
     "originalPrice": 590000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -9033,7 +8961,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-49",
@@ -9051,8 +8980,8 @@
     "price": 430000,
     "originalPrice": 3700000,
     "discountPercentage": 88,
-    "rating": 5,
-    "reviewCount": 56,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành) hoặc 1-2 ngày toàn quốc",
@@ -9084,7 +9013,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-072",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-49-0-0",
@@ -9144,7 +9073,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "mau-50",
@@ -9162,8 +9092,8 @@
     "price": 510000,
     "originalPrice": 22000000,
     "discountPercentage": 98,
-    "rating": 5,
-    "reviewCount": 31,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 6,
     "estimatedDelivery": "Dự kiến 8-12 ngày (Bay Air từ Florence)",
@@ -9194,7 +9124,7 @@
     "isBestSeller": true,
     "isSale": true,
     "sku": "TADA-NAM-073",
-    "status": "active",
+    "status": "pending_price_review",
     "variants": [
       {
         "id": "var-mau-50-0-0",
@@ -9255,7 +9185,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-01",
@@ -9273,8 +9204,8 @@
     "price": 980000,
     "originalPrice": 1250000,
     "discountPercentage": 22,
-    "rating": 4.9,
-    "reviewCount": 38,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Giao nhanh 2-3 ngày toàn quốc",
@@ -9409,14 +9340,15 @@
     "updatedAt": "2026-10-23T12:41:34.633Z",
     "categoryId": "nu",
     "subCategoryId": "dam-vay-lien",
-    "salesCount": 1,
+    "salesCount": 0,
     "tags": [
       "new",
       "bestseller",
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-02",
@@ -9434,8 +9366,8 @@
     "price": 890000,
     "originalPrice": 1100000,
     "discountPercentage": 19,
-    "rating": 4.8,
-    "reviewCount": 42,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Giao nhanh 24-48h",
@@ -9551,7 +9483,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-03",
@@ -9569,8 +9502,8 @@
     "price": 1150000,
     "originalPrice": 1450000,
     "discountPercentage": 21,
-    "rating": 4.9,
-    "reviewCount": 29,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Hỏa tốc 2-4h (Nội thành HCM/HN)",
@@ -9684,7 +9617,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-04",
@@ -9701,8 +9635,8 @@
     "price": 750000,
     "originalPrice": 950000,
     "discountPercentage": 21,
-    "rating": 4.7,
-    "reviewCount": 56,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Giao hàng 2-3 ngày",
@@ -9773,7 +9707,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-05",
@@ -9789,8 +9724,8 @@
     "category": "nu",
     "subCategory": "vay-dam",
     "price": 680000,
-    "rating": 4.8,
-    "reviewCount": 31,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Hàng có sẵn - Giao ngay",
@@ -9902,7 +9837,8 @@
     "tags": [
       "new"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-vay-06",
@@ -9920,8 +9856,8 @@
     "price": 490000,
     "originalPrice": 650000,
     "discountPercentage": 25,
-    "rating": 4.8,
-    "reviewCount": 68,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 30,
     "estimatedDelivery": "Hàng có sẵn - Giao 1-2 ngày",
@@ -10035,7 +9971,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-khoac-01",
@@ -10053,8 +9990,8 @@
     "price": 1350000,
     "originalPrice": 1750000,
     "discountPercentage": 23,
-    "rating": 4.9,
-    "reviewCount": 47,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 14,
     "estimatedDelivery": "Dự kiến 7-10 ngày (Order Pháp)",
@@ -10171,7 +10108,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-khoac-02",
@@ -10179,7 +10117,7 @@
     "slug": "ao-trench-coat-dang-dai-heritage-trench-coat",
     "brand": "Burberry",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ",
       "PREMIUM"
@@ -10189,8 +10127,8 @@
     "price": 1650000,
     "originalPrice": 2100000,
     "discountPercentage": 21,
-    "rating": 5,
-    "reviewCount": 36,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Order 7-12 ngày trực tiếp từ London",
@@ -10331,7 +10269,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-khoac-03",
@@ -10347,8 +10286,8 @@
     "category": "nu",
     "subCategory": "ao-khoac",
     "price": 950000,
-    "rating": 4.8,
-    "reviewCount": 28,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 22,
     "estimatedDelivery": "Hàng có sẵn - Giao 1-2 ngày",
@@ -10459,7 +10398,8 @@
     "tags": [
       "new"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-khoac-04",
@@ -10477,8 +10417,8 @@
     "price": 1190000,
     "originalPrice": 1550000,
     "discountPercentage": 23,
-    "rating": 4.9,
-    "reviewCount": 33,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Giao nhanh toàn quốc 2-3 ngày",
@@ -10591,7 +10531,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-len-01",
@@ -10599,7 +10540,7 @@
     "slug": "ao-len-co-lo-det-van-thung-cashmere-turtleneck",
     "brand": "COS",
     "origin": "international_order",
-    "originCountry": "Vương quốc Anh",
+    "originCountry": "Vương Quốc Anh",
     "badges": [
       "ORDER QUỐC TẾ"
     ],
@@ -10608,8 +10549,8 @@
     "price": 650000,
     "originalPrice": 850000,
     "discountPercentage": 24,
-    "rating": 4.8,
-    "reviewCount": 45,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Giao nhanh 3-5 ngày",
@@ -10722,7 +10663,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-len-02",
@@ -10740,8 +10682,8 @@
     "price": 450000,
     "originalPrice": 580000,
     "discountPercentage": 22,
-    "rating": 4.7,
-    "reviewCount": 52,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 30,
     "estimatedDelivery": "Giao hàng 1-2 ngày",
@@ -10855,7 +10797,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-len-03",
@@ -10870,8 +10813,8 @@
     "category": "nu",
     "subCategory": "ao-len",
     "price": 520000,
-    "rating": 4.8,
-    "reviewCount": 34,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Order 5-7 ngày",
@@ -10983,7 +10926,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-len-04",
@@ -11000,8 +10944,8 @@
     "price": 580000,
     "originalPrice": 750000,
     "discountPercentage": 23,
-    "rating": 4.9,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Giao nhanh 3-5 ngày",
@@ -11060,7 +11004,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-somi-01",
@@ -11078,8 +11023,8 @@
     "price": 690000,
     "originalPrice": 890000,
     "discountPercentage": 22,
-    "rating": 4.9,
-    "reviewCount": 41,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 16,
     "estimatedDelivery": "Giao nhanh 24-48h",
@@ -11217,7 +11162,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-somi-02",
@@ -11235,8 +11181,8 @@
     "price": 420000,
     "originalPrice": 550000,
     "discountPercentage": 24,
-    "rating": 4.8,
-    "reviewCount": 63,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 35,
     "estimatedDelivery": "Hàng có sẵn - Giao 1-2 ngày",
@@ -11309,7 +11255,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-somi-03",
@@ -11325,8 +11272,8 @@
     "category": "nu",
     "subCategory": "ao-thun",
     "price": 290000,
-    "rating": 4.7,
-    "reviewCount": 88,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 50,
     "estimatedDelivery": "Giao ngay trong 24h",
@@ -11473,12 +11420,13 @@
     "updatedAt": "2026-10-23T12:41:34.634Z",
     "categoryId": "nu",
     "subCategoryId": "ao-thun-nu",
-    "salesCount": 1,
+    "salesCount": 0,
     "tags": [
       "new",
       "bestseller"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-quan-01",
@@ -11496,8 +11444,8 @@
     "price": 590000,
     "originalPrice": 750000,
     "discountPercentage": 21,
-    "rating": 4.9,
-    "reviewCount": 54,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 28,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -11635,7 +11583,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-quan-02",
@@ -11652,8 +11601,8 @@
     "price": 520000,
     "originalPrice": 680000,
     "discountPercentage": 24,
-    "rating": 4.8,
-    "reviewCount": 46,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Giao hàng 2-3 ngày",
@@ -11766,7 +11715,8 @@
       "bestseller",
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nu-quan-03",
@@ -11782,8 +11732,8 @@
     "category": "nu",
     "subCategory": "quan",
     "price": 490000,
-    "rating": 4.8,
-    "reviewCount": 72,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 40,
     "estimatedDelivery": "Hàng có sẵn - Giao 24h",
@@ -11944,7 +11894,8 @@
     "tags": [
       "new"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-gai-01",
@@ -11961,8 +11912,8 @@
     "price": 360000,
     "originalPrice": 480000,
     "discountPercentage": 25,
-    "rating": 4.9,
-    "reviewCount": 27,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Order 5-7 ngày",
@@ -12101,7 +12052,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-gai-02",
@@ -12119,8 +12071,8 @@
     "price": 320000,
     "originalPrice": 420000,
     "discountPercentage": 24,
-    "rating": 4.8,
-    "reviewCount": 38,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Hàng có sẵn - Giao 1-2 ngày",
@@ -12220,7 +12172,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-gai-03",
@@ -12235,8 +12188,8 @@
     "category": "tre-em",
     "subCategory": "be-gai",
     "price": 290000,
-    "rating": 4.7,
-    "reviewCount": 21,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Giao nhanh 3-4 ngày",
@@ -12373,7 +12326,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-trai-01",
@@ -12391,8 +12345,8 @@
     "price": 450000,
     "originalPrice": 590000,
     "discountPercentage": 24,
-    "rating": 4.9,
-    "reviewCount": 32,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Order 5-7 ngày",
@@ -12556,7 +12510,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-trai-02",
@@ -12572,8 +12527,8 @@
     "category": "tre-em",
     "subCategory": "be-trai",
     "price": 280000,
-    "rating": 4.8,
-    "reviewCount": 45,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 30,
     "estimatedDelivery": "Giao ngay 24h",
@@ -12735,7 +12690,8 @@
       "bestseller",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-trai-03",
@@ -12752,8 +12708,8 @@
     "price": 350000,
     "originalPrice": 450000,
     "discountPercentage": 22,
-    "rating": 4.8,
-    "reviewCount": 36,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Giao 2-4 ngày",
@@ -12890,7 +12846,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "treem-len-01",
@@ -12907,8 +12864,8 @@
     "price": 260000,
     "originalPrice": 350000,
     "discountPercentage": 26,
-    "rating": 4.9,
-    "reviewCount": 50,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 35,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -13070,7 +13027,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-tui-01",
@@ -13088,8 +13046,8 @@
     "price": 790000,
     "originalPrice": 990000,
     "discountPercentage": 20,
-    "rating": 4.9,
-    "reviewCount": 48,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Giao nhanh 24-48h",
@@ -13152,7 +13110,8 @@
       "sale",
       "featured"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-tui-02",
@@ -13167,8 +13126,8 @@
     "category": "phu-kien",
     "subCategory": "tui-xach",
     "price": 680000,
-    "rating": 4.8,
-    "reviewCount": 39,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 20,
     "estimatedDelivery": "Giao hàng 1-2 ngày",
@@ -13229,7 +13188,8 @@
     "tags": [
       "bestseller"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-tui-03",
@@ -13247,8 +13207,8 @@
     "price": 1150000,
     "originalPrice": 1450000,
     "discountPercentage": 21,
-    "rating": 5,
-    "reviewCount": 42,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 10,
     "estimatedDelivery": "Order 7-10 ngày từ Paris",
@@ -13314,7 +13274,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-giay-01",
@@ -13331,8 +13292,8 @@
     "price": 590000,
     "originalPrice": 750000,
     "discountPercentage": 21,
-    "rating": 4.8,
-    "reviewCount": 65,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 22,
     "estimatedDelivery": "Giao nhanh 2-3 ngày",
@@ -13496,7 +13457,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-giay-02",
@@ -13514,8 +13476,8 @@
     "price": 850000,
     "originalPrice": 1100000,
     "discountPercentage": 23,
-    "rating": 4.9,
-    "reviewCount": 38,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 16,
     "estimatedDelivery": "Order 7-10 ngày từ Milan",
@@ -13731,7 +13693,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-giay-03",
@@ -13747,8 +13710,8 @@
     "category": "phu-kien",
     "subCategory": "giay-dep",
     "price": 720000,
-    "rating": 4.9,
-    "reviewCount": 84,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 30,
     "estimatedDelivery": "Giao ngay trong 24h",
@@ -13985,7 +13948,8 @@
       "new",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-thatlung-01",
@@ -14002,8 +13966,8 @@
     "price": 380000,
     "originalPrice": 480000,
     "discountPercentage": 21,
-    "rating": 4.8,
-    "reviewCount": 46,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Hàng có sẵn - Giao 1-2 ngày",
@@ -14115,7 +14079,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-thatlung-02",
@@ -14131,8 +14096,8 @@
     "category": "phu-kien",
     "subCategory": "that-lung",
     "price": 260000,
-    "rating": 4.8,
-    "reviewCount": 31,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 35,
     "estimatedDelivery": "Giao hàng 24h",
@@ -14193,7 +14158,8 @@
     "tags": [
       "new"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-kinh-01",
@@ -14211,8 +14177,8 @@
     "price": 490000,
     "originalPrice": 650000,
     "discountPercentage": 25,
-    "rating": 4.9,
-    "reviewCount": 55,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Giao nhanh 2-3 ngày",
@@ -14276,7 +14242,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "pk-kinh-02",
@@ -14293,8 +14260,8 @@
     "price": 450000,
     "originalPrice": 590000,
     "discountPercentage": 24,
-    "rating": 4.9,
-    "reviewCount": 37,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Giao hàng 3-4 ngày",
@@ -14342,7 +14309,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "duc-studio-02",
@@ -14360,8 +14328,8 @@
     "price": 620000,
     "originalPrice": 780000,
     "discountPercentage": 21,
-    "rating": 4.8,
-    "reviewCount": 26,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 18,
     "estimatedDelivery": "Giao nhanh 1-2 ngày",
@@ -14497,7 +14465,8 @@
     "tags": [
       "sale"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "dg-02",
@@ -14515,8 +14484,8 @@
     "price": 890000,
     "originalPrice": 1150000,
     "discountPercentage": 23,
-    "rating": 4.9,
-    "reviewCount": 31,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 12,
     "estimatedDelivery": "Order 7-10 ngày từ Milan",
@@ -14603,7 +14572,8 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "loro-piana-02",
@@ -14621,8 +14591,8 @@
     "price": 750000,
     "originalPrice": 950000,
     "discountPercentage": 21,
-    "rating": 5,
-    "reviewCount": 24,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 15,
     "estimatedDelivery": "Order 7-10 ngày từ Ý",
@@ -14763,7 +14733,8 @@
       "featured",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   },
   {
     "id": "nike-02",
@@ -14781,8 +14752,8 @@
     "price": 720000,
     "originalPrice": 890000,
     "discountPercentage": 19,
-    "rating": 4.8,
-    "reviewCount": 58,
+    "rating": 0,
+    "reviewCount": 0,
     "inStock": true,
     "stockCount": 25,
     "estimatedDelivery": "Giao nhanh 24h",
@@ -14882,6 +14853,7 @@
       "sale",
       "order"
     ],
-    "viewsCount": 10
+    "viewsCount": 10,
+    "soldCount": 0
   }
 ]

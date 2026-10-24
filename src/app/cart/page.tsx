@@ -187,11 +187,11 @@ export default function CartPage() {
                   <h4 className="text-xs font-bold text-[#171613]">
                     Giảm thêm 10% cho đơn hàng từ 3.000.000đ
                   </h4>
-                  <p className="text-[10px] text-[#747069]">Áp dụng tự động hoặc nhập mã LUMIEREVIP</p>
+                  <p className="text-[10px] text-[#747069]">Áp dụng tự động hoặc nhập mã TADAVIP</p>
                 </div>
               </div>
               <button
-                onClick={() => applyCoupon('LUMIEREVIP')}
+                onClick={() => applyCoupon('TADAVIP')}
                 className="px-3.5 py-1.5 bg-[#8A7158] hover:bg-[#6D5843] text-white text-[11px] font-semibold rounded-lg shrink-0"
               >
                 Sử dụng ngay

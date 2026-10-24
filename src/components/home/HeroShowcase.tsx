@@ -19,7 +19,7 @@ export const HeroShowcase: React.FC = () => {
   const slides = [
     {
       script: 'New Collection',
-      title: 'THU ĐÔNG 2025',
+      title: 'THU ĐÔNG 2026',
       subtitle: 'Thanh lịch trong từng khoảnh khắc',
       sub2: 'Phong cách mới - Cảm hứng mới',
       slogan: "More than fashion / It's your story",
@@ -142,7 +142,7 @@ export const HeroShowcase: React.FC = () => {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-[#171613]">Hàng chính hãng</h4>
-                <p className="text-[10px] text-[#747069]">Cam kết 100% chính hãng</p>
+                <p className="text-[10px] text-[#747069]">Xuất xứ minh bạch & full bill boutique</p>
               </div>
             </div>
 
