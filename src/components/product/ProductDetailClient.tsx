@@ -52,18 +52,32 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const [reviewSuccessMsg, setReviewSuccessMsg] = useState('');
 
-  // Sync selection when product changes
-  useEffect(() => {
-    setSelectedImage(0);
-    if (product?.colors && product.colors.length > 0) {
-      setSelectedColor(product.colors[0].name);
-    }
-    if (product?.sizes && product.sizes.length > 0) {
-      setSelectedSize(product.sizes[0]);
-    }
-  }, [product]);
-
   // Fetch reviews từ API server
+  useEffect(() => {
+    let active = true;
+    const loadReviews = async () => {
+      if (!product?.id) return;
+      setIsLoadingReviews(true);
+      try {
+        const res = await fetch(`/api/reviews?productId=${product.id}`);
+        if (res.ok && active) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.reviews)) {
+            setReviewsList(data.reviews);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to load reviews', e);
+      } finally {
+        if (active) setIsLoadingReviews(false);
+      }
+    };
+    void loadReviews();
+    return () => {
+      active = false;
+    };
+  }, [product?.id]);
+
   const fetchReviews = async () => {
     if (!product?.id) return;
     setIsLoadingReviews(true);
@@ -82,16 +96,12 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
     }
   };
 
-  useEffect(() => {
-    fetchReviews();
-  }, [product?.id]);
-
   // Kiểm tra xem user hiện tại đã mua sản phẩm này chưa
   const eligibleOrder = useMemo(() => {
     if (!user || !product) return null;
     return orders.find(
       (o) =>
-        (o.userId === user.id || o.shippingAddress?.email?.toLowerCase() === user.email?.toLowerCase()) &&
+        o.userId === user.id &&
         o.status !== 'cancelled' &&
         o.items.some((i) => i.productId === product.id)
     );
@@ -111,15 +121,15 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
   const isOutOfStock = currentStock <= 0;
   const isLowStock = currentStock > 0 && currentStock <= 5;
 
-  // Đổi ảnh chính nếu màu có ảnh riêng
-  useEffect(() => {
+  const handleSelectColor = (colorName: string) => {
+    setSelectedColor(colorName);
     if (!product) return;
-    const colorObj = product.colors?.find((c) => c.name.toLowerCase() === selectedColor.toLowerCase());
-    if (colorObj?.image) {
+    const colorObj = product.colors?.find((c) => c.name.toLowerCase() === colorName.toLowerCase());
+    if (colorObj?.image && product.images) {
       const idx = product.images.findIndex((img) => img === colorObj.image);
       if (idx !== -1) setSelectedImage(idx);
     }
-  }, [selectedColor, product]);
+  };
 
   const isFavorite = product ? isInWishlist(product.id) : false;
 
@@ -419,7 +429,7 @@ export function ProductDetailClient({ product, relatedProducts }: ProductDetailC
                       <button
                         key={c.name}
                         type="button"
-                        onClick={() => setSelectedColor(c.name)}
+                        onClick={() => handleSelectColor(c.name)}
                         className={`w-7 h-7 rounded-full border transition-all ${
                           selectedColor === c.name
                             ? 'ring-2 ring-offset-2 ring-[#171613] scale-110 shadow-sm'

@@ -5,7 +5,7 @@ import { SafeImage } from '@/components/ui/SafeImage';
 
 export const PromoCards: React.FC = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 min-w-0">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: SALE ĐỒ NỮ (Hồng phấn) */}
         <div className="relative rounded-2xl overflow-hidden p-5 flex flex-col justify-between h-48 bg-[#FDECEF] border border-[#F8D2D9] shadow-sm group">

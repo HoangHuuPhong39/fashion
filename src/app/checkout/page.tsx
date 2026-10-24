@@ -48,7 +48,8 @@ export default function CheckoutPage() {
 
   // Tự động đồng bộ thông tin tài khoản đang đăng nhập
   useEffect(() => {
-    if (user) {
+    if (!user) return;
+    queueMicrotask(() => {
       if (user.name) setFullName((prev) => prev || user.name);
       if (user.phone) setPhone((prev) => prev || user.phone);
       if (user.email) setEmail((prev) => prev || user.email);
@@ -63,7 +64,7 @@ export default function CheckoutPage() {
         if (defaultAddr.district) setDistrict(defaultAddr.district);
         if (defaultAddr.ward) setWard(defaultAddr.ward);
       }
-    }
+    });
   }, [user]);
 
   const pricing = calculateOrderPricing({
@@ -177,9 +178,9 @@ export default function CheckoutPage() {
           <div className="w-14 h-14 rounded-full bg-[#FAF8F3] text-[#8A7158] flex items-center justify-center mx-auto">
             <ShoppingBag className="w-6 h-6" />
           </div>
-          <h2 className="font-editorial text-2xl font-medium text-[#171613]">
+          <h1 className="font-editorial text-2xl font-medium text-[#171613]">
             Giỏ Hàng Đang Trống
-          </h2>
+          </h1>
           <p className="text-xs text-[#747069]">
             Bạn chưa chọn thiết kế nào. Hãy khám phá bộ sưu tập mới nhất của TADA! và chọn cho mình sản phẩm ưng ý.
           </p>

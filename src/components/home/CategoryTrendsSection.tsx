@@ -79,7 +79,7 @@ export const CategoryTrendsSection: React.FC = () => {
   }, [products, currentTab]);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-w-0">
       {/* Header & Tabs */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 pb-3 border-b border-[#E8E4DC]">
         <div>

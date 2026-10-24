@@ -69,5 +69,5 @@ export default async function ProductDetailPage({ params }: PageProps) {
     )
     .slice(0, 4);
 
-  return <ProductDetailClient product={product} relatedProducts={relatedProducts} />;
+  return <ProductDetailClient key={product.id} product={product} relatedProducts={relatedProducts} />;
 }

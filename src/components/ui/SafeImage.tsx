@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image, { ImageProps } from 'next/image';
 
 interface SafeImageProps extends Omit<ImageProps, 'src' | 'onError'> {
@@ -21,19 +21,20 @@ export const SafeImage: React.FC<SafeImageProps> = ({
   loading = 'lazy',
   ...props
 }) => {
-  const [imgSrc, setImgSrc] = useState<string>(src || fallbackSrc);
+  const [prevSrc, setPrevSrc] = useState<string | undefined | null>(src);
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  useEffect(() => {
-    setImgSrc(src || fallbackSrc);
+  if (prevSrc !== src) {
+    setPrevSrc(src);
     setHasError(false);
-  }, [src, fallbackSrc]);
+  }
+
+  const effectiveSrc = hasError ? fallbackSrc : (src || fallbackSrc);
 
   const handleError = () => {
     if (!hasError) {
       setHasError(true);
-      setImgSrc(fallbackSrc);
       setIsLoaded(true);
     }
   };
@@ -48,7 +49,7 @@ export const SafeImage: React.FC<SafeImageProps> = ({
       )}
       <Image
         {...props}
-        src={imgSrc}
+        src={effectiveSrc}
         alt={alt}
         fill={fill}
         sizes={sizes}

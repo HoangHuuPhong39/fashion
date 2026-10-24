@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { X, ChevronRight, ChevronDown, Sparkles, Globe, Heart, ShoppingBag, User, Flame } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { useCart } from '@/context/CartContext';
 import { BRANDS } from '@/data/mockData';
+import { useMounted } from '@/hooks/useMounted';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -18,11 +19,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
   const { totalWishlist } = useWishlist();
   const { totalItems } = useCart();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   if (!isOpen) return null;
 

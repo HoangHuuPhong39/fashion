@@ -17,7 +17,7 @@ const QUICK_CATEGORIES = [
 
 export const CategoryCircles: React.FC = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 min-w-0">
       <div className="bg-white rounded-2xl border border-[#E8E4DC] p-4 sm:p-5 shadow-sm overflow-x-auto no-scrollbar">
         <div className="flex items-center justify-between min-w-[780px] gap-4 sm:gap-6">
           {QUICK_CATEGORIES.map((cat, index) => (

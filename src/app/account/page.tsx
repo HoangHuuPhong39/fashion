@@ -153,7 +153,8 @@ export default function AccountPage() {
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (user) {
+    if (!user) return;
+    queueMicrotask(() => {
       setProfileName(user.name || '');
       setProfilePhone(user.phone || '');
       setProfileAvatar(user.avatar || '');
@@ -184,7 +185,7 @@ export default function AccountPage() {
         setBankBranch(user.bankInfo.branch || '');
         setBankHotline(user.bankInfo.hotline || '');
       }
-    }
+    });
   }, [user]);
 
   const handleUploadImageFile = async (file: File, target: 'avatar' | 'cover') => {

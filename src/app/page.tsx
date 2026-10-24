@@ -15,7 +15,7 @@ import { LocalBrandSpotlight } from '@/components/home/LocalBrandSpotlight';
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF8F3]">
+    <div className="flex flex-col min-h-screen bg-[#FAF8F3] w-full min-w-0 overflow-x-hidden">
       {/* 1. Banner Chiến Dịch / Bộ Sưu Tập Nổi Bật (Gọn gàng, sang trọng) */}
       <HeroShowcase />
 

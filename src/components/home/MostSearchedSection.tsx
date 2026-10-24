@@ -21,7 +21,7 @@ export const MostSearchedSection: React.FC = () => {
   }, [products]);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 min-w-0">
       <div className="bg-gradient-to-r from-[#FAF6F0] via-white to-[#F7F3EB] rounded-2xl border border-[#E8E4DC] p-5 sm:p-6 shadow-sm">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">

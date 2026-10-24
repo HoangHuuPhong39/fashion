@@ -58,11 +58,13 @@ export default function OrderSuccessPage({ params }: PageProps) {
   };
 
   useEffect(() => {
+    let active = true;
+
     // Tải cấu hình tài khoản ngân hàng mới nhất do Admin thiết lập
     fetch('/api/bank-info')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.bankInfo && data.bankInfo.accountNumber) {
+        if (active && data.success && data.bankInfo && data.bankInfo.accountNumber) {
           setBankInfo(data.bankInfo);
         }
       })
@@ -71,21 +73,33 @@ export default function OrderSuccessPage({ params }: PageProps) {
     // 1. Thử tìm trong AuthContext
     const found = orders.find((o) => o.id === resolvedParams.id || o.orderCode === resolvedParams.id);
     if (found) {
-      setOrder(found);
-      setIsLoading(false);
-      return;
+      queueMicrotask(() => {
+        if (active) {
+          setOrder(found);
+          setIsLoading(false);
+        }
+      });
+      return () => {
+        active = false;
+      };
     }
 
     // 2. Fetch từ API nếu chưa có
     fetch(`/api/orders/${resolvedParams.id}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.order) {
+        if (active && data.success && data.order) {
           setOrder(data.order);
         }
       })
       .catch((err) => console.error(err))
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        if (active) setIsLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [resolvedParams.id, orders]);
 
   const copyToClipboard = (text: string, field: string) => {

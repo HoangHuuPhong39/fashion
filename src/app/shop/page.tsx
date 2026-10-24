@@ -73,28 +73,30 @@ function ShopContent() {
 
   // Sync state when URL params change: reset transient filters (color, size, price) to avoid accidental hiding
   useEffect(() => {
-    setSelectedSubCat(subParam);
-    if (brandParam) {
-      const bObj = BRANDS.find(
-        (b) =>
-          b.slug.toLowerCase() === brandParam.toLowerCase() ||
-          b.name.toLowerCase() === brandParam.toLowerCase()
-      );
-      setSelectedBrands(bObj ? [bObj.name] : [brandParam]);
-    } else {
-      setSelectedBrands([]);
-    }
-    if (tabParam === 'best_sellers') {
-      setSortBy('best_seller');
-    } else if (tabParam === 'new') {
-      setSortBy('newest');
-    }
-    // Reset ephemeral filters when top-level route params change so products aren't accidentally hidden
-    setSelectedColor('');
-    setSelectedSizes([]);
-    setPriceRange(3000000);
-    setStockStatus('all');
-    setCurrentPage(1);
+    queueMicrotask(() => {
+      setSelectedSubCat(subParam);
+      if (brandParam) {
+        const bObj = BRANDS.find(
+          (b) =>
+            b.slug.toLowerCase() === brandParam.toLowerCase() ||
+            b.name.toLowerCase() === brandParam.toLowerCase()
+        );
+        setSelectedBrands(bObj ? [bObj.name] : [brandParam]);
+      } else {
+        setSelectedBrands([]);
+      }
+      if (tabParam === 'best_sellers') {
+        setSortBy('best_seller');
+      } else if (tabParam === 'new') {
+        setSortBy('newest');
+      }
+      // Reset ephemeral filters when top-level route params change so products aren't accidentally hidden
+      setSelectedColor('');
+      setSelectedSizes([]);
+      setPriceRange(3000000);
+      setStockStatus('all');
+      setCurrentPage(1);
+    });
   }, [categoryParam, subParam, brandParam, originParam, saleParam, collectionParam, queryParam, tabParam]);
 
   // Danh mục cha đang chọn
@@ -137,7 +139,7 @@ function ShopContent() {
         count
       };
     });
-  }, []);
+  }, [products]);
 
   const colors = [
     { name: 'Đen', hex: '#171613' },
@@ -601,8 +603,8 @@ function ShopContent() {
     selectedSizes.forEach((s) => {
       list.push({ id: `size-${s}`, label: `Size: ${s}`, onRemove: () => toggleSize(s) });
     });
-    if (priceRange < 30000000) {
-      list.push({ id: 'price', label: `Dưới ${formatPrice(priceRange)}`, onRemove: () => setPriceRange(30000000) });
+    if (priceRange < 3000000) {
+      list.push({ id: 'price', label: `Dưới ${formatPrice(priceRange)}`, onRemove: () => setPriceRange(3000000) });
     }
     if (stockStatus !== 'all') {
       list.push({

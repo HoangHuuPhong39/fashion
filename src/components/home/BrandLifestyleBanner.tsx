@@ -13,7 +13,7 @@ export const BrandLifestyleBanner: React.FC = () => {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-w-0">
       <div className="relative rounded-2xl overflow-hidden bg-[#2A231C] text-white p-6 sm:p-8 shadow-md">
         {/* Background Image với Opacity mờ */}
         <div className="absolute inset-0 opacity-25">

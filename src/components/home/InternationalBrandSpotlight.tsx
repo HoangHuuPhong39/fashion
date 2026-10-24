@@ -12,8 +12,8 @@ export const InternationalBrandSpotlight: React.FC = () => {
   const intlBrands = BRANDS.filter((b) => !b.isLocalBrand && featuredSlugs.includes(b.slug));
 
   return (
-    <section className="bg-white py-16 border-b border-[#E8E4DC]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="w-full bg-white py-16 border-b border-[#E8E4DC] min-w-0">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-w-0">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>

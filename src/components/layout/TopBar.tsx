@@ -6,16 +6,13 @@ import { Truck, Award, RotateCcw, Heart, ShoppingBag, User } from 'lucide-react'
 import { useWishlist } from '@/context/WishlistContext';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { useMounted } from '@/hooks/useMounted';
 
 export const TopBar: React.FC = () => {
-  const [mounted, setMounted] = React.useState(false);
+  const mounted = useMounted();
   const { totalWishlist } = useWishlist();
   const { totalItems } = useCart();
   const { user } = useAuth();
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <div className="bg-[#171613] text-[#FAF8F3] text-[11px] py-1.5 px-4 sm:px-6 lg:px-8 border-b border-[#2A2925] select-none">

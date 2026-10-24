@@ -111,9 +111,20 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, []);
 
   useEffect(() => {
-    Promise.all([fetchProducts(), fetchCategories(), fetchTrendingSearches()]).finally(() =>
-      setIsLoading(false)
-    );
+    let active = true;
+    const initData = async () => {
+      try {
+        await Promise.all([fetchProducts(), fetchCategories(), fetchTrendingSearches()]);
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+    void initData();
+    return () => {
+      active = false;
+    };
   }, [fetchProducts, fetchCategories, fetchTrendingSearches]);
 
   const saveProductsLocal = (newProducts: Product[]) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, ShoppingBag, Gift, Menu, X, ArrowRight } from 'lucide-react';
@@ -8,6 +8,7 @@ import { useCart } from '@/context/CartContext';
 import { useProducts } from '@/context/ProductContext';
 import { Product } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
+import { useMounted } from '@/hooks/useMounted';
 
 interface HeaderProps {
   onOpenMobileMenu: () => void;
@@ -17,34 +18,26 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
   const router = useRouter();
   const { totalItems, setIsCartDrawerOpen } = useCart();
   const { products, trendingSearches, trackSearch } = useProducts();
+  const mounted = useMounted();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Live search filtering với debounce nhẹ
-  useEffect(() => {
+  // Live search filtering với useMemo
+  const searchResults = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
-    if (term.length >= 2) {
-      const filtered = products.filter(
+    if (term.length < 2) return [];
+    return products
+      .filter(
         (p) =>
           p.name.toLowerCase().includes(term) ||
           p.brand.toLowerCase().includes(term) ||
           (p.sku && p.sku.toLowerCase().includes(term)) ||
           p.category.toLowerCase().includes(term) ||
           (p.subCategory && p.subCategory.toLowerCase().includes(term))
-      ).slice(0, 6);
-      setSearchResults(filtered);
-      setIsSearchOpen(true);
-    } else {
-      setSearchResults([]);
-    }
+      )
+      .slice(0, 6);
   }, [searchTerm, products]);
 
   // Click outside to close search dropdown
@@ -119,7 +112,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenMobileMenu }) => {
                 type="text"
                 placeholder="Tìm kiếm sản phẩm, thương hiệu, phong cách..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setIsSearchOpen(true);
+                }}
                 onFocus={() => setIsSearchOpen(true)}
                 className="w-full bg-[#FAF8F3] text-[#171613] placeholder-[#8A857D] text-xs py-2.5 pl-5 pr-14 rounded-full border border-[#D5CEC2] focus:border-[#171613] focus:outline-none transition-colors shadow-inner"
               />

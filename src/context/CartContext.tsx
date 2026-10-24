@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { Product, CartItem } from '@/types';
 import { useAuth } from '@/context/AuthContext';
 import { calculateOrderPricing, VALID_COUPONS } from '@/lib/pricing';
@@ -34,12 +34,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false);
 
+  const isInitialMount = useRef(true);
+
   // Initialize from localStorage on mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem('tada_cart');
       if (saved) {
-        setItems(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        queueMicrotask(() => {
+          setItems(parsed);
+        });
       }
     } catch {
       // fallback safe
@@ -47,6 +52,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
     try {
       localStorage.setItem('tada_cart', JSON.stringify(items));
     } catch {

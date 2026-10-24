@@ -49,7 +49,7 @@ export const HeroShowcase: React.FC = () => {
   const current = slides[slideIndex];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8">
+    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-8 min-w-0">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
         {/* Banner Lớn Bên Trái (Cột 9) - Chuẩn 100% bố cục ảnh mẫu */}
         <div className="lg:col-span-9 relative h-[360px] sm:h-[420px] md:h-[460px] rounded-2xl overflow-hidden bg-[#171613] shadow-sm select-none">

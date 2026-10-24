@@ -5,14 +5,11 @@ import Link from 'next/link';
 import { Heart, ChevronRight, ArrowRight } from 'lucide-react';
 import { useWishlist } from '@/context/WishlistContext';
 import { ProductCard } from '@/components/product/ProductCard';
+import { useMounted } from '@/hooks/useMounted';
 
 export default function WishlistPage() {
   const { wishlist, totalWishlist } = useWishlist();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useMounted();
 
   return (
     <div className="bg-[#FAF8F3] min-h-screen py-10 px-4 sm:px-6 lg:px-8">
