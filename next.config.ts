@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {},
   allowedDevOrigins: ['192.168.157.1', 'localhost', '127.0.0.1'],
   images: {
     unoptimized: process.env.NODE_ENV === 'development',
