@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --lumiere-dark: #171613;
+  --lumiere-cream: #FAF8F3;
+  --lumiere-beige: #E8D7BD;
+  --lumiere-mocha: #8A7158;
+  --lumiere-gold: #C7A66A;
+  --lumiere-gold-light: #E0C79B;
+  --lumiere-red: #B83A3A;
+  --lumiere-gray-light: #F4F1EA;
+  --lumiere-gray-border: #E8E4DC;
+  --lumiere-text-muted: #747069;
+}
+
+@theme {
+  --color-lumiere-dark: #171613;
+  --color-lumiere-cream: #FAF8F3;
+  --color-lumiere-beige: #E8D7BD;
+  --color-lumiere-mocha: #8A7158;
+  --color-lumiere-gold: #C7A66A;
+  --color-lumiere-gold-light: #E0C79B;
+  --color-lumiere-red: #B83A3A;
+  --color-lumiere-gray-light: #F4F1EA;
+  --color-lumiere-gray-border: #E8E4DC;
+  --color-lumiere-text-muted: #747069;
+  
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans), "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background-color: var(--lumiere-cream);
+  color: var(--lumiere-dark);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "liga";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* Custom smooth transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Luxury scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF8F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #C7A66A;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8A7158;
+}
+
+/* Editorial typography utilities */
+.font-editorial {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+  line-height: 1.22;
+}
+
+/* Chuẩn hóa tracking thanh lịch cho tiếng Việt (tránh dãn ký tự quá mức làm lệch dấu) */
+.tracking-luxury {
+  letter-spacing: 0.06em;
+}
+
+.tracking-fashion {
+  letter-spacing: 0.05em;
+}
+
+/* Căn chỉnh số tiền và dữ liệu số thẳng hàng chuẩn UI */
+.text-price, .tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Input & form font normalization */
+input, select, textarea, button {
+  font-family: inherit;
+}

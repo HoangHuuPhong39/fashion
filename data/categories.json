@@ -1,0 +1,360 @@
+[
+  {
+    "id": "cat-nu",
+    "name": "Nữ",
+    "slug": "nu",
+    "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&auto=format&fit=crop&q=80",
+    "icon": "👗",
+    "description": "Thời trang nữ cao cấp, tinh tế và thanh lịch",
+    "parentId": null,
+    "order": 1,
+    "isActive": true,
+    "displayOnHome": true,
+    "subcategories": [
+      {
+        "id": "cat-ao-so-mi-nu",
+        "name": "Áo sơ mi nữ",
+        "slug": "ao-so-mi-nu",
+        "parentId": "cat-nu",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-thun-nu",
+        "name": "Áo thun nữ",
+        "slug": "ao-thun-nu",
+        "parentId": "cat-nu",
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-kieu-nu",
+        "name": "Áo kiểu",
+        "slug": "ao-kieu-nu",
+        "parentId": "cat-nu",
+        "order": 3,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-croptop-nu",
+        "name": "Áo croptop",
+        "slug": "ao-croptop-nu",
+        "parentId": "cat-nu",
+        "order": 4,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-len-nu",
+        "name": "Áo len",
+        "slug": "ao-len-nu",
+        "parentId": "cat-nu",
+        "order": 5,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-khoac-nu",
+        "name": "Áo khoác nữ",
+        "slug": "ao-khoac-nu",
+        "parentId": "cat-nu",
+        "order": 6,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-jeans-nu",
+        "name": "Quần jeans nữ",
+        "slug": "quan-jeans-nu",
+        "parentId": "cat-nu",
+        "order": 7,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-au-nu",
+        "name": "Quần âu nữ",
+        "slug": "quan-au-nu",
+        "parentId": "cat-nu",
+        "order": 8,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-short-nu",
+        "name": "Quần short nữ",
+        "slug": "quan-short-nu",
+        "parentId": "cat-nu",
+        "order": 9,
+        "isActive": true
+      },
+      {
+        "id": "cat-chan-vay",
+        "name": "Chân váy",
+        "slug": "chan-vay",
+        "parentId": "cat-nu",
+        "order": 10,
+        "isActive": true
+      },
+      {
+        "id": "cat-dam-vay-lien",
+        "name": "Đầm/váy liền",
+        "slug": "dam-vay-lien",
+        "parentId": "cat-nu",
+        "order": 11,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-bo-nu",
+        "name": "Đồ bộ nữ",
+        "slug": "do-bo-nu",
+        "parentId": "cat-nu",
+        "order": 12,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cat-nam",
+    "name": "Nam",
+    "slug": "nam",
+    "image": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&auto=format&fit=crop&q=80",
+    "icon": "👔",
+    "description": "Phong cách quý ông đương đại, chỉn chu và đẳng cấp",
+    "parentId": null,
+    "order": 2,
+    "isActive": true,
+    "displayOnHome": true,
+    "subcategories": [
+      {
+        "id": "cat-ao-so-mi-nam",
+        "name": "Áo sơ mi nam",
+        "slug": "ao-so-mi-nam",
+        "parentId": "cat-nam",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-thun-nam",
+        "name": "Áo thun nam",
+        "slug": "ao-thun-nam",
+        "parentId": "cat-nam",
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-polo-nam",
+        "name": "Áo polo",
+        "slug": "ao-polo-nam",
+        "parentId": "cat-nam",
+        "order": 3,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-khoac-nam",
+        "name": "Áo khoác nam",
+        "slug": "ao-khoac-nam",
+        "parentId": "cat-nam",
+        "order": 4,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-jeans-nam",
+        "name": "Quần jeans nam",
+        "slug": "quan-jeans-nam",
+        "parentId": "cat-nam",
+        "order": 5,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-au-nam",
+        "name": "Quần âu nam",
+        "slug": "quan-au-nam",
+        "parentId": "cat-nam",
+        "order": 6,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-short-nam",
+        "name": "Quần short nam",
+        "slug": "quan-short-nam",
+        "parentId": "cat-nam",
+        "order": 7,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-bo-nam",
+        "name": "Đồ bộ nam",
+        "slug": "do-bo-nam",
+        "parentId": "cat-nam",
+        "order": 8,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cat-tre-em",
+    "name": "Trẻ em",
+    "slug": "tre-em",
+    "image": "https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=600&auto=format&fit=crop&q=80",
+    "icon": "🧸",
+    "description": "Thời trang trẻ em cao cấp, an toàn và dễ thương",
+    "parentId": null,
+    "order": 3,
+    "isActive": true,
+    "displayOnHome": true,
+    "subcategories": [
+      {
+        "id": "cat-ao-be-trai",
+        "name": "Áo bé trai",
+        "slug": "ao-be-trai",
+        "parentId": "cat-tre-em",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": "cat-ao-be-gai",
+        "name": "Áo bé gái",
+        "slug": "ao-be-gai",
+        "parentId": "cat-tre-em",
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": "cat-quan-tre-em",
+        "name": "Quần trẻ em",
+        "slug": "quan-tre-em",
+        "parentId": "cat-tre-em",
+        "order": 3,
+        "isActive": true
+      },
+      {
+        "id": "cat-vay-tre-em",
+        "name": "Váy trẻ em",
+        "slug": "vay-tre-em",
+        "parentId": "cat-tre-em",
+        "order": 4,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-bo-tre-em",
+        "name": "Đồ bộ trẻ em",
+        "slug": "do-bo-tre-em",
+        "parentId": "cat-tre-em",
+        "order": 5,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cat-do-bo",
+    "name": "Đồ bộ và mặc nhà",
+    "slug": "do-bo",
+    "image": "/images/products/adidas-varsity-bomber-tracksuit.jpg",
+    "icon": "🛋️",
+    "description": "Trang phục thư giãn, đồ ngủ và đồ mặc nhà thoáng mát",
+    "parentId": null,
+    "order": 4,
+    "isActive": true,
+    "displayOnHome": true,
+    "subcategories": [
+      {
+        "id": "cat-do-bo-nu-mn",
+        "name": "Đồ bộ nữ",
+        "slug": "do-bo-mac-nha-nu",
+        "parentId": "cat-do-bo",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-bo-nam-mn",
+        "name": "Đồ bộ nam",
+        "slug": "do-bo-mac-nha-nam",
+        "parentId": "cat-do-bo",
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-ngu",
+        "name": "Đồ ngủ",
+        "slug": "do-ngu",
+        "parentId": "cat-do-bo",
+        "order": 3,
+        "isActive": true
+      },
+      {
+        "id": "cat-do-mac-nha",
+        "name": "Đồ mặc nhà",
+        "slug": "do-mac-nha",
+        "parentId": "cat-do-bo",
+        "order": 4,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cat-phu-kien",
+    "name": "Phụ kiện",
+    "slug": "phu-kien",
+    "image": "https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&auto=format&fit=crop&q=80",
+    "icon": "👜",
+    "description": "Túi xách, balo, thắt lưng và phụ kiện hoàn thiện outfit",
+    "parentId": null,
+    "order": 5,
+    "isActive": true,
+    "displayOnHome": true,
+    "subcategories": [
+      {
+        "id": "cat-tui-xach",
+        "name": "Túi xách",
+        "slug": "tui-xach",
+        "parentId": "cat-phu-kien",
+        "order": 1,
+        "isActive": true
+      },
+      {
+        "id": "cat-balo",
+        "name": "Balo",
+        "slug": "balo",
+        "parentId": "cat-phu-kien",
+        "order": 2,
+        "isActive": true
+      },
+      {
+        "id": "cat-that-lung",
+        "name": "Thắt lưng",
+        "slug": "that-lung",
+        "parentId": "cat-phu-kien",
+        "order": 3,
+        "isActive": true
+      },
+      {
+        "id": "cat-mu-non",
+        "name": "Mũ/nón",
+        "slug": "mu-non",
+        "parentId": "cat-phu-kien",
+        "order": 4,
+        "isActive": true
+      },
+      {
+        "id": "cat-tat-vo",
+        "name": "Tất/vớ",
+        "slug": "tat-vo",
+        "parentId": "cat-phu-kien",
+        "order": 5,
+        "isActive": true
+      },
+      {
+        "id": "cat-vi",
+        "name": "Ví",
+        "slug": "vi",
+        "parentId": "cat-phu-kien",
+        "order": 6,
+        "isActive": true
+      },
+      {
+        "id": "cat-phu-kien-tt",
+        "name": "Phụ kiện thời trang",
+        "slug": "phu-kien-thoi-trang",
+        "parentId": "cat-phu-kien",
+        "order": 7,
+        "isActive": true
+      }
+    ]
+  }
+]

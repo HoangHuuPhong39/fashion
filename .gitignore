@@ -1,0 +1,46 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js build
+/.next/
+/out/
+/build
+
+# temporary & uploads
+*.tmp
+/public/uploads/*
+!/public/uploads/.gitkeep
+file_anh_mau.zip
+web.zip
+data_backup*
+
+# runtime data
+/data/*
+!/data/categories.json
+!/data/products.json
+!/data/bank_settings.json
+
+# environment variables
+.env*
+!.env.example
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.vercel
+*.tsbuildinfo
+next-env.d.ts

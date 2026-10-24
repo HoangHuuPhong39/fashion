@@ -1,0 +1,9 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="800" fill="#F4F1EA"/>
+  <rect x="20" y="20" width="560" height="760" stroke="#E8E4DC" stroke-width="1"/>
+  <circle cx="300" cy="360" r="64" fill="#EAE5DC"/>
+  <path d="M280 375C280 355 290 345 300 345C310 345 320 355 320 375V400H280V375Z" fill="#C7A66A" opacity="0.8"/>
+  <circle cx="300" cy="330" r="14" fill="#C7A66A" opacity="0.8"/>
+  <text x="300" y="460" font-family="'Playfair Display', serif, Georgia" font-size="20" font-weight="600" fill="#171613" text-anchor="middle" letter-spacing="2">TADA! ATELIER</text>
+  <text x="300" y="485" font-family="'Be Vietnam Pro', sans-serif" font-size="11" font-weight="400" fill="#8A7158" text-anchor="middle" letter-spacing="1.5">FASHION IMAGE PLACEHOLDER</text>
+</svg>
