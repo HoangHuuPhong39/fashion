@@ -3,6 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import { User, UserRole } from '@/types';
+import INITIAL_USERS from '../../data/users.json';
 import {
   getTrustedClientIp,
   checkRateLimit,
@@ -115,23 +116,36 @@ function getInitialUsers(): StoredUser[] {
   const adminEmail = (process.env.ADMIN_EMAIL || 'admin@tada.vn').trim().toLowerCase();
   const adminPassword = process.env.ADMIN_INITIAL_PASSWORD || 'Admin@2026!';
 
-  return [
-    {
-      id: 'usr-admin',
-      name: 'Quản Trị Viên TADA!',
+  const fallbackAdmin: StoredUser = {
+    id: 'usr-admin',
+    name: 'Quản Trị Viên TADA!',
+    email: adminEmail,
+    phone: process.env.NEXT_PUBLIC_HOTLINE || '0366861159',
+    role: 'admin',
+    passwordHash: hashPassword(adminPassword),
+    membershipTier: 'diamond',
+    totalSpent: 0,
+    points: 0,
+    isVip: true,
+    avatar: '/images/avatar-default.jpg',
+    coverImage: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80',
+    addresses: []
+  };
+
+  const users = [...(INITIAL_USERS as StoredUser[])];
+  const adminIdx = users.findIndex(u => u.id === 'usr-admin' || u.role === 'admin');
+  if (adminIdx !== -1) {
+    users[adminIdx] = {
+      ...users[adminIdx],
       email: adminEmail,
-      phone: process.env.NEXT_PUBLIC_HOTLINE || '0366861159',
       role: 'admin',
-      passwordHash: hashPassword(adminPassword),
-      membershipTier: 'diamond',
-      totalSpent: 0,
-      points: 0,
-      isVip: true,
-      avatar: '/images/avatar-default.jpg',
-      coverImage: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1200&auto=format&fit=crop&q=80',
-      addresses: []
-    }
-  ];
+      passwordHash: hashPassword(adminPassword)
+    };
+  } else {
+    users.push(fallbackAdmin);
+  }
+
+  return users;
 }
 
 export function getAllUsers(): StoredUser[] {
@@ -149,7 +163,14 @@ export function findUserByEmail(email: string): StoredUser | undefined {
 
 export function findUserById(id: string): StoredUser | undefined {
   const users = getAllUsers();
-  return users.find((u) => u.id === id);
+  const found = users.find((u) => u.id === id);
+  if (found) return found;
+
+  // Fallback nếu usr-admin không nằm trong danh sách bộ nhớ
+  if (id === 'usr-admin') {
+    return getInitialUsers().find((u) => u.id === 'usr-admin');
+  }
+  return undefined;
 }
 
 export function updateUserPassword(userIdOrEmail: string, newPassword: string): boolean {
@@ -202,7 +223,57 @@ export function updateUser(id: string, updates: Partial<StoredUser>): StoredUser
   return users[idx];
 }
 
-// ===== QUẢN LÝ PHIÊN LÀM VIỆC (SESSIONS) =====
+// ===== QUẢN LÝ PHIÊN LÀM VIỆC STATELESS & COOKIE SESSIONS =====
+
+const SESSION_SECRET =
+  process.env.SESSION_SECRET ||
+  process.env.IP_HASH_SECRET ||
+  'tada-fashion-atelier-session-hmac-secret-key-2026';
+
+export interface StatelessSessionPayload {
+  id: string;
+  role: UserRole;
+  email: string;
+  name?: string;
+  iat: number;
+  exp: number;
+}
+
+export function signStatelessSessionToken(payload: StatelessSessionPayload): string {
+  const payloadBase64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature = crypto.createHmac('sha256', SESSION_SECRET).update(payloadBase64).digest('base64url');
+  return `tada.${payloadBase64}.${signature}`;
+}
+
+export function verifyStatelessSessionToken(token: string): { valid: boolean; payload?: StatelessSessionPayload } {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3 || parts[0] !== 'tada') {
+      return { valid: false };
+    }
+    const [, payloadBase64, signature] = parts;
+    const expectedSig = crypto.createHmac('sha256', SESSION_SECRET).update(payloadBase64).digest('base64url');
+
+    const sigBuf = Buffer.from(signature);
+    const expBuf = Buffer.from(expectedSig);
+    if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+      return { valid: false };
+    }
+
+    const payload = JSON.parse(Buffer.from(payloadBase64, 'base64url').toString('utf-8')) as StatelessSessionPayload;
+    if (!payload.id || !payload.exp || typeof payload.exp !== 'number') {
+      return { valid: false };
+    }
+
+    if (payload.exp < Date.now()) {
+      return { valid: false };
+    }
+
+    return { valid: true, payload };
+  } catch {
+    return { valid: false };
+  }
+}
 
 export function getAllSessions(): Session[] {
   return readJSON<Session[]>(SESSIONS_FILE, []);
@@ -214,14 +285,23 @@ export function saveAllSessions(sessions: Session[]): void {
 
 /**
  * Tạo phiên làm việc mới:
- * Bỏ giới hạn 100 phiên toàn hệ thống.
- * Giới hạn tối đa 5 phiên đang hoạt động CHO TỪNG USER.
+ * Sử dụng Stateless HMAC-signed token để hoạt động độc lập và hoàn hảo trên Serverless (Netlify/Lambda).
+ * Đồng thời ghi vào sessions.json cho local continuity.
  */
 export function createServerSession(user: StoredUser): { rawToken: string; session: Session } {
-  const sessions = getAllSessions();
-  const rawToken = crypto.randomBytes(32).toString('hex');
+  const expiresAtMs = Date.now() + 30 * 24 * 3600 * 1000; // 30 ngày
+  const expiresAt = new Date(expiresAtMs).toISOString();
+
+  const rawToken = signStatelessSessionToken({
+    id: user.id,
+    role: user.role,
+    email: user.email,
+    name: user.name,
+    iat: Date.now(),
+    exp: expiresAtMs
+  });
+
   const tokenHash = hashToken(rawToken);
-  const expiresAt = new Date(Date.now() + 30 * 24 * 3600 * 1000).toISOString(); // 30 ngày
 
   const newSession: Session = {
     tokenHash,
@@ -231,12 +311,16 @@ export function createServerSession(user: StoredUser): { rawToken: string; sessi
     expiresAt
   };
 
-  const now = Date.now();
-  const validSessions = sessions.filter((s) => new Date(s.expiresAt).getTime() > now);
-  const otherUsersSessions = validSessions.filter((s) => s.userId !== user.id);
-  const thisUserSessions = [newSession, ...validSessions.filter((s) => s.userId === user.id)].slice(0, 5);
+  try {
+    const sessions = getAllSessions();
+    const now = Date.now();
+    const validSessions = sessions.filter((s) => new Date(s.expiresAt).getTime() > now);
+    const otherUsersSessions = validSessions.filter((s) => s.userId !== user.id);
+    const thisUserSessions = [newSession, ...validSessions.filter((s) => s.userId === user.id)].slice(0, 5);
 
-  saveAllSessions([...thisUserSessions, ...otherUsersSessions]);
+    saveAllSessions([...thisUserSessions, ...otherUsersSessions]);
+  } catch {}
+
   return { rawToken, session: newSession };
 }
 
@@ -269,6 +353,43 @@ export function revokeOtherUserSessions(userId: string, currentToken?: string | 
 export function verifySessionToken(rawToken?: string | null): { valid: boolean; user?: User } {
   if (!rawToken) return { valid: false };
 
+  // 1. Xác thực Stateless Signed Session Token (Netlify / Serverless Multi-instance)
+  if (rawToken.startsWith('tada.')) {
+    const { valid, payload } = verifyStatelessSessionToken(rawToken);
+    if (!valid || !payload) return { valid: false };
+
+    const user = findUserById(payload.id);
+    if (user) {
+      const { passwordHash: _, ...safeUser } = user;
+      return { valid: true, user: safeUser };
+    }
+
+    // Fallback cho tài khoản admin trên môi trường serverless không gắn đĩa
+    if (payload.id === 'usr-admin' || payload.role === 'admin') {
+      const adminUsers = getInitialUsers();
+      const admin = adminUsers.find(u => u.id === 'usr-admin') || adminUsers[0];
+      const { passwordHash: _, ...safeAdmin } = admin;
+      return { valid: true, user: safeAdmin };
+    }
+
+    return {
+      valid: true,
+      user: {
+        id: payload.id,
+        name: payload.name || 'Khách hàng',
+        email: payload.email,
+        phone: '',
+        role: payload.role,
+        membershipTier: 'bronze',
+        totalSpent: 0,
+        points: 0,
+        isVip: false,
+        addresses: []
+      }
+    };
+  }
+
+  // 2. Legacy fallback cho token chưa ký
   const tokenHash = hashToken(rawToken);
   const sessions = getAllSessions();
   const session = sessions.find((s) => s.tokenHash === tokenHash);

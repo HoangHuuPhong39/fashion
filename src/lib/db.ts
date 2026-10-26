@@ -23,6 +23,13 @@ import {
   ConciergeStatus
 } from '@/types';
 import { PRODUCTS as DEFAULT_PRODUCTS, MOCK_ORDERS } from '@/data/mockData';
+import INITIAL_ORDERS from '../../data/orders.json';
+import INITIAL_PRODUCTS from '../../data/products.json';
+import INITIAL_CATEGORIES from '../../data/categories.json';
+import INITIAL_REVIEWS from '../../data/reviews.json';
+import INITIAL_SIZE_GUIDES from '../../data/size_guides.json';
+import INITIAL_INVENTORY_LOGS from '../../data/inventory_logs.json';
+import INITIAL_CONCIERGE from '../../data/concierge_requests.json';
 import { getAllUsers, findUserById } from '@/lib/auth';
 import { calculateOrderPricing } from '@/lib/pricing';
 import { matchSearchQuery } from '@/lib/vietnamese';
@@ -312,7 +319,7 @@ export function generateInitialCategories(): Category[] {
 // ===== CATEGORIES METHODS =====
 
 export function getDBCategories(): Category[] {
-  const categories = readJSON<Category[]>(CATEGORIES_FILE, generateInitialCategories());
+  const categories = readJSON<Category[]>(CATEGORIES_FILE, INITIAL_CATEGORIES as Category[]);
   return categories.sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
@@ -436,7 +443,7 @@ export function deleteDBCategory(idOrSlug: string): { success: boolean; message:
 // ===== REAL SALES & SEARCH STATS HELPERS =====
 
 export function getProductSalesMap(): Record<string, number> {
-  const orders = readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
+  const orders = readJSON<Order[]>(ORDERS_FILE, INITIAL_ORDERS as Order[]);
   const salesMap: Record<string, number> = {};
   for (const order of orders) {
     // Chỉ tính các đơn hàng đã giao thành công thực tế (status === 'delivered')
@@ -658,22 +665,20 @@ let migratedProductsCache: { mtimeMs: number; products: Product[] } | null = nul
 export function getDBProducts(): Product[] {
   ensureDirectoryExistence();
   if (!fs.existsSync(PRODUCTS_FILE)) {
-    const initial = generateInitialProducts();
-    saveDBProducts(initial);
-    return initial;
+    return autoMigrateProducts(INITIAL_PRODUCTS as Product[]);
   }
   try {
     const stats = fs.statSync(PRODUCTS_FILE);
     if (migratedProductsCache && migratedProductsCache.mtimeMs === stats.mtimeMs) {
       return migratedProductsCache.products;
     }
-    const rawProducts = readJSON<Product[]>(PRODUCTS_FILE, []);
+    const rawProducts = readJSON<Product[]>(PRODUCTS_FILE, INITIAL_PRODUCTS as Product[]);
     const migrated = autoMigrateProducts(rawProducts);
     const updatedStats = fs.existsSync(PRODUCTS_FILE) ? fs.statSync(PRODUCTS_FILE) : stats;
     migratedProductsCache = { mtimeMs: updatedStats.mtimeMs, products: migrated };
     return migrated;
   } catch (err) {
-    return readJSON<Product[]>(PRODUCTS_FILE, generateInitialProducts());
+    return autoMigrateProducts(readJSON<Product[]>(PRODUCTS_FILE, INITIAL_PRODUCTS as Product[]));
   }
 }
 
@@ -843,7 +848,7 @@ export function deleteDBProduct(id: string): boolean {
 // ===== INVENTORY & AUDIT LOG =====
 
 export function getDBInventoryLogs(): InventoryLog[] {
-  return readJSON<InventoryLog[]>(INVENTORY_LOGS_FILE, generateInitialInventoryLogs(getDBProducts()));
+  return readJSON<InventoryLog[]>(INVENTORY_LOGS_FILE, INITIAL_INVENTORY_LOGS as InventoryLog[]);
 }
 
 export function recordInventoryLog(logData: Omit<InventoryLog, 'id' | 'createdAt'>): InventoryLog {
@@ -953,7 +958,7 @@ export function adjustProductStock(
 
 export function checkAndCancelExpiredVietQROrders(): void {
   try {
-    const orders = readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
+    const orders = readJSON<Order[]>(ORDERS_FILE, INITIAL_ORDERS as Order[]);
     const now = Date.now();
     let hasExpired = false;
 
@@ -1001,7 +1006,7 @@ export function checkAndCancelExpiredVietQROrders(): void {
 
 export function getDBOrders(): Order[] {
   checkAndCancelExpiredVietQROrders();
-  return readJSON<Order[]>(ORDERS_FILE, MOCK_ORDERS);
+  return readJSON<Order[]>(ORDERS_FILE, INITIAL_ORDERS as Order[]);
 }
 
 export function saveDBOrders(orders: Order[]): void {
@@ -1387,7 +1392,7 @@ export function updateDBOrderStatus(
 // ===== REVIEWS =====
 
 export function getDBReviews(productId?: string): Review[] {
-  const reviews = readJSON<Review[]>(REVIEWS_FILE, generateInitialReviews(getDBProducts()));
+  const reviews = readJSON<Review[]>(REVIEWS_FILE, INITIAL_REVIEWS as Review[]);
   if (productId) {
     return reviews.filter((r) => r.productId === productId);
   }
@@ -1753,7 +1758,7 @@ export const DEFAULT_SIZE_GUIDES: SizeGuide[] = [
 ];
 
 export function getSizeGuides(): SizeGuide[] {
-  return readJSON<SizeGuide[]>(SIZE_GUIDES_FILE, DEFAULT_SIZE_GUIDES);
+  return readJSON<SizeGuide[]>(SIZE_GUIDES_FILE, INITIAL_SIZE_GUIDES as SizeGuide[]);
 }
 
 export function getSizeGuideByCategoryOrProduct(category?: string, productId?: string): SizeGuide | null {
@@ -2026,7 +2031,7 @@ export const CONCIERGE_STATUS_LABELS: Record<ConciergeStatus, string> = {
 };
 
 export function getAllConciergeRequests(): ConciergeRequest[] {
-  return readJSON<ConciergeRequest[]>(CONCIERGE_REQUESTS_FILE, []);
+  return readJSON<ConciergeRequest[]>(CONCIERGE_REQUESTS_FILE, INITIAL_CONCIERGE as ConciergeRequest[]);
 }
 
 export function createConciergeRequest(data: {

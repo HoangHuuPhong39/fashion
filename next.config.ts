@@ -15,6 +15,9 @@ const cspHeader = `
 const nextConfig: NextConfig = {
   turbopack: {},
   poweredByHeader: false,
+  outputFileTracingIncludes: {
+    '/**': ['./data/**/*'],
+  },
   allowedDevOrigins: ['192.168.157.1', 'localhost', '127.0.0.1'],
   images: {
     unoptimized: process.env.NODE_ENV === 'development',

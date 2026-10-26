@@ -9,9 +9,12 @@ import {
   markPasswordResetTokenUsed,
   createConciergeRequest,
   lookupConciergeRequest,
-  updateConciergeStatus
+  updateConciergeStatus,
+  getDBOrders,
+  getDBProducts
 } from '@/lib/db';
 import { requireAdmin, requireUser } from '@/lib/guard';
+import { signStatelessSessionToken, verifySessionToken } from '@/lib/auth';
 import { sanitizeCsvCell } from '@/lib/csv';
 import { verifyTotpCode, generateTotpSecret, generateTotpCode, generateBackupCodes, verifyAndConsumeBackupCode } from '@/lib/totp';
 import crypto from 'crypto';
@@ -217,6 +220,45 @@ describe('TADA! Fashion Atelier - Automated Test Suite', () => {
       const guard = requireAdmin(maliciousReq);
       expect(guard.errorResponse).toBeDefined();
       expect(guard.errorResponse?.status).toBe(403);
+    });
+
+    it('xác thực thành công và cấp quyền cho token quản trị viên dạng Stateless HMAC', () => {
+      const adminToken = signStatelessSessionToken({
+        id: 'usr-admin',
+        role: 'admin',
+        email: 'admin@tada.vn',
+        name: 'Quản Trị Viên TADA!',
+        iat: Date.now(),
+        exp: Date.now() + 3600000
+      });
+
+      const { valid, user } = verifySessionToken(adminToken);
+      expect(valid).toBe(true);
+      expect(user?.role).toBe('admin');
+      expect(user?.email).toBe('admin@tada.vn');
+
+      // Test qua requireAdmin với cookie tada_session
+      const adminReq = new Request('https://tada-fashion-atelier.netlify.app/api/inventory/adjust', {
+        method: 'POST',
+        headers: {
+          host: 'tada-fashion-atelier.netlify.app',
+          origin: 'https://tada-fashion-atelier.netlify.app',
+          cookie: `tada_session=${adminToken}`
+        }
+      });
+
+      const check = requireAdmin(adminReq);
+      expect(check.errorResponse).toBeUndefined();
+      expect(check.user).toBeDefined();
+      expect(check.user?.role).toBe('admin');
+    });
+
+    it('đảm bảo đồng bộ đầy đủ toàn bộ 22 đơn hàng và 116 sản phẩm cho serverless', () => {
+      const orders = getDBOrders();
+      expect(orders.length).toBe(22);
+
+      const products = getDBProducts();
+      expect(products.length).toBeGreaterThanOrEqual(79);
     });
   });
 

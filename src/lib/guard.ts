@@ -12,7 +12,7 @@ export function verifyMutationOrigin(request: Request): { valid: boolean; errorR
   }
 
   const origin = request.headers.get('origin');
-  const host = request.headers.get('host');
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host');
   const referer = request.headers.get('referer');
 
   if (origin) {
@@ -26,7 +26,8 @@ export function verifyMutationOrigin(request: Request): { valid: boolean; errorR
           originUrl.host === host ||
           originHostWithoutPort === 'localhost' ||
           originHostWithoutPort === '127.0.0.1' ||
-          (process.env.NEXT_PUBLIC_SITE_URL && originUrl.origin === process.env.NEXT_PUBLIC_SITE_URL)
+          (process.env.NEXT_PUBLIC_SITE_URL && originUrl.origin === process.env.NEXT_PUBLIC_SITE_URL) ||
+          originUrl.hostname.endsWith('.netlify.app')
         ) {
           return { valid: true };
         }
@@ -58,7 +59,8 @@ export function verifyMutationOrigin(request: Request): { valid: boolean; errorR
         refererUrl.host === host ||
         refererUrl.hostname === 'localhost' ||
         refererUrl.hostname === '127.0.0.1' ||
-        (process.env.NEXT_PUBLIC_SITE_URL && refererUrl.origin === process.env.NEXT_PUBLIC_SITE_URL)
+        (process.env.NEXT_PUBLIC_SITE_URL && refererUrl.origin === process.env.NEXT_PUBLIC_SITE_URL) ||
+        refererUrl.hostname.endsWith('.netlify.app')
       ) {
         return { valid: true };
       }
