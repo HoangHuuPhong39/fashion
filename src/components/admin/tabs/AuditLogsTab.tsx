@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { History, Search, RefreshCw, ShieldCheck, Filter } from 'lucide-react';
 import { AdminAuditLogEntry } from '@/lib/audit';
+import { getAuthHeaders } from '@/context/AuthContext';
 
 export const AuditLogsTab: React.FC = () => {
   const [logs, setLogs] = useState<AdminAuditLogEntry[]>([]);
@@ -18,7 +19,7 @@ export const AuditLogsTab: React.FC = () => {
       if (search.trim()) params.set('search', search.trim());
       params.set('limit', '100');
 
-      const res = await fetch(`/api/admin/audit-logs?${params.toString()}`);
+      const res = await fetch(`/api/admin/audit-logs?${params.toString()}`, { headers: getAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.logs)) {
@@ -40,7 +41,7 @@ export const AuditLogsTab: React.FC = () => {
         if (actionFilter !== 'all') params.set('action', actionFilter);
         params.set('limit', '100');
 
-        const res = await fetch(`/api/admin/audit-logs?${params.toString()}`);
+        const res = await fetch(`/api/admin/audit-logs?${params.toString()}`, { headers: getAuthHeaders() });
         if (res.ok && active) {
           const data = await res.json();
           if (data.success && Array.isArray(data.logs)) {

@@ -251,6 +251,32 @@ describe('TADA! Fashion Atelier - Automated Test Suite', () => {
       expect(check.errorResponse).toBeUndefined();
       expect(check.user).toBeDefined();
       expect(check.user?.role).toBe('admin');
+
+      // Test qua requireAdmin với Authorization Bearer header
+      const bearerReq = new Request('https://tada-fashion-atelier.netlify.app/api/inventory/adjust', {
+        method: 'POST',
+        headers: {
+          host: 'tada-fashion-atelier.netlify.app',
+          origin: 'https://tada-fashion-atelier.netlify.app',
+          authorization: `Bearer ${adminToken}`
+        }
+      });
+      const checkBearer = requireAdmin(bearerReq);
+      expect(checkBearer.errorResponse).toBeUndefined();
+      expect(checkBearer.user?.role).toBe('admin');
+
+      // Test qua requireAdmin với x-tada-session header
+      const headerReq = new Request('https://tada-fashion-atelier.netlify.app/api/inventory/adjust', {
+        method: 'POST',
+        headers: {
+          host: 'tada-fashion-atelier.netlify.app',
+          origin: 'https://tada-fashion-atelier.netlify.app',
+          'x-tada-session': adminToken
+        }
+      });
+      const checkHeader = requireAdmin(headerReq);
+      expect(checkHeader.errorResponse).toBeUndefined();
+      expect(checkHeader.user?.role).toBe('admin');
     });
 
     it('đảm bảo đồng bộ đầy đủ toàn bộ 22 đơn hàng và 116 sản phẩm cho serverless', () => {

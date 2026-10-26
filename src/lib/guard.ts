@@ -78,19 +78,42 @@ export function verifyMutationOrigin(request: Request): { valid: boolean; errorR
 }
 
 /**
- * Trích xuất User từ session cookie 'tada_session'.
+ * Trích xuất User từ:
+ * 1. Authorization header (Bearer <token>)
+ * 2. x-tada-session header (<token>)
+ * 3. Session cookie 'tada_session'
  * Trả về null nếu không có token hoặc token không hợp lệ/hết hạn.
  */
 export function getSessionUser(request: Request): User | null {
   try {
+    // 1. Kiểm tra Authorization header (Bearer token)
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
+      const token = authHeader.slice(7).trim();
+      const { valid, user } = verifySessionToken(token);
+      if (valid && user) return user;
+    }
+
+    // 2. Kiểm tra Custom header x-tada-session
+    const customHeader = request.headers.get('x-tada-session');
+    if (customHeader) {
+      const { valid, user } = verifySessionToken(customHeader.trim());
+      if (valid && user) return user;
+    }
+
+    // 3. Kiểm tra Cookie tada_session
     const cookieHeader = request.headers.get('cookie') || '';
     const match = cookieHeader.match(/tada_session=([^;]+)/);
-    const rawToken = match ? match[1] : null;
+    if (match) {
+      let rawToken = decodeURIComponent(match[1].trim());
+      if (rawToken.startsWith('"') && rawToken.endsWith('"')) {
+        rawToken = rawToken.slice(1, -1);
+      }
+      const { valid, user } = verifySessionToken(rawToken);
+      if (valid && user) return user;
+    }
 
-    if (!rawToken) return null;
-
-    const { valid, user } = verifySessionToken(rawToken);
-    return valid && user ? user : null;
+    return null;
   } catch (err) {
     console.error('getSessionUser error:', err);
     return null;

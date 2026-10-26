@@ -1,5 +1,89 @@
 [
   {
+    "id": "cr-1793031702422-cki5",
+    "code": "CR-702422",
+    "customerName": "Lê Thảo",
+    "phone": "0988776655",
+    "email": "lethao@example.com",
+    "serviceType": "international_order",
+    "productName": "Yêu cầu Atelier Concierge",
+    "images": [],
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "received",
+        "label": "Đã tiếp nhận yêu cầu",
+        "note": "Yêu cầu của bạn đã được chuyển tới chuyên viên tạo mẫu & thẩm định nguồn cung Atelier.",
+        "changedAt": "2026-10-26T16:21:42.422Z"
+      },
+      {
+        "status": "quoted",
+        "label": "Đã thẩm định & Báo giá",
+        "note": "Đã thẩm định sản phẩm có sẵn tại store Milan",
+        "changedAt": "2026-10-26T16:21:42.431Z"
+      },
+      {
+        "status": "deposit_paid",
+        "label": "Đã nhận đặt cọc 50%",
+        "note": "Khách đã cọc 50% qua VietQR",
+        "changedAt": "2026-10-26T16:21:42.438Z"
+      },
+      {
+        "status": "delivered",
+        "label": "Đã bàn giao khách hàng",
+        "note": "Giao tận tay khách tại Atelier",
+        "changedAt": "2026-10-26T16:21:42.455Z"
+      }
+    ],
+    "createdAt": "2026-10-26T16:21:42.422Z",
+    "updatedAt": "2026-10-26T16:21:42.455Z",
+    "quotedPrice": 12500000,
+    "depositAmount": 6250000
+  },
+  {
+    "id": "cr-1793031702403-6uwo",
+    "code": "CR-702403",
+    "customerName": "Minh Hằng",
+    "phone": "0912345678",
+    "email": "minhhang@example.com",
+    "serviceType": "international_order",
+    "productLink": "https://chanel.com/fr/look-2026",
+    "productName": "Yêu cầu Atelier Concierge",
+    "images": [],
+    "status": "received",
+    "statusHistory": [
+      {
+        "status": "received",
+        "label": "Đã tiếp nhận yêu cầu",
+        "note": "Yêu cầu của bạn đã được chuyển tới chuyên viên tạo mẫu & thẩm định nguồn cung Atelier.",
+        "changedAt": "2026-10-26T16:21:42.403Z"
+      }
+    ],
+    "createdAt": "2026-10-26T16:21:42.403Z",
+    "updatedAt": "2026-10-26T16:21:42.403Z"
+  },
+  {
+    "id": "cr-1793031702381-u4y0",
+    "code": "CR-702381",
+    "customerName": "Hoàng Oanh",
+    "phone": "0901234567",
+    "email": "hoangoanh@example.com",
+    "serviceType": "bespoke_tailoring",
+    "productName": "May đo đầm dạ tiệc lụa satin tơ tằm riêng",
+    "images": [],
+    "status": "received",
+    "statusHistory": [
+      {
+        "status": "received",
+        "label": "Đã tiếp nhận yêu cầu",
+        "note": "Yêu cầu của bạn đã được chuyển tới chuyên viên tạo mẫu & thẩm định nguồn cung Atelier.",
+        "changedAt": "2026-10-26T16:21:42.381Z"
+      }
+    ],
+    "createdAt": "2026-10-26T16:21:42.381Z",
+    "updatedAt": "2026-10-26T16:21:42.381Z"
+  },
+  {
     "id": "cr-1793029635896-etz1",
     "code": "CR-635896",
     "customerName": "Lê Thảo",

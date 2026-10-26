@@ -140,8 +140,27 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const USER_STORAGE_KEY = 'tada_current_user';
-const ORDERS_STORAGE_KEY = 'tada_orders_list';
+export const USER_STORAGE_KEY = 'tada_current_user';
+export const ORDERS_STORAGE_KEY = 'tada_orders_list';
+export const SESSION_TOKEN_KEY = 'tada_session_token';
+
+/**
+ * Trả về HTTP Headers chứa token xác thực (Bearer & Custom Header)
+ * Đảm bảo 100% hoạt động tin cậy trên Serverless (Netlify/Vercel) kể cả khi cookie bị chặn.
+ */
+export function getAuthHeaders(extraHeaders: Record<string, string> = {}): Record<string, string> {
+  const headers: Record<string, string> = { ...extraHeaders };
+  if (typeof window !== 'undefined') {
+    try {
+      const token = localStorage.getItem(SESSION_TOKEN_KEY);
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+        headers['x-tada-session'] = token;
+      }
+    } catch {}
+  }
+  return headers;
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Mặc định không có tài khoản demo tự gán, bắt đầu bằng null
@@ -159,8 +178,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const isAdmin = currentUser.role === 'admin';
       const userIdParam = encodeURIComponent(currentUser.id);
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 3500);
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const headers = getAuthHeaders();
       const res = await fetch(`/api/orders?userId=${userIdParam}&isAdmin=${isAdmin}`, {
+        headers,
         signal: controller.signal
       });
       clearTimeout(timeoutId);
@@ -182,10 +203,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let isCancelled = false;
 
     const restoreSession = async () => {
-      // 1. Kiểm tra localStorage trước để có UI nhanh tức thì
+      // 1. Đọc cache user và token từ localStorage
       let localUser: User | null = null;
+      let token: string | null = null;
       try {
         const savedUser = localStorage.getItem(USER_STORAGE_KEY);
+        token = localStorage.getItem(SESSION_TOKEN_KEY);
         if (savedUser) {
           const parsed = JSON.parse(savedUser);
           if (parsed && parsed.id) {
@@ -202,11 +225,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.removeItem(ORDERS_STORAGE_KEY);
       } catch {}
 
-      // 2. Xác thực phiên thật với máy chủ với timeout 2.5s
+      // 2. Xác thực phiên thật với máy chủ với timeout 6s
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2500);
-        const res = await fetch('/api/auth/me', { signal: controller.signal });
+        const timeoutId = setTimeout(() => controller.abort(), 6000);
+        const headers = getAuthHeaders();
+        const res = await fetch('/api/auth/me', { headers, signal: controller.signal });
         clearTimeout(timeoutId);
 
         if (!isCancelled) {
@@ -221,12 +245,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               return;
             }
           } else if (res.status === 401) {
-            // BẢO MẬT: Khi máy chủ trả về 401, LUÔN xóa user và đơn hàng khỏi cả state và localStorage
+            // BẢO MẬT: Khi máy chủ trả về 401, LUÔN xóa sạch session zombie
             setUser(null);
             setOrders([]);
             try {
               localStorage.removeItem(USER_STORAGE_KEY);
               localStorage.removeItem(ORDERS_STORAGE_KEY);
+              localStorage.removeItem(SESSION_TOKEN_KEY);
             } catch {}
             return;
           }
@@ -236,11 +261,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (!isCancelled) {
-        if (localUser) {
+        // Chỉ duy trì user nếu có token hợp lệ trên máy khách
+        if (localUser && token) {
           fetchOrders(localUser);
         } else {
           setUser(null);
           setOrders([]);
+          try {
+            localStorage.removeItem(USER_STORAGE_KEY);
+            localStorage.removeItem(SESSION_TOKEN_KEY);
+          } catch {}
         }
       }
     };
@@ -252,12 +282,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     });
 
-    // Timeout an toàn tuyệt đối: không bao giờ để loading xoay quá 1.5s
+    // Timeout an toàn tuyệt đối: không bao giờ để loading xoay quá 2s
     const safetyTimer = setTimeout(() => {
       if (!isCancelled) {
         setIsLoading(false);
       }
-    }, 1500);
+    }, 2000);
 
     return () => {
       isCancelled = true;
@@ -265,14 +295,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [fetchOrders]);
 
-  const saveUserLocal = (newUser: User | null) => {
+  const saveUserLocal = (newUser: User | null, token?: string) => {
     setUser(newUser);
     try {
       if (newUser) {
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(newUser));
+        if (token) {
+          localStorage.setItem(SESSION_TOKEN_KEY, token);
+        }
       } else {
         localStorage.removeItem(USER_STORAGE_KEY);
         localStorage.removeItem(ORDERS_STORAGE_KEY);
+        localStorage.removeItem(SESSION_TOKEN_KEY);
       }
     } catch (e) {
       console.error('Failed to save user', e);
@@ -344,7 +378,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await res.json();
 
       if (res.ok && data.success && data.user) {
-        saveUserLocal(data.user);
+        saveUserLocal(data.user, data.token);
         return { success: true, message: data.message };
       }
       return {
@@ -368,7 +402,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await res.json();
 
       if (res.ok && data.success && data.user) {
-        saveUserLocal(data.user);
+        saveUserLocal(data.user, data.token);
         return { success: true, message: data.message };
       }
       return { success: false, message: data.message || 'Xác thực Quản trị viên thất bại.' };
@@ -388,7 +422,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await res.json();
 
       if (res.ok && data.success && data.user) {
-        saveUserLocal(data.user);
+        saveUserLocal(data.user, data.token);
         return { success: true, message: data.message };
       }
       return { success: false, message: data.message || 'Đăng ký không thành công.' };
@@ -419,7 +453,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch('/api/auth/password', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ currentPassword, newPassword })
       });
       const data = await res.json();
@@ -432,7 +466,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Đăng xuất: xóa session trên server và client
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { method: 'POST', headers: getAuthHeaders() });
     } catch {}
     saveUserLocal(null);
   };
@@ -442,9 +476,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch('/api/auth/profile', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(updates)
       });
+      if (res.status === 401) {
+        saveUserLocal(null);
+        return { success: false, message: 'Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại.' };
+      }
       const data = await res.json();
       if (res.ok && data.success && data.user) {
         saveUserLocal(data.user);
@@ -461,7 +499,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch('/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           ...newOrder,
           userId: user?.id
@@ -520,7 +558,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const res = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           status,
           note,

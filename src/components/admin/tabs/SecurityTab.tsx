@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ShieldCheck, ShieldAlert, Copy, Check, Lock, Smartphone, RefreshCw, AlertTriangle } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth, getAuthHeaders } from '@/context/AuthContext';
 
 export const SecurityTab: React.FC = () => {
   const { user } = useAuth();
@@ -25,7 +25,7 @@ export const SecurityTab: React.FC = () => {
     setIsSubmitting(true);
     setVerifyError('');
     try {
-      const res = await fetch('/api/auth/2fa/setup', { method: 'POST' });
+      const res = await fetch('/api/auth/2fa/setup', { method: 'POST', headers: getAuthHeaders() });
       const data = await res.json();
       if (res.ok && data.success) {
         setSetupData({ secret: data.secret, otpauthUrl: data.otpauthUrl });
@@ -48,7 +48,7 @@ export const SecurityTab: React.FC = () => {
     try {
       const res = await fetch('/api/auth/2fa/verify', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           token: verifyCode.trim(),
           secret: setupData.secret
@@ -78,7 +78,7 @@ export const SecurityTab: React.FC = () => {
     try {
       const res = await fetch('/api/auth/2fa/disable', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ password: disablePassword })
       });
       const data = await res.json();

@@ -45,7 +45,7 @@ import {
   QrCode,
   Image as ImageIcon
 } from 'lucide-react';
-import { useAuth, LOYALTY_TIERS } from '@/context/AuthContext';
+import { useAuth, LOYALTY_TIERS, getAuthHeaders } from '@/context/AuthContext';
 import { useProducts } from '@/context/ProductContext';
 import { useWishlist } from '@/context/WishlistContext';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -197,9 +197,15 @@ export default function AccountPage() {
       formData.append('file', file);
       const res = await fetch('/api/upload', {
         method: 'POST',
+        headers: getAuthHeaders(),
         body: formData
       });
       const data = await res.json();
+      if (res.status === 401) {
+        alert('Phiên làm việc đã hết hạn hoặc chưa đồng bộ với máy chủ. Vui lòng đăng nhập lại.');
+        logout();
+        return;
+      }
       if (data.success && data.url) {
         if (target === 'avatar') {
           setProfileAvatar(data.url);

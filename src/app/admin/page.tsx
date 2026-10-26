@@ -53,7 +53,7 @@ import {
   ExternalLink,
   Sparkles
 } from 'lucide-react';
-import { useAuth, LOYALTY_TIERS } from '@/context/AuthContext';
+import { useAuth, LOYALTY_TIERS, getAuthHeaders } from '@/context/AuthContext';
 import { useProducts } from '@/context/ProductContext';
 import { OrderStatus, Order, ProductOrigin, Product, ProductVariant, InventoryLog, ProductStatus, User, Category, ProductTag } from '@/types';
 import { SafeImage } from '@/components/ui/SafeImage';
@@ -85,7 +85,7 @@ export default function AdminPage() {
   useEffect(() => {
     refreshProducts();
     refreshOrders();
-    fetch('/api/users')
+    fetch('/api/users', { headers: getAuthHeaders() })
       .then((res) => res.json())
       .then((data) => {
         if (data.success && Array.isArray(data.users)) {
@@ -176,7 +176,7 @@ export default function AdminPage() {
   const fetchInventoryLogs = async () => {
     setIsLoadingLogs(true);
     try {
-      const res = await fetch('/api/inventory/logs');
+      const res = await fetch('/api/inventory/logs', { headers: getAuthHeaders() });
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.logs)) {
@@ -196,7 +196,7 @@ export default function AdminPage() {
       void (async () => {
         setIsLoadingLogs(true);
         try {
-          const res = await fetch('/api/admin/inventory/logs');
+          const res = await fetch('/api/admin/inventory/logs', { headers: getAuthHeaders() });
           if (res.ok && active) {
             const data = await res.json();
             if (data.success && Array.isArray(data.logs)) {
@@ -364,9 +364,15 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
+        headers: getAuthHeaders(),
         body: formData
       });
       const data = await res.json();
+      if (res.status === 401) {
+        alert('Phiên làm việc quản trị đã hết hạn hoặc chưa đồng bộ. Vui lòng đăng nhập lại.');
+        logout();
+        return;
+      }
       if (res.ok && data.success && data.urls) {
         if (editingProduct) {
           const currentImages = editingProduct.images || [];

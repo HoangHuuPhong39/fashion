@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Product, ProductVariant, Category } from '@/types';
+import { getAuthHeaders } from '@/context/AuthContext';
 
 interface ProductContextType {
   products: Product[];
@@ -128,7 +129,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const res = await fetch('/api/products', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(productData)
       });
       if (res.ok) {
@@ -174,7 +175,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const res = await fetch(`/api/products/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(updatedFields)
       });
       if (res.ok) {
@@ -218,7 +219,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const res = await fetch('/api/inventory/adjust', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           productId,
           variantId,
@@ -246,7 +247,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const deleteProduct = async (id: string) => {
     try {
-      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/products/${id}`, { method: 'DELETE', headers: getAuthHeaders() });
       if (res.ok) {
         setProducts((prev) => prev.filter((p) => p.id !== id));
         fetchCategories();
@@ -276,7 +277,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     try {
       const res = await fetch('/api/categories', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(catData)
       });
       const data = await res.json();
@@ -296,7 +297,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   const deleteCategory = async (id: string): Promise<{ success: boolean; message: string }> => {
     try {
-      const res = await fetch(`/api/categories?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+      const res = await fetch(`/api/categories?id=${encodeURIComponent(id)}`, { method: 'DELETE', headers: getAuthHeaders() });
       const data = await res.json();
       if (res.ok && data.success) {
         if (Array.isArray(data.categories)) {

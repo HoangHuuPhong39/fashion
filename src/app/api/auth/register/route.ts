@@ -112,7 +112,8 @@ export async function POST(request: Request) {
     const response = NextResponse.json({
       success: true,
       message: 'Đăng ký tài khoản thành công! Chào mừng bạn gia nhập TADA! Privilege.',
-      user: safeUser
+      user: safeUser,
+      token: rawToken
     });
 
     response.cookies.set('tada_session', rawToken, {
