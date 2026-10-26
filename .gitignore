@@ -28,6 +28,11 @@ data_backup*
 /data/*
 !/data/categories.json
 !/data/products.json
+!/data/orders.json
+!/data/inventory_logs.json
+!/data/reviews.json
+!/data/size_guides.json
+!/data/concierge_requests.json
 
 # environment variables
 .env*

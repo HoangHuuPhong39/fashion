@@ -83,6 +83,8 @@ export default function AdminPage() {
 
   // Tải danh sách khách hàng thật từ server
   useEffect(() => {
+    refreshProducts();
+    refreshOrders();
     fetch('/api/users')
       .then((res) => res.json())
       .then((data) => {
@@ -91,7 +93,7 @@ export default function AdminPage() {
         }
       })
       .catch(() => {});
-  }, []);
+  }, [refreshProducts, refreshOrders]);
 
   // Thông báo đơn mới
   const [newOrderAlertCount, setNewOrderAlertCount] = useState(0);

@@ -1,0 +1,1103 @@
+[
+  {
+    "id": "LM202610248E1CB5B642",
+    "orderCode": "#TADA-20261024-8E1CB5",
+    "createdAt": "2026-10-24T16:20:14.348Z",
+    "status": "cancelled",
+    "statusLabel": "Đã hủy (Hết hạn chuyển khoản 24h)",
+    "userId": "usr-admin",
+    "items": [
+      {
+        "productId": "lum-20",
+        "productName": "Thắt lưng da bê khoá cài mạ vàng champagne Timeless Belt",
+        "brand": "Chanel",
+        "image": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=1000&auto=format&fit=crop&q=85",
+        "color": "Đen Noir",
+        "size": "75cm",
+        "price": 440000,
+        "quantity": 1,
+        "origin": "international_order",
+        "variantId": "var-lum-20-0-0",
+        "sku": "TADA-PHU-020-ĐE-75cm"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Nguyễn Quản Trị",
+      "phone": "0909999999",
+      "email": "admin@tada.vn",
+      "address": "13243",
+      "city": "Hà Nội",
+      "district": "Quận Thanh Xuân",
+      "ward": "Phường Nhân Chính",
+      "notes": ""
+    },
+    "subtotal": 440000,
+    "shippingFee": 0,
+    "discountAmount": 66000,
+    "total": 374000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "pending",
+    "holdExpiresAt": "2026-10-25T16:20:14.348Z",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T16:20:14.348Z",
+        "note": "Đơn hàng tạo thành công qua VietQR (Giữ tồn kho trong 24 giờ)"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy (Hết hạn chuyển khoản 24h)",
+        "changedAt": "2026-10-26T15:01:22.529Z",
+        "note": "Tự động hủy đơn và hoàn trả tồn kho sau 24 giờ không thanh toán VietQR."
+      }
+    ],
+    "updatedAt": "2026-10-26T15:01:22.529Z"
+  },
+  {
+    "id": "LM20261024AFF074C9D6",
+    "orderCode": "#TADA-20261024-AFF074",
+    "createdAt": "2026-10-24T12:34:31.235Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-1792845200885-eed67433",
+    "items": [
+      {
+        "productId": "mau-02",
+        "productName": "Áo Cardigan Dệt Kim Có Mũ Lacoste Navy Knit Zip Hooded",
+        "brand": "Lacoste",
+        "image": "/images/products/lacoste-hooded-knit-cardigan-navy.jpg",
+        "color": "Xanh Navy",
+        "size": "S",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-02-0-0",
+        "sku": "TADA-NAM-025-XA-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "nguyen",
+      "phone": "0987654321",
+      "email": "nguyen1@gmail.com",
+      "address": "số nhà 16",
+      "city": "Hà Nội",
+      "district": "thanh liệt",
+      "ward": "triều khúc",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 520000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T12:34:31.235Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024F796EF9443",
+    "orderCode": "#TADA-20261024-F796EF",
+    "createdAt": "2026-10-24T12:27:34.025Z",
+    "status": "cancelled",
+    "statusLabel": "Đã hủy",
+    "items": [
+      {
+        "productId": "prod-1792844854002",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 3,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792844854002-0-0",
+        "sku": "TADA-NU-4003-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Đổi Ý",
+      "phone": "0977123456",
+      "email": "khachdoiy@tada.vn",
+      "address": "10 Hai Bà Trưng",
+      "city": "Hà Nội",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 5550000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 5550000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T12:27:34.025Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy",
+        "changedAt": "2026-10-24T12:27:34.039Z",
+        "note": "Khách báo bận đi công tác cần hủy đơn"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024D1EB8828EB",
+    "orderCode": "#TADA-20261024-D1EB88",
+    "createdAt": "2026-10-24T12:27:34.015Z",
+    "status": "delivered",
+    "statusLabel": "Đã giao thành công",
+    "items": [
+      {
+        "productId": "prod-1792844854002",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 2,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792844854002-0-0",
+        "sku": "TADA-NU-4003-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Hàng Bảo Mật",
+      "phone": "0988888999",
+      "email": "security@tada.vn",
+      "address": "72 Lê Thánh Tôn",
+      "city": "TP. Hồ Chí Minh",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 3700000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 3700000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T12:27:34.015Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "delivered",
+        "statusLabel": "Đã giao thành công",
+        "changedAt": "2026-10-24T12:27:34.024Z",
+        "note": "Shipper đã giao tận tay khách"
+      }
+    ]
+  },
+  {
+    "id": "LM202610242058DB593A",
+    "orderCode": "#TADA-20261024-2058DB",
+    "createdAt": "2026-10-24T12:01:28.694Z",
+    "status": "cancelled",
+    "statusLabel": "Đã hủy",
+    "items": [
+      {
+        "productId": "prod-1792843288674",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 3,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792843288674-0-0",
+        "sku": "TADA-NU-8674-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Đổi Ý",
+      "phone": "0977123456",
+      "email": "khachdoiy@tada.vn",
+      "address": "10 Hai Bà Trưng",
+      "city": "Hà Nội",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 5550000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 5550000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T12:01:28.694Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy",
+        "changedAt": "2026-10-24T12:01:28.704Z",
+        "note": "Khách báo bận đi công tác cần hủy đơn"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024F2FD3D40BF",
+    "orderCode": "#TADA-20261024-F2FD3D",
+    "createdAt": "2026-10-24T12:01:28.689Z",
+    "status": "delivered",
+    "statusLabel": "Đã giao thành công",
+    "items": [
+      {
+        "productId": "prod-1792843288674",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 2,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792843288674-0-0",
+        "sku": "TADA-NU-8674-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Hàng Bảo Mật",
+      "phone": "0988888999",
+      "email": "security@tada.vn",
+      "address": "72 Lê Thánh Tôn",
+      "city": "TP. Hồ Chí Minh",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 3700000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 3700000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T12:01:28.689Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "delivered",
+        "statusLabel": "Đã giao thành công",
+        "changedAt": "2026-10-24T12:01:28.693Z",
+        "note": "Shipper đã giao tận tay khách"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024700499ED0A",
+    "orderCode": "#TADA-20261024-700499",
+    "createdAt": "2026-10-24T11:36:50.868Z",
+    "status": "cancelled",
+    "statusLabel": "Đã hủy",
+    "items": [
+      {
+        "productId": "prod-1792841810813",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 3,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792841810813-0-0",
+        "sku": "TADA-NU-0813-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Đổi Ý",
+      "phone": "0977123456",
+      "email": "khachdoiy@tada.vn",
+      "address": "10 Hai Bà Trưng",
+      "city": "Hà Nội",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 5550000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 5550000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T11:36:50.868Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy",
+        "changedAt": "2026-10-24T11:36:50.903Z",
+        "note": "Khách báo bận đi công tác cần hủy đơn"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024FE234470B0",
+    "orderCode": "#TADA-20261024-FE2344",
+    "createdAt": "2026-10-24T11:36:50.842Z",
+    "status": "delivered",
+    "statusLabel": "Đã giao thành công",
+    "items": [
+      {
+        "productId": "prod-1792841810813",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 2,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792841810813-0-0",
+        "sku": "TADA-NU-0813-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Hàng Bảo Mật",
+      "phone": "0988888999",
+      "email": "security@tada.vn",
+      "address": "72 Lê Thánh Tôn",
+      "city": "TP. Hồ Chí Minh",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 3700000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 3700000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T11:36:50.842Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "delivered",
+        "statusLabel": "Đã giao thành công",
+        "changedAt": "2026-10-24T11:36:50.863Z",
+        "note": "Shipper đã giao tận tay khách"
+      }
+    ]
+  },
+  {
+    "id": "LM20261024EFC74281C9",
+    "orderCode": "#TADA-20261024-EFC742",
+    "createdAt": "2026-10-24T11:13:22.980Z",
+    "status": "cancelled",
+    "statusLabel": "Đã hủy",
+    "items": [
+      {
+        "productId": "prod-1792840402947",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 3,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792840402947-0-0",
+        "sku": "TADA-NU-2947-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Đổi Ý",
+      "phone": "0977123456",
+      "email": "khachdoiy@tada.vn",
+      "address": "10 Hai Bà Trưng",
+      "city": "Hà Nội",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 5550000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 5550000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T11:13:22.980Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy",
+        "changedAt": "2026-10-24T11:13:23.004Z",
+        "note": "Khách báo bận đi công tác cần hủy đơn"
+      }
+    ]
+  },
+  {
+    "id": "LM202610248CC1EB025A",
+    "orderCode": "#TADA-20261024-8CC1EB",
+    "createdAt": "2026-10-24T11:13:22.965Z",
+    "status": "delivered",
+    "statusLabel": "Đã giao thành công",
+    "items": [
+      {
+        "productId": "prod-1792840402947",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture Test",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "price": 1850000,
+        "quantity": 2,
+        "origin": "vietnam_local_brand",
+        "variantId": "var-prod-1792840402947-0-0",
+        "sku": "TADA-NU-2947-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Hàng Bảo Mật",
+      "phone": "0988888999",
+      "email": "security@tada.vn",
+      "address": "72 Lê Thánh Tôn",
+      "city": "TP. Hồ Chí Minh",
+      "district": "",
+      "ward": "",
+      "notes": ""
+    },
+    "subtotal": 3700000,
+    "shippingFee": 0,
+    "discountAmount": 0,
+    "total": 3700000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T11:13:22.965Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "delivered",
+        "statusLabel": "Đã giao thành công",
+        "changedAt": "2026-10-24T11:13:22.978Z",
+        "note": "Shipper đã giao tận tay khách"
+      }
+    ]
+  },
+  {
+    "id": "LM202610248342",
+    "orderCode": "#TADA-20261024-8342",
+    "createdAt": "2026-10-24T10:04:07.884Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-admin",
+    "items": [
+      {
+        "productId": "mau-02",
+        "productName": "Áo Cardigan Dệt Kim Có Mũ Lacoste Navy Knit Zip Hooded",
+        "brand": "Lacoste",
+        "image": "/images/products/lacoste-hooded-knit-cardigan-navy.jpg",
+        "color": "Xanh Navy",
+        "size": "S",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-02-0-0",
+        "sku": "TADA-NAM-025-XA-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Văn Phòng Ban Quản Trị TADA!",
+      "phone": "0909 999 999",
+      "email": "admin@tada.vn",
+      "address": "Tòa nhà Landmark 81, 720A Điện Biên Phủ, Phường 22",
+      "city": "TP. Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "ward": "Phường 22",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 30000,
+    "discountAmount": 78000,
+    "total": 472000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T10:04:07.884Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610243997",
+    "orderCode": "#TADA-20261024-3997",
+    "createdAt": "2026-10-24T09:39:05.497Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-1792834715776-506",
+    "items": [
+      {
+        "productId": "mau-02",
+        "productName": "Áo Cardigan Dệt Kim Có Mũ Lacoste Navy Knit Zip Hooded",
+        "brand": "Lacoste",
+        "image": "/images/products/lacoste-hooded-knit-cardigan-navy.jpg",
+        "color": "Xanh Navy",
+        "size": "S",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-02-0-0",
+        "sku": "TADA-NAM-025-XA-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "jfjasf",
+      "phone": "098765431",
+      "email": "gsafs12@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 550000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-24T09:39:05.497Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610249592",
+    "orderCode": "#TADA-20261024-9592",
+    "createdAt": "2026-10-23T17:21:21.950Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-1792772999233-719",
+    "items": [
+      {
+        "productId": "lum-18",
+        "productName": "Áo len đan tay cổ tròn Cotton Len Hữu Cơ Trẻ Em",
+        "brand": "Uniqlo",
+        "image": "https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=1000&auto=format&fit=crop&q=85",
+        "color": "Vàng Mù Tạt Ấm Áp",
+        "size": "100cm",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-lum-18-0-0",
+        "sku": "TADA-TRE-017-VÀ-100cm"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "mai",
+      "phone": "098765432",
+      "email": "mai@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 550000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T17:21:21.950Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610236654",
+    "orderCode": "#TADA-20261023-6654",
+    "createdAt": "2026-10-23T16:30:56.001Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-1792772999233-719",
+    "items": [
+      {
+        "productId": "lum-18",
+        "productName": "Áo len đan tay cổ tròn Cotton Len Hữu Cơ Trẻ Em",
+        "brand": "Uniqlo",
+        "image": "https://images.unsplash.com/photo-1514090458221-65bb69cf63e6?w=1000&auto=format&fit=crop&q=85",
+        "color": "Nâu Hạt Dẻ",
+        "size": "120cm",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-lum-18-1-2",
+        "sku": "TADA-TRE-017-NÂ-120cm"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "mai",
+      "phone": "098765432",
+      "email": "mai@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 550000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T16:30:56.001Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610236755",
+    "orderCode": "#TADA-20261023-6755",
+    "createdAt": "2026-10-23T14:47:57.760Z",
+    "status": "confirmed",
+    "statusLabel": "Đã xác nhận",
+    "userId": "usr-1792766850785-135",
+    "items": [
+      {
+        "productId": "mau-02",
+        "productName": "Áo Cardigan Dệt Kim Có Mũ Lacoste Navy Knit Zip Hooded",
+        "brand": "Lacoste",
+        "image": "/images/products/lacoste-hooded-knit-cardigan-navy.jpg",
+        "color": "Xanh Navy",
+        "size": "XL",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-02-0-3",
+        "sku": "TADA-NAM-025-XA-XL"
+      },
+      {
+        "productId": "mau-03",
+        "productName": "Bộ Tracksuit Nỉ Cổ Bomber Adidas Originals Varsity 3-Stripes Set",
+        "brand": "Adidas Originals",
+        "image": "/images/products/adidas-varsity-bomber-tracksuit.jpg",
+        "color": "Đen Trắng Varsity",
+        "size": "S",
+        "price": 900000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-03-0-0",
+        "sku": "TADA-DO--026-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "123456",
+      "phone": "098765431",
+      "email": "123456@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 1420000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 1450000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T14:47:57.760Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "confirmed",
+        "statusLabel": "Đã xác nhận",
+        "changedAt": "2026-10-23T15:27:08.031Z",
+        "note": "Cập nhật từ bảng quản trị"
+      }
+    ]
+  },
+  {
+    "id": "LM202610234876",
+    "orderCode": "#TADA-20261023-4876",
+    "createdAt": "2026-10-23T13:54:14.023Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-1792763419582-497",
+    "items": [
+      {
+        "productId": "mau-02",
+        "productName": "Áo Cardigan Dệt Kim Có Mũ Lacoste Navy Knit Zip Hooded",
+        "brand": "Lacoste",
+        "image": "/images/products/lacoste-hooded-knit-cardigan-navy.jpg",
+        "color": "Xanh Navy",
+        "size": "L",
+        "price": 520000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-02-0-2",
+        "sku": "TADA-NAM-025-XA-L"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "nguyễn thị tiên",
+      "phone": "0987654321",
+      "email": "tien123@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 520000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 550000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T13:54:14.023Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610239041",
+    "orderCode": "#TADA-20261023-9041",
+    "createdAt": "2026-10-23T13:32:52.184Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-diamond",
+    "items": [
+      {
+        "productId": "lum-01",
+        "productName": "Áo khoác dạ Cashmere dáng dài Oversized Trench",
+        "brand": "Lemaire",
+        "image": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=1000&auto=format&fit=crop&q=85",
+        "color": "Be Champagne",
+        "size": "M",
+        "price": 910000,
+        "quantity": 1,
+        "origin": "international_order",
+        "variantId": "var-lum-01-1-1",
+        "sku": "TADA-NU-001-BE-M"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Nguyễn Lê Hoàng Yến",
+      "phone": "0912 888 999",
+      "email": "kimcuong@tada.vn",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 910000,
+    "shippingFee": 30000,
+    "discountAmount": 136500,
+    "total": 803500,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "partially_paid",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T13:32:52.184Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "id": "LM202610237132",
+    "orderCode": "#TADA-20261023-7132",
+    "createdAt": "2026-10-23T13:20:29.849Z",
+    "status": "pending_confirmation",
+    "statusLabel": "Chờ xác nhận",
+    "userId": "usr-google-1792761590556",
+    "items": [
+      {
+        "productId": "mau-03",
+        "productName": "Bộ Tracksuit Nỉ Cổ Bomber Adidas Originals Varsity 3-Stripes Set",
+        "brand": "Adidas Originals",
+        "image": "/images/products/adidas-varsity-bomber-tracksuit.jpg",
+        "color": "Đen Trắng Varsity",
+        "size": "S",
+        "price": 900000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "variantId": "var-mau-03-0-0",
+        "sku": "TADA-DO--026-ĐE-S"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "minhanh.google@gmail.com",
+      "phone": "0912 345 678",
+      "email": "minhanh.google@gmail.com",
+      "address": "Số 12 Nguyễn Văn Cừ, Quận Long Biên, Hà Nội",
+      "city": "Hà Nội",
+      "district": "Quận Long Biên",
+      "ward": "Phường Gia Thụy",
+      "notes": ""
+    },
+    "subtotal": 900000,
+    "shippingFee": 30000,
+    "discountAmount": 45000,
+    "total": 885000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T13:20:29.849Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      }
+    ]
+  },
+  {
+    "status": "cancelled",
+    "statusLabel": "Đã hủy",
+    "items": [
+      {
+        "productId": "prod-1792760839536",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "variantId": "var-prod-1792760839536-0-0",
+        "price": 1850000,
+        "quantity": 3,
+        "origin": "vietnam_local_brand"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Đổi Ý",
+      "phone": "0977 123 456",
+      "email": "khachdoiy@tada.vn",
+      "address": "10 Hai Bà Trưng",
+      "city": "Hà Nội",
+      "district": "Hoàn Kiếm",
+      "ward": "Tràng Tiền"
+    },
+    "subtotal": 5550000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 5580000,
+    "paymentMethod": "cod",
+    "paymentStatus": "pending",
+    "id": "LM202610236687",
+    "orderCode": "#TADA-20261023-6687",
+    "createdAt": "2026-10-23T13:07:19.616Z",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T13:07:19.616Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "cancelled",
+        "statusLabel": "Đã hủy",
+        "changedAt": "2026-10-23T13:07:19.668Z",
+        "note": "Khách báo bận đi công tác cần hủy đơn"
+      }
+    ]
+  },
+  {
+    "status": "delivered",
+    "statusLabel": "Đã giao thành công",
+    "items": [
+      {
+        "productId": "prod-1792760839536",
+        "productName": "Đầm Lụa TADA! Signature Haute Couture",
+        "brand": "TADA! Atelier",
+        "image": "/images/products/dress-1.jpg",
+        "color": "Đen Huyền Bí",
+        "size": "S",
+        "variantId": "var-prod-1792760839536-0-0",
+        "price": 1850000,
+        "quantity": 2,
+        "origin": "vietnam_local_brand"
+      }
+    ],
+    "shippingAddress": {
+      "fullName": "Khách Hàng Test",
+      "phone": "0988 888 999",
+      "email": "khachhangtest@tada.vn",
+      "address": "72 Lê Thánh Tôn",
+      "city": "TP. Hồ Chí Minh",
+      "district": "Quận 1",
+      "ward": "Phường Bến Nghé"
+    },
+    "subtotal": 3700000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 3730000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "id": "LM202610235005",
+    "orderCode": "#TADA-20261023-5005",
+    "createdAt": "2026-10-23T13:07:19.585Z",
+    "statusHistory": [
+      {
+        "status": "pending_confirmation",
+        "statusLabel": "Chờ xác nhận",
+        "changedAt": "2026-10-23T13:07:19.585Z",
+        "note": "Đơn hàng được đặt thành công qua website TADA!"
+      },
+      {
+        "status": "delivered",
+        "statusLabel": "Đã giao thành công",
+        "changedAt": "2026-10-23T13:07:19.612Z",
+        "note": "Shipper đã giao tận tay khách"
+      }
+    ]
+  },
+  {
+    "id": "ord-101",
+    "orderCode": "TD-984210",
+    "createdAt": "2026-10-20T14:30:00Z",
+    "status": "shipping",
+    "statusLabel": "Đang vận chuyển",
+    "subtotal": 1370000,
+    "shippingFee": 0,
+    "discountAmount": 100000,
+    "total": 1270000,
+    "paymentMethod": "vietqr",
+    "paymentStatus": "paid",
+    "trackingNumber": "VNPOST-884920412",
+    "carrier": "VNPost Nhanh",
+    "shippingAddress": {
+      "fullName": "Trần Minh Anh",
+      "phone": "0908 123 456",
+      "email": "minhanh.tran@gmail.com",
+      "address": "Căn hộ 18.04, Tháp B2, Sarimi Sala, 10 Mai Chí Thọ",
+      "city": "TP. Hồ Chí Minh",
+      "district": "Thành phố Thủ Đức",
+      "ward": "Phường An Lợi Đông"
+    },
+    "items": [
+      {
+        "productId": "nu-vay-01",
+        "productName": "Đầm Lụa Satin Cổ Yếm Dáng Dài The Aurelia Maxi Dress",
+        "brand": "Gia Studios",
+        "image": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=1000&auto=format&fit=crop&q=85",
+        "color": "Vàng Champagne",
+        "size": "M",
+        "price": 980000,
+        "quantity": 1,
+        "origin": "vietnam_local_brand",
+        "estimatedDelivery": "Giao nhanh 1-2 ngày"
+      },
+      {
+        "productId": "nu-somi-03",
+        "productName": "Áo Thun Gân Ôm Body Cổ Vuông Tôn Dáng",
+        "brand": "Routine",
+        "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=1000&auto=format&fit=crop&q=85",
+        "color": "Đen Basic",
+        "size": "S",
+        "price": 290000,
+        "quantity": 1,
+        "origin": "vietnam_local_brand",
+        "estimatedDelivery": "Giao nhanh 1-2 ngày"
+      }
+    ]
+  },
+  {
+    "id": "ord-102",
+    "orderCode": "TD-983105",
+    "createdAt": "2026-10-15T09:15:00Z",
+    "status": "delivered",
+    "statusLabel": "Giao hàng thành công",
+    "subtotal": 750000,
+    "shippingFee": 30000,
+    "discountAmount": 0,
+    "total": 780000,
+    "paymentMethod": "cod",
+    "paymentStatus": "paid",
+    "trackingNumber": "GHN-9938210",
+    "carrier": "Giao Hàng Nhanh",
+    "shippingAddress": {
+      "fullName": "Trần Minh Anh",
+      "phone": "0908 123 456",
+      "email": "minhanh.tran@gmail.com",
+      "address": "Căn hộ 18.04, Tháp B2, Sarimi Sala, 10 Mai Chí Thọ",
+      "city": "TP. Hồ Chí Minh",
+      "district": "Thành phố Thủ Đức",
+      "ward": "Phường An Lợi Đông"
+    },
+    "items": [
+      {
+        "productId": "mau-36",
+        "productName": "Bộ Tracksuit Beckenbauer Tuyển Đức DFB Retro Set",
+        "brand": "Adidas Originals",
+        "image": "/images/products/adidas-germany-tracksuit-white-black.jpg",
+        "color": "Trắng Ngà Phối Đen",
+        "size": "L",
+        "price": 750000,
+        "quantity": 1,
+        "origin": "in_stock_ready",
+        "estimatedDelivery": "Đã giao"
+      }
+    ]
+  }
+]

@@ -3023,7 +3023,7 @@
     "rating": 0,
     "reviewCount": 0,
     "inStock": true,
-    "stockCount": 1,
+    "stockCount": 2,
     "estimatedDelivery": "Bay Air từ Paris (Boutique Rue Cambon) 10-14 ngày",
     "depositRequired": true,
     "depositPercentage": 50,
@@ -3063,10 +3063,10 @@
         "color": "Đen Noir",
         "colorHex": "#171613",
         "size": "75cm",
-        "stockCount": 0,
+        "stockCount": 1,
         "price": 440000,
         "originalPrice": 440000,
-        "inStock": false,
+        "inStock": true,
         "image": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=1000&auto=format&fit=crop&q=85"
       },
       {
@@ -3130,7 +3130,7 @@
         "image": "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=1000&auto=format&fit=crop&q=85"
       }
     ],
-    "updatedAt": "2026-10-24T16:20:14.349Z",
+    "updatedAt": "2026-10-26T15:01:22.532Z",
     "categoryId": "phu-kien",
     "subCategoryId": "that-lung",
     "salesCount": 0,

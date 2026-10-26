@@ -1,0 +1,207 @@
+[
+  {
+    "id": "guide-ao-so-mi",
+    "categoryId": "ao-so-mi",
+    "title": "Bảng Size Áo Sơ Mi & Áo Kiểu Atelier",
+    "fitTips": "Phom Regular fit may đo thanh lịch. Nếu muốn mặc phong cách thoải mái rộng rãi (Oversized), quý khách vui lòng tăng thêm 1 size.",
+    "modelStats": "Người mẫu cao 1m75, nặng 52kg, số đo 84-62-90, đang mặc size S.",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "measurements": [
+      {
+        "size": "XS",
+        "bust": "80 - 84",
+        "waist": "62 - 66",
+        "length": "60",
+        "heightRange": "150 - 155",
+        "weightRange": "42 - 47"
+      },
+      {
+        "size": "S",
+        "bust": "84 - 88",
+        "waist": "66 - 70",
+        "length": "62",
+        "heightRange": "155 - 160",
+        "weightRange": "48 - 53"
+      },
+      {
+        "size": "M",
+        "bust": "88 - 92",
+        "waist": "70 - 74",
+        "length": "64",
+        "heightRange": "160 - 165",
+        "weightRange": "54 - 58"
+      },
+      {
+        "size": "L",
+        "bust": "92 - 96",
+        "waist": "74 - 78",
+        "length": "66",
+        "heightRange": "165 - 170",
+        "weightRange": "59 - 64"
+      },
+      {
+        "size": "XL",
+        "bust": "96 - 102",
+        "waist": "78 - 84",
+        "length": "68",
+        "heightRange": "168 - 175",
+        "weightRange": "65 - 72"
+      }
+    ]
+  },
+  {
+    "id": "guide-dam-vay",
+    "categoryId": "dam-vay",
+    "title": "Bảng Size Đầm Lụa & Váy Haute Couture",
+    "fitTips": "Chất liệu lụa tơ tằm dệt cao cấp mềm rủ tự nhiên. Ưu tiên chọn size theo số đo Vòng Ngực và Vòng Eo chuẩn.",
+    "modelStats": "Người mẫu cao 1m78, nặng 51kg, số đo 82-60-89, đang mặc size S.",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "measurements": [
+      {
+        "size": "XS",
+        "bust": "80 - 83",
+        "waist": "60 - 64",
+        "hips": "86 - 90",
+        "length": "106",
+        "heightRange": "152 - 156",
+        "weightRange": "43 - 47"
+      },
+      {
+        "size": "S",
+        "bust": "84 - 87",
+        "waist": "64 - 68",
+        "hips": "90 - 94",
+        "length": "108",
+        "heightRange": "156 - 162",
+        "weightRange": "48 - 53"
+      },
+      {
+        "size": "M",
+        "bust": "88 - 92",
+        "waist": "68 - 72",
+        "hips": "94 - 98",
+        "length": "110",
+        "heightRange": "162 - 167",
+        "weightRange": "54 - 59"
+      },
+      {
+        "size": "L",
+        "bust": "92 - 96",
+        "waist": "72 - 76",
+        "hips": "98 - 102",
+        "length": "112",
+        "heightRange": "165 - 172",
+        "weightRange": "60 - 65"
+      },
+      {
+        "size": "XL",
+        "bust": "96 - 102",
+        "waist": "76 - 82",
+        "hips": "102 - 108",
+        "length": "114",
+        "heightRange": "168 - 175",
+        "weightRange": "66 - 72"
+      }
+    ]
+  },
+  {
+    "id": "guide-quan-au",
+    "categoryId": "quan-au",
+    "title": "Bảng Size Quần Âu & Quần Khắc Họa Kiến Trúc",
+    "fitTips": "Cạp cao tôn dáng, ống suông rủ. Chọn size dựa theo số đo Vòng Eo (đo ngang rốn) và Vòng Mông.",
+    "modelStats": "Người mẫu cao 1m75, đang mặc size S, gấu quần chạm mu bàn chân khi đi giày 5cm.",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "measurements": [
+      {
+        "size": "XS",
+        "waist": "62 - 66",
+        "hips": "86 - 90",
+        "length": "98",
+        "heightRange": "152 - 157",
+        "weightRange": "42 - 47"
+      },
+      {
+        "size": "S",
+        "waist": "66 - 70",
+        "hips": "90 - 94",
+        "length": "100",
+        "heightRange": "157 - 163",
+        "weightRange": "48 - 53"
+      },
+      {
+        "size": "M",
+        "waist": "70 - 74",
+        "hips": "94 - 98",
+        "length": "102",
+        "heightRange": "163 - 168",
+        "weightRange": "54 - 59"
+      },
+      {
+        "size": "L",
+        "waist": "74 - 78",
+        "hips": "98 - 102",
+        "length": "104",
+        "heightRange": "167 - 172",
+        "weightRange": "60 - 65"
+      },
+      {
+        "size": "XL",
+        "waist": "78 - 84",
+        "hips": "102 - 108",
+        "length": "105",
+        "heightRange": "170 - 176",
+        "weightRange": "66 - 72"
+      }
+    ]
+  },
+  {
+    "id": "guide-ao-khoac",
+    "categoryId": "ao-khoac",
+    "title": "Bảng Size Áo Khoác Blazer & Măng Tô Cashmere",
+    "fitTips": "Thiết kế có độ cử động vừa phải để quý khách thoải mái phối cùng sơ mi hoặc áo len mỏng bên trong.",
+    "modelStats": "Người mẫu cao 1m77, số đo vai 39cm, đang mặc size S.",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "measurements": [
+      {
+        "size": "XS",
+        "bust": "84 - 88",
+        "waist": "70 - 74",
+        "length": "68",
+        "heightRange": "152 - 157",
+        "weightRange": "43 - 48"
+      },
+      {
+        "size": "S",
+        "bust": "88 - 92",
+        "waist": "74 - 78",
+        "length": "70",
+        "heightRange": "157 - 163",
+        "weightRange": "49 - 54"
+      },
+      {
+        "size": "M",
+        "bust": "92 - 96",
+        "waist": "78 - 82",
+        "length": "72",
+        "heightRange": "163 - 168",
+        "weightRange": "55 - 60"
+      },
+      {
+        "size": "L",
+        "bust": "96 - 100",
+        "waist": "82 - 86",
+        "length": "74",
+        "heightRange": "168 - 173",
+        "weightRange": "61 - 66"
+      },
+      {
+        "size": "XL",
+        "bust": "100 - 106",
+        "waist": "86 - 92",
+        "length": "75",
+        "heightRange": "170 - 176",
+        "weightRange": "67 - 74"
+      }
+    ]
+  }
+]

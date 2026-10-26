@@ -82,9 +82,10 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     } catch {}
   }, []);
 
-  const fetchProducts = useCallback(async (page: number = 1, limit: number = 24) => {
+  const fetchProducts = useCallback(async (page?: number, limit?: number) => {
     try {
-      const res = await fetch(`/api/products?page=${page}&limit=${limit}`);
+      const url = page && limit ? `/api/products?page=${page}&limit=${limit}` : '/api/products';
+      const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         if (data.success && Array.isArray(data.products)) {
@@ -101,7 +102,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     let active = true;
     const initData = async () => {
       try {
-        await Promise.all([fetchCategories(), fetchTrendingSearches()]);
+        await Promise.all([fetchProducts(), fetchCategories(), fetchTrendingSearches()]);
       } finally {
         if (active) {
           setIsLoading(false);
@@ -112,7 +113,7 @@ export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => {
       active = false;
     };
-  }, [fetchCategories, fetchTrendingSearches]);
+  }, [fetchProducts, fetchCategories, fetchTrendingSearches]);
 
   const saveProductsLocal = (newProducts: Product[]) => {
     setProducts(newProducts);
