@@ -93,6 +93,8 @@ export default function AccountPage() {
   const [authError, setAuthError] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showOAuthConfigGuide, setShowOAuthConfigGuide] = useState(false);
+  const [isDemoLoggingIn, setIsDemoLoggingIn] = useState(false);
 
   // Sửa giá inline cho Admin
   const [editingPriceId, setEditingPriceId] = useState<string | null>(null);
@@ -345,6 +347,33 @@ export default function AccountPage() {
     }
   };
 
+  // Đăng nhập thử nghiệm tức thì với tài khoản Google hoặc Facebook mẫu
+  const handleDemoOAuthLogin = async (provider: 'google' | 'facebook') => {
+    setIsDemoLoggingIn(true);
+    setAuthError('');
+    try {
+      const res = await fetch('/api/auth/demo-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider })
+      });
+      const data = await res.json();
+      if (data.success && data.user) {
+        if (data.token) {
+          localStorage.setItem('tada_session_token', data.token);
+        }
+        localStorage.setItem('tada_current_user', JSON.stringify(data.user));
+        window.location.reload();
+      } else {
+        setAuthError(data.message || 'Đăng nhập thử nghiệm thất bại.');
+      }
+    } catch {
+      setAuthError('Không thể kết nối máy chủ để đăng nhập thử nghiệm.');
+    } finally {
+      setIsDemoLoggingIn(false);
+    }
+  };
+
   // Xử lý đăng ký thành viên mới
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -594,6 +623,51 @@ export default function AccountPage() {
                   </a>
                 </div>
 
+                {/* Khối Đăng nhập Thử nghiệm Tức thì & Hướng dẫn Cấu hình */}
+                <div className="mt-3 p-3 bg-[#FAF8F3] border border-[#E8E4DC] rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-[#171613] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#C5A265]" />
+                      Trải nghiệm nhanh (Không cần Client ID)
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowOAuthConfigGuide(!showOAuthConfigGuide)}
+                      className="text-[10px] text-[#8A7158] hover:underline"
+                    >
+                      {showOAuthConfigGuide ? 'Ẩn hướng dẫn' : 'Dùng Google/FB thật?'}
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      disabled={isDemoLoggingIn}
+                      onClick={() => handleDemoOAuthLogin('google')}
+                      className="py-1.5 px-2 bg-white hover:bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg text-[11px] font-medium text-[#171613] text-center transition-colors disabled:opacity-50"
+                    >
+                      {isDemoLoggingIn ? 'Đang vào...' : '⚡ Thử với Google'}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isDemoLoggingIn}
+                      onClick={() => handleDemoOAuthLogin('facebook')}
+                      className="py-1.5 px-2 bg-white hover:bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg text-[11px] font-medium text-[#171613] text-center transition-colors disabled:opacity-50"
+                    >
+                      {isDemoLoggingIn ? 'Đang vào...' : '⚡ Thử với Facebook'}
+                    </button>
+                  </div>
+
+                  {showOAuthConfigGuide && (
+                    <div className="pt-2 border-t border-[#E8E4DC] text-[10px] text-[#747069] space-y-1.5 leading-relaxed">
+                      <p className="font-semibold text-[#171613]">Hướng dẫn kết nối Google & Facebook thật cho website:</p>
+                      <p>• <b>Google OAuth</b>: Truy cập <span className="font-mono text-[#171613]">console.cloud.google.com</span> &rarr; Tạo <i>OAuth 2.0 Client ID</i> &rarr; Cấu hình Authorized Redirect URI là <span className="font-mono text-[#171613]">/api/auth/google/callback</span>.</p>
+                      <p>• <b>Facebook Login</b>: Truy cập <span className="font-mono text-[#171613]">developers.facebook.com</span> &rarr; Tạo App &rarr; Bật Facebook Login &rarr; Cấu hình Valid OAuth Redirect URI là <span className="font-mono text-[#171613]">/api/auth/facebook/callback</span>.</p>
+                      <p>• Sau đó điền các biến <code className="bg-white px-1 py-0.5 rounded border border-[#E8E4DC]">GOOGLE_CLIENT_ID</code>, <code className="bg-white px-1 py-0.5 rounded border border-[#E8E4DC]">FACEBOOK_APP_ID</code> vào Netlify hoặc file <code className="bg-white px-1 py-0.5 rounded border border-[#E8E4DC]">.env.local</code>.</p>
+                    </div>
+                  )}
+                </div>
+
                 <div className="text-center pt-2">
                   <button
                     type="button"
@@ -712,6 +786,35 @@ export default function AccountPage() {
                     </svg>
                     <span>Facebook</span>
                   </a>
+                </div>
+
+                {/* Khối Thử nghiệm Nhanh cho form Đăng ký */}
+                <div className="mt-3 p-3 bg-[#FAF8F3] border border-[#E8E4DC] rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-[#171613] flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#C5A265]" />
+                      Trải nghiệm nhanh (Không cần Client ID)
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      disabled={isDemoLoggingIn}
+                      onClick={() => handleDemoOAuthLogin('google')}
+                      className="py-1.5 px-2 bg-white hover:bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg text-[11px] font-medium text-[#171613] text-center transition-colors disabled:opacity-50"
+                    >
+                      {isDemoLoggingIn ? 'Đang vào...' : '⚡ Thử với Google'}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={isDemoLoggingIn}
+                      onClick={() => handleDemoOAuthLogin('facebook')}
+                      className="py-1.5 px-2 bg-white hover:bg-[#FAF8F3] border border-[#E8E4DC] rounded-lg text-[11px] font-medium text-[#171613] text-center transition-colors disabled:opacity-50"
+                    >
+                      {isDemoLoggingIn ? 'Đang vào...' : '⚡ Thử với Facebook'}
+                    </button>
+                  </div>
                 </div>
               </form>
             )}
