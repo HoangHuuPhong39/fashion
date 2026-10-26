@@ -433,6 +433,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Đăng nhập nhanh OAuth
   const loginWithOAuth = (provider: 'google' | 'facebook' | 'apple' | 'phone', identifier?: string) => {
+    if (provider === 'google') {
+      window.location.href = '/api/auth/google';
+      return;
+    }
+    if (provider === 'facebook') {
+      window.location.href = '/api/auth/facebook';
+      return;
+    }
     const newUser: User = {
       id: `usr-${provider}-${Date.now()}`,
       name: identifier || `Khách Hàng (${provider.toUpperCase()})`,

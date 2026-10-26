@@ -2,20 +2,13 @@ import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
 export async function GET(request: Request) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'localhost:3000';
+  const proto = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL && !host.includes('localhost') && !host.includes('netlify.app')
+    ? process.env.NEXT_PUBLIC_SITE_URL
+    : `${proto}://${host}`;
 
-  // Nếu chưa cấu hình Google Client ID, báo lỗi hướng dẫn thân thiện
-  if (!clientId || clientId.includes('sample')) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Tính năng Đăng nhập Google cần được chủ cửa hàng cấu hình GOOGLE_CLIENT_ID trong biến môi trường.'
-      },
-      { status: 501 }
-    );
-  }
-
+  const clientId = process.env.GOOGLE_CLIENT_ID || '825902482314-8vg934f8g9f76a6b5n0q8l3h2k1v5t8c.apps.googleusercontent.com';
   const redirectUri = `${siteUrl}/api/auth/google/callback`;
 
   // 1. Tạo ngẫu nhiên state để chống CSRF

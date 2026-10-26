@@ -10,7 +10,12 @@ function safeCompare(a: string, b: string): boolean {
 }
 
 export async function GET(request: Request) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tada-fashion.vn';
+  const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || 'localhost:3000';
+  const proto = request.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL && !host.includes('localhost') && !host.includes('netlify.app')
+    ? process.env.NEXT_PUBLIC_SITE_URL
+    : `${proto}://${host}`;
+
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const state = searchParams.get('state');
@@ -126,7 +131,7 @@ export async function GET(request: Request) {
     // 4. Tạo phiên đăng nhập máy chủ (Session)
     const { rawToken } = createServerSession(user as StoredUser);
 
-    const redirectResponse = NextResponse.redirect(`${siteUrl}/account`);
+    const redirectResponse = NextResponse.redirect(`${siteUrl}/account?token=${encodeURIComponent(rawToken)}`);
 
     // Lưu cookie phiên đăng nhập HttpOnly
     redirectResponse.cookies.set('tada_session', rawToken, {
