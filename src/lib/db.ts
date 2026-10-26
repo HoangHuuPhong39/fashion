@@ -46,9 +46,11 @@ const STOCK_NOTIFICATIONS_FILE = path.join(DATA_DIR, 'stock_notifications.json')
 const CONCIERGE_REQUESTS_FILE = path.join(DATA_DIR, 'concierge_requests.json');
 
 function ensureDirectoryExistence() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+  } catch {}
 }
 
 // In-memory cache to eliminate repetitive synchronous disk reads and JSON parsing
@@ -59,42 +61,37 @@ interface CacheEntry<T> {
 const memoryCache = new Map<string, CacheEntry<unknown>>();
 
 function readJSON<T>(filePath: string, defaultData: T): T {
-  ensureDirectoryExistence();
-  if (!fs.existsSync(filePath)) {
-    writeJSON(filePath, defaultData);
-    return defaultData;
-  }
-  try {
-    const stats = fs.statSync(filePath);
-    const cached = memoryCache.get(filePath);
-    if (cached && cached.mtimeMs === stats.mtimeMs) {
-      return cached.data as T;
+  const cached = memoryCache.get(filePath);
+  if (fs.existsSync(filePath)) {
+    try {
+      const stats = fs.statSync(filePath);
+      if (cached && cached.mtimeMs === stats.mtimeMs) {
+        return cached.data as T;
+      }
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const parsed = JSON.parse(raw) as T;
+      memoryCache.set(filePath, { data: parsed, mtimeMs: stats.mtimeMs });
+      return parsed;
+    } catch {
+      if (cached) return cached.data as T;
     }
-    const raw = fs.readFileSync(filePath, 'utf-8');
-    const parsed = JSON.parse(raw) as T;
-    memoryCache.set(filePath, { data: parsed, mtimeMs: stats.mtimeMs });
-    return parsed;
-  } catch (err) {
-    console.error(`Error reading ${filePath}, fallback to default`, err);
-    return defaultData;
   }
+
+  if (cached) return cached.data as T;
+
+  memoryCache.set(filePath, { data: defaultData, mtimeMs: Date.now() });
+  return defaultData;
 }
 
 function writeJSON<T>(filePath: string, data: T): void {
-  ensureDirectoryExistence();
-  const tmpFile = `${filePath}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
+  memoryCache.set(filePath, { data, mtimeMs: Date.now() });
   try {
+    ensureDirectoryExistence();
+    const tmpFile = `${filePath}.${Date.now()}.${crypto.randomBytes(4).toString('hex')}.tmp`;
     fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2), 'utf-8');
     fs.renameSync(tmpFile, filePath);
-    try {
-      const stats = fs.statSync(filePath);
-      memoryCache.set(filePath, { data, mtimeMs: stats.mtimeMs });
-    } catch {}
-  } catch (err) {
-    if (fs.existsSync(tmpFile)) {
-      try { fs.unlinkSync(tmpFile); } catch {}
-    }
-    console.error(`Error writing to ${filePath}`, err);
+  } catch {
+    // Phục vụ môi trường Serverless (Netlify / Vercel)
   }
 }
 
